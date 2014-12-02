@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>odba-indexeddb | Connection Tests</title>
+  <meta charset="utf-8">
+
+  <!-- imports -->
+  <script src="../test/lib/jquery.js"></script>
+  <script src="../test/lib/should.js"></script>
+  <script src="../test/lib/mocha.js"></script>
+  <script>
+    mocha.setup({
+      ui: "bdd",
+      timeout: 3500,
+      ignoreLeaks: false
+    });
+  </script>
+
+  <script src="../lib/util.js"></script>
+  <script src="../lib/Driver.js"></script>
+  <script src="../lib/Connection.js"></script>
+  <script src="../lib/Database.js"></script>
+  <script src="../lib/Table.js"></script>
+  <script src="../lib/Index.js"></script>
+  <script src="../lib/Result.js"></script>
+
+  <script src="../test/js/schema.js"></script>
+  <script src="../test/js/Driver.js"></script>
+  <script src="../test/js/Connection.js"></script>
+  <script src="../test/js/Database.js"></script>
+  <script src="../test/js/Table.js"></script>
+
+  <!-- stylesheets -->
+  <link rel="stylesheet" href="../test/lib/mocha.css">
+</head>
+
+<body>
+  <div id="mocha"></div>
+
+  <script>
+    mocha.run();
+  </script>
+</body>
+</html>
