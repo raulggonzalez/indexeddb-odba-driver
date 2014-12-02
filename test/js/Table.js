@@ -138,6 +138,105 @@ describe("Table", function() {
         });
       });
     });
+
+    describe("DDO", function() {
+      describe("#dropIndex()", function() {
+        var cx = drv.createConnection({database: "odba"});
+        var auxCx = cx.clone();
+
+        beforeEach(function(done) {
+          cx.createDatabase(indexedSchema, done);
+        });
+
+        afterEach(function(done) {
+          auxCx.close(done);
+        });
+
+        afterEach(function(done) {
+          cx.dropDatabase(done);
+        });
+
+        it("dropIndex()", function(done) {
+          cx.alterDatabase(function(db) {
+            db.findTable("user", function(error, tab) {
+              should.assert(error === undefined);
+
+              (function() {
+                tab.dropIndex();
+              }).should.throwError("Index name expected.");
+
+              done();
+            });
+          });
+        });
+
+        it("dropIndex(index)", function(done) {
+          cx.alterDatabase(function(db) {
+            db.findTable("user", function(error, tab) {
+              should.assert(error === undefined);
+
+              tab.dropIndex("ix_username");
+
+              setTimeout(function() {
+                auxCx.open(function(error, db) {
+                  should.assert(error === undefined);
+                  db.hasIndex("user", "ix_username", function(error, exists) {
+                    should.assert(error === undefined);
+                    exists.should.be.eql(false);
+                    done();
+                  });
+                });
+              }, 1000);
+            });
+          });
+        });
+
+        it("dropIndex(unknown)", function(done) {
+          cx.alterDatabase(function(db) {
+            db.findTable("user", function(error, tab) {
+              should.assert(error === undefined);
+
+              tab.dropIndex("ix_unknown");
+
+              setTimeout(function() {
+                done();
+              }, 1000);
+            });
+          });
+        });
+
+        it("dropIndex(index, callback)", function(done) {
+          cx.alterDatabase(function(db) {
+            db.findTable("user", function(error, tab) {
+              should.assert(error === undefined);
+
+              tab.dropIndex("ix_username", function(error) {
+                should.assert(error === undefined);
+
+                tab.hasIndex("ix_username", function(error, exists) {
+                  should.assert(error === undefined);
+                  exists.should.be.eql(false);
+                  done();
+                });
+              });
+            });
+          });
+        });
+
+        it("dropIndex(unexisting, callback)", function(done) {
+          cx.alterDatabase(function(db) {
+            db.findTable("user", function(error, tab) {
+              should.assert(error === undefined);
+
+              tab.dropIndex("ix_unknown", function(error) {
+                should.assert(error === undefined);
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
   });
 
   describe("DQO", function() {
@@ -275,7 +374,7 @@ describe("Table", function() {
         });
       });
 
-      it("findOne(where, callback) - No row matched", function(done) {
+      it("findOne(where, callback) - No rows matched", function(done) {
         tab.findOne({userId: 111}, function(error, record) {
           should.assert(error === undefined);
           should.assert(record === undefined);
@@ -395,7 +494,7 @@ describe("Table", function() {
       });
     });
 
-    describe("save()", function() {
+    describe("#save()", function() {
       var cx = drv.createConnection({database: "odba"});
       var tab;
 
@@ -524,7 +623,7 @@ describe("Table", function() {
         }, 1000);
       });
 
-      it("remove(where) - No rows meeting the predicate", function(done) {
+      it("remove(where) - No rows matched", function(done) {
         tab.remove({userId: 111});
 
         setTimeout(function() {
@@ -548,7 +647,7 @@ describe("Table", function() {
         });
       });
 
-      it("remove(where, callback) - No rows meeting the predicate", function(done) {
+      it("remove(where, callback) - No rows matched", function(done) {
         tab.remove({userId: 111}, function(error) {
           should.assert(error === undefined);
 
