@@ -22,6 +22,14 @@ IndexedDB is a document-oriented database and it uses its own terminology:
 - Key path = Primary key (SQL) or Id (MongoDB or CouchDB)
 - Index = Index
 
+## Use
+
+To use `odba-indexeddb`, we have to include:
+
+  ```
+  <script src="../odba-indexeddb.min.js"></script>
+  ```
+
 ## Getting the driver
 
 First of all, we have to get the IndexedDB driver:
