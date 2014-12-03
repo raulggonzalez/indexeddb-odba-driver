@@ -71,8 +71,8 @@ To create a database with tables:
 
 ## Creating tables (object stores)
 
-To create a table, we use the methods `Database.createTable()` into a `createDatabase()`
-or `alterDatabase()`.
+To create a table, we use the method `Database.createTable()` whitin the
+methods `createDatabase()` or `alterDatabase()`.
 
 During the database creation:
 
@@ -103,6 +103,11 @@ After the database creation:
     //...
   });
   ```
+
+Options:
+
+  - `keyPath` or `id` (String). The key path, the primary key or the id field.
+  - `autoIncrement` (Boolean). If the key path is auto increment.
 
 ## Dropping tables (object stores)
 

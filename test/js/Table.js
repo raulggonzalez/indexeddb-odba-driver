@@ -404,93 +404,188 @@ describe("Table", function() {
 
   describe("DMO", function() {
     describe("#insert()", function() {
-      var cx = drv.createConnection({database: "odba"});
-      var tab;
+      describe("Auto increment", function() {
+        var cx = drv.createConnection({database: "odba"});
+        var tab;
+        var RECORDS = [
+          {username: "user01", password: "pwd01"},
+          {username: "user02", password: "pwd02"},
+          {username: "user03", password: "pwd03"}
+        ];
 
-      beforeEach(function(done) {
-        cx.createDatabase(schema, done);
-      });
+        beforeEach(function(done) {
+          cx.createDatabase(autoIncrementSchema, done);
+        });
 
-      beforeEach(function(done) {
-        cx.open(function(error, db) {
-          db.findTable("user", function(error, table)  {
-            tab = table;
-            done();
+        beforeEach(function(done) {
+          cx.open(function(error, db) {
+            db.findTable("user", function(error, table) {
+              tab = table;
+              done();
+            });
+          });
+        });
+
+        afterEach(function(done) {
+          cx.close(done);
+        });
+
+        afterEach(function(done) {
+          cx.dropDatabase(done);
+        });
+
+        it("insert(record, callback)", function(done) {
+          tab.insert({username: "user01", password: "pwd01"}, function(error) {
+            should.assert(error === undefined);
+
+            tab.findAll(function(error, result) {
+              should.assert(error === undefined);
+              result.length.should.be.eql(1);
+              result.rows[0].should.be.eql({userId: 1, username: "user01", password: "pwd01"});
+              done();
+            });
+          });
+        });
+
+        it("insert(records, callback)", function(done) {
+          tab.insert(RECORDS, function(error, result) {
+            should.assert(error === undefined);
+
+            tab.findAll(function(error, result) {
+              should.assert(error === undefined);
+              result.length.should.be.eql(3);
+              result.rows[0].should.be.eql({userId: 1, username: "user01", password: "pwd01"});
+              result.rows[1].should.be.eql({userId: 2, username: "user02", password: "pwd02"});
+              result.rows[2].should.be.eql({userId: 3, username: "user03", password: "pwd03"});
+              done();
+            });
           });
         });
       });
 
-      afterEach(function(done) {
-        cx.close(done);
-      });
+      describe("Non-auto increment", function() {
+        var cx = drv.createConnection({database: "odba"});
+        var tab;
 
-      afterEach(function(done) {
-        cx.dropDatabase(done);
-      });
-
-      it("insert()", function() {
-        (function() {
-          tab.insert();
-        }).should.throwError("Object(s) to insert expected.");
-      });
-
-      it("insert(null, callback)", function(done) {
-        tab.insert(null, function(error) {
-          error.message.should.be.eql("Object to insert can't be null or undefined.");
-          done();
+        beforeEach(function(done) {
+          cx.createDatabase(schema, done);
         });
-      });
 
-      it("insert(record, callback)", function(done) {
-        tab.insert({userId: 1, username: "user01", password: "pwd01"}, function(error) {
-          should.assert(error === undefined);
-
-          tab.count(function(error, count) {
-            should.assert(error === undefined);
-            count.should.be.eql(1);
-            done();
+        beforeEach(function(done) {
+          cx.open(function(error, db) {
+            db.findTable("user", function(error, table)  {
+              tab = table;
+              done();
+            });
           });
         });
-      });
 
-      it("insert(records, callback)", function(done) {
-        tab.insert(RECORDS, function(error) {
-          should.assert(error === undefined);
+        afterEach(function(done) {
+          cx.close(done);
+        });
 
-          tab.count(function(error, count) {
-            should.assert(error === undefined);
-            count.should.be.eql(3);
+        afterEach(function(done) {
+          cx.dropDatabase(done);
+        });
+
+        it("insert()", function() {
+          (function() {
+            tab.insert();
+          }).should.throwError("Object(s) to insert expected.");
+        });
+
+        it("insert(null, callback)", function(done) {
+          tab.insert(null, function(error) {
+            error.message.should.be.eql("Object to insert can't be null or undefined.");
             done();
           });
         });
-      });
 
-      it("insert([], callback)", function(done) {
-        tab.insert([], done);
-      });
-
-      it("insert(record)", function(done) {
-        tab.insert({userId: 1, username: "user01", password: "pwd01"});
-
-        setTimeout(function() {
-          tab.count(function(error, count) {
+        it("insert(record, callback)", function(done) {
+          tab.insert({userId: 1, username: "user01", password: "pwd01"}, function(error) {
             should.assert(error === undefined);
-            count.should.be.eql(1);
+
+            tab.count(function(error, count) {
+              should.assert(error === undefined);
+              count.should.be.eql(1);
+              done();
+            });
+          });
+        });
+
+        it("insert(records, callback)", function(done) {
+          tab.insert(RECORDS, function(error) {
+            should.assert(error === undefined);
+
+            tab.count(function(error, count) {
+              should.assert(error === undefined);
+              count.should.be.eql(3);
+              done();
+            });
+          });
+        });
+
+        it("insert([], callback)", function(done) {
+          tab.insert([], done);
+        });
+
+        it("insert(record)", function(done) {
+          tab.insert({userId: 1, username: "user01", password: "pwd01"});
+
+          setTimeout(function() {
+            tab.count(function(error, count) {
+              should.assert(error === undefined);
+              count.should.be.eql(1);
+              done();
+            });
+          }, 1000);
+        });
+
+        it("insert(records)", function(done) {
+          tab.insert(RECORDS);
+
+          setTimeout(function() {
+            tab.count(function(error, count) {
+              should.assert(error === undefined);
+              count.should.be.eql(3);
+              done();
+            });
+          }, 1000);
+        });
+
+        it("insert(record, callback) - No key path specified", function(done) {
+          tab.insert({username: "user01", password: "pwd01"}, function(error) {
+            error.should.be.instanceOf(Error);
             done();
           });
-        }, 1000);
-      });
+        });
 
-      it("insert(records)", function(done) {
-        tab.insert(RECORDS);
+        it("insert(records, callback) - Some record without key path", function(done) {
+          tab.insert([
+            {userId: 1, username: "user01", password: "pwd01"},
+            {username: "user02", password: "pwd02"},
+            {userId: 3, username: "user03", password: "pwd03"}
+          ], function(error) {
+            error.should.be.instanceOf(Error);
 
-        setTimeout(function() {
-          tab.count(function(error, count) {
-            should.assert(error === undefined);
-            count.should.be.eql(3);
-            done();
+            tab.count(function(error, count) {
+              should.assert(error === undefined);
+              count.should.be.eql(0);
+              done();
+            });
           });
-        }, 1000);
+        });
+
+        it("insert(record, callback) - Existing key path", function(done) {
+          tab.insert(RECORDS, function(error) {
+            should.assert(error === undefined);
+
+            tab.insert({userId: 2, username: "user04", password: "pwd04"}, function(error) {
+              error.should.be.instanceOf(Error);
+              done();
+            });
+          });
+        });
       });
     });
 
