@@ -9,7 +9,7 @@ The ODBA philosophy is similar to the `Node.js` API's.
 The unit testing is performed using `Should.js` and `Mocha` on:
 
   - Chrome.
-  - Firefox (coming soon).
+  - Firefox.
 
 
 ## Terminology

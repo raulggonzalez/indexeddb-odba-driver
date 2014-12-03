@@ -227,16 +227,30 @@ describe("Connection", function() {
     describe("#hasDatabase()", function() {
       var cx = drv.createConnection({database: "odba"});
 
-      before(function(done) {
-        cx.createDatabase(undefined, function(error)  {
-          cx.open(done);
-        });
+      beforeEach(function(done) {
+        cx.createDatabase(undefined, done);
       });
 
-      after(function(done) {
-        cx.close(function(error) {
-          cx.dropDatabase(done);
-        });
+      beforeEach(function(done) {
+        cx.open(done);
+      });
+
+      afterEach(function(done) {
+        cx.close(done);
+      });
+
+      afterEach(function(done) {
+        cx.dropDatabase(done);
+      })
+
+      afterEach(function(done) {
+        drv.createConnection({database: "unknown"}).dropDatabase(done);
+      })
+
+      it("hasDatabase()", function() {
+        (function() {
+          cx.hasDatabase();
+        }).should.throwError("Callback expected.");
       });
 
       it("hasDatabase(callback)", function(done) {
