@@ -27,7 +27,7 @@ IndexedDB is a document-oriented database and it uses its own terminology:
 To use `odba-indexeddb`, we have to include:
 
   ```
-  <script src="../odba-indexeddb.min.js"></script>
+  <script src="odba-indexeddb.min.js"></script>
   ```
 
 ## Getting the driver
