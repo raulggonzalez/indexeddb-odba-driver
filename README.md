@@ -11,7 +11,6 @@ The unit testing is performed using `Should.js` and `Mocha` on:
   - Chrome.
   - Firefox.
 
-
 ## Terminology
 
 IndexedDB is a document-oriented database and it uses its own terminology:
@@ -125,7 +124,7 @@ Dropping a table is easy, we have to use the `Database.dropTable()` into a
 
 ## Creating indexes
 
-Similar to creating tables (object stores).
+Similar to tables.
 
 During the database creation:
 
@@ -144,6 +143,8 @@ After the database creation:
     db.createIndex("user", "ix_username", "username", {unique: true});
   });
   ```
+
+**Important** Nowdays, we only can create simple indexes.
 
 ## Dropping indexes
 
@@ -191,7 +192,7 @@ Next, we can use `Table.find()`, `Table.findOne()` and `Table.findAll()`:
 
   ```
   table.find({userId: 1}, function(error, result) {
-    //result is an array
+    //result is an IndexedDBResult instance
   });
 
   table.findOne({userId: 1}, function(error, record) {
@@ -199,9 +200,36 @@ Next, we can use `Table.find()`, `Table.findOne()` and `Table.findAll()`:
   });
 
   table.findAll(function(error, result) {
-    //result is an array
+    //result is an IndexedDBResult instance
   });
   ```
+
+**Important** When the query can be resolved using the key path or an index,
+the method uses.
+
+### Result
+
+The methods `find()` and `findAll()` returns an object with the next properties:
+
+  - `length` (Number). The number of records.
+  - `rows` (Object[]). The records.
+  - `byKey` (Boolean). Whether the query has been resolved using the key path.
+  - `byIndex` (Boolean). Whether the qury has been resolved using an index.
+
+### Operators
+
+We can use the following operators:
+
+  - `$eq`. Equality (`=`). Example: `{userId: {$eq: 1}}` or simply `{userId: 1}`.
+  - `$ne`. Inequality (`!=`). Example: `{username: {$ne: "ecostello"}`.
+  - `$lt`. Less than (`<`). Example: `{year: {$lt: 2014}}`.
+  - `$le`. Less than or equal (`<=`). Example: `{year: {$le: 2010}}`.
+  - `$gt`. Greater than (`>`). Example: `{year: {$gt: 2010}}`.
+  - `$gt`. Greater than or equal (`>=`). Example: `{year: {$ge: 2010}}`.
+  - `$like`. Like. Example: `{email: {$like: ".*@gmail\.com"}}`.
+  - `$notLike`. Not like. Example: `{email: {$notLike: ".*@gmail\.com"}}`.
+  - `$in`. In. Example: `{username: {$in: ["ecostello", "elvisc"]}}`.
+  - `$notIn`. Not in. Example: `{username: {$notIn: ["costello", "elvisc"]}}`.
 
 ## Inserting data
 

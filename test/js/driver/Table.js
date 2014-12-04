@@ -244,7 +244,7 @@ describe("Table", function() {
     var tab;
 
     before(function(done) {
-      cx.createDatabase(schema, done);
+      cx.createDatabase(indexedSchema, done);
     });
 
     before(function(done) {
@@ -278,58 +278,202 @@ describe("Table", function() {
       it("findAll(callback)", function(done) {
         tab.findAll(function(error, result) {
           should.assert(error === undefined);
-          result.should.be.instanceOf(IndexedDBResult);
+          result.should.be.instanceOf(Result);
           result.length.should.be.eql(3);
           done();
         });
       });
     });
 
+    describe("#findByFilter()", function() {
+      it("findByFilter()", function() {
+        (function() {
+          tab.findByFilter();
+        }).should.throwError("Callback expected.");
+      });
+
+      it("findByFilter(where)", function() {
+        (function() {
+          tab.findByFilter({userId: 1});
+        }).should.throwError("Callback expected.");
+      });
+
+      it("findByFilter(callback)", function(done) {
+        tab.findByFilter(function(error, result) {
+          should.assert(error === undefined);
+          result.rows.should.be.eql(RECORDS);
+          done();
+        });
+      });
+
+      it("findByFilter({prop: value}, callback)", function(done) {
+        tab.findByFilter({userId: 1}, function(error, result) {
+          should.assert(error === undefined);
+          result.rows.should.be.eql([RECORDS[0]]);
+          done();
+        });
+      });
+
+      it("findByFilter({prop: {$ne: value}}, callback)", function(done) {
+        tab.findByFilter({userId: {$ne: 1}}, function(error, result) {
+          should.assert(error === undefined);
+          result.rows.should.be.eql([RECORDS[1], RECORDS[2]]);
+          done();
+        });
+      });
+    });
+
+    describe("#findByKeyPath()", function() {
+      it("findByKeyPath({prop: value}, callback)", function(done) {
+        tab.findByKeyPath({userId: 1}, function(error, result) {
+          should.assert(error === undefined);
+          result.byKey.should.be.eql(true);
+          result.byIndex.should.be.eql(false);
+          result.rows.should.be.eql([RECORDS[0]]);
+          done();
+        });
+      });
+
+      it("findByKeyPath({prop: {$lt: value}}, callback)", function(done) {
+        tab.findByKeyPath({userId: {$lt: 3}}, function(error, result) {
+          should.assert(error === undefined);
+          result.byKey.should.be.eql(true);
+          result.byIndex.should.be.eql(false);
+          result.rows.should.be.eql([RECORDS[0], RECORDS[1]]);
+          done();
+        });
+      });
+
+      it("findByKeyPath({prop: {$le: value}}, callback)", function(done) {
+        tab.findByKeyPath({userId: {$le: 2}}, function(error, result) {
+          should.assert(error === undefined);
+          result.byKey.should.be.eql(true);
+          result.byIndex.should.be.eql(false);
+          result.rows.should.be.eql([RECORDS[0], RECORDS[1]]);
+          done();
+        });
+      });
+
+      it("findByKeyPath({prop: {$gt: value}}, callback)", function(done) {
+        tab.findByKeyPath({userId: {$gt: 1}}, function(error, result) {
+          should.assert(error === undefined);
+          result.byKey.should.be.eql(true);
+          result.byIndex.should.be.eql(false);
+          result.rows.should.be.eql([RECORDS[1], RECORDS[2]]);
+          done();
+        });
+      });
+
+      it("findByKeyPath({prop: {$ge: value}}, callback)", function(done) {
+        tab.findByKeyPath({userId: {$ge: 2}}, function(error, result) {
+          should.assert(error === undefined);
+          result.byKey.should.be.eql(true);
+          result.byIndex.should.be.eql(false);
+          result.rows.should.be.eql([RECORDS[1], RECORDS[2]]);
+          done();
+        });
+      });
+    });
+
+    describe("#findByIndex()", function() {
+      it("findByIndex({prop: value}, callback)", function(done) {
+        tab.findByIndex({username: "user01"}, function(error, result) {
+          should.assert(error === undefined);
+          result.byKey.should.be.eql(false);
+          result.byIndex.should.be.eql(true);
+          result.rows.should.be.eql([RECORDS[0]]);
+          done();
+        });
+      });
+
+      it("findByIndex({prop: {$lt: value}}, callback)", function(done) {
+        tab.findByIndex({username: {$lt: "user03"}}, function(error, result) {
+          should.assert(error === undefined);
+          result.byKey.should.be.eql(false);
+          result.byIndex.should.be.eql(true);
+          result.rows.should.be.eql([RECORDS[0], RECORDS[1]]);
+          done();
+        });
+      });
+
+      it("findByIndex({prop: {$le: value}}, callback)", function(done) {
+        tab.findByIndex({username: {$le: "user02"}}, function(error, result) {
+          should.assert(error === undefined);
+          result.byKey.should.be.eql(false);
+          result.byIndex.should.be.eql(true);
+          result.rows.should.be.eql([RECORDS[0], RECORDS[1]]);
+          done();
+        });
+      });
+
+      it("findByIndex({prop: {$gt: value}}, callback)", function(done) {
+        tab.findByIndex({username: {$gt: "user01"}}, function(error, result) {
+          should.assert(error === undefined);
+          result.byKey.should.be.eql(false);
+          result.byIndex.should.be.eql(true);
+          result.rows.should.be.eql([RECORDS[1], RECORDS[2]]);
+          done();
+        });
+      });
+
+      it("findByIndex({prop: {$ge: value}}, callback)", function(done) {
+        tab.findByIndex({username: {$ge: "user02"}}, function(error, result) {
+          should.assert(error === undefined);
+          result.byKey.should.be.eql(false);
+          result.byIndex.should.be.eql(true);
+          result.rows.should.be.eql([RECORDS[1], RECORDS[2]]);
+          done();
+        });
+      });
+    });
+
     describe("#find()", function() {
-      it("find()", function() {
-        (function() {
-          tab.find();
-        }).should.throwError("Callback expected.");
-      });
+      describe("Error handler", function() {
+        it("find()", function() {
+          (function() {
+            tab.find();
+          }).should.throwError("Callback expected.");
+        });
 
-      it("find(where)", function() {
-        (function() {
-          tab.find({});
-        }).should.throwError("Callback expected.");
-      });
-
-      it("find(callback)", function(done) {
-        tab.find(function(error, result) {
-          should.assert(error === undefined);
-          result.should.be.instanceOf(IndexedDBResult);
-          result.length.should.be.eql(3);
-          done();
+        it("find(where)", function() {
+          (function() {
+            tab.find({});
+          }).should.throwError("Callback expected.");
         });
       });
 
-      it("find(where, callback)", function(done) {
-        tab.find({userId: 2}, function(error, result) {
-          should.assert(error === undefined);
-          result.length.should.be.eql(1);
-          result.rows[0].should.be.eql(RECORDS[1]);
-          done();
+      describe("Find all", function() {
+        it("find(callback)", function(done) {
+          tab.find(function(error, result) {
+            should.assert(error === undefined);
+            result.should.be.instanceOf(Result);
+            result.length.should.be.eql(3);
+            done();
+          });
         });
       });
 
-      it("find(where, callback) - No rows matched", function(done) {
-        tab.find({userId: 111}, function(error, result) {
-          should.assert(error === undefined);
-          result.length.should.be.eql(0);
-          result.rows.should.be.eql([]);
-          done();
+      describe("By key", function() {
+        it("find({key: value}, callback)", function(done) {
+          tab.find({userId: 1}, function(error, result) {
+            should.assert(error === undefined);
+            result.rows.should.be.eql([RECORDS[0]]);
+            result.byKey.should.be.eql(true);
+            result.byIndex.should.be.eql(false);
+            done();
+          });
         });
       });
 
-      it("find(where, callback) - No key path", function(done) {
-        tab.find({noKeyPath: 1}, function(error, result) {
-          error.message.should.be.eql("Invalid find criteria.");
-          should.assert(result === undefined);
-          done();
+      describe("By index", function() {
+        it("find({ixField: value}, callback)", function(done) {
+          tab.find({username: "user01"}, function(error, result) {
+            should.assert(error === undefined);
+            result.rows.should.be.eql([RECORDS[0]]);
+            result.byKey.should.be.eql(false);
+            result.byIndex.should.be.eql(true);
+            done();
+          });
         });
       });
     });
@@ -350,7 +494,7 @@ describe("Table", function() {
       it("findOne(callback)", function(done) {
         tab.findOne(function(error, record) {
           should.assert(error === undefined);
-          record.should.not.be.instanceOf(IndexedDBResult);
+          record.should.not.be.instanceOf(Result);
           record.should.have.properties("userId", "username", "password");
           done();
         });
@@ -359,7 +503,7 @@ describe("Table", function() {
       it("findOne({}, callback)", function(done) {
         tab.findOne({}, function(error, record) {
           should.assert(error === undefined);
-          record.should.not.be.instanceOf(IndexedDBResult);
+          record.should.not.be.instanceOf(Result);
           record.should.have.properties("userId", "username", "password");
           done();
         });
@@ -368,7 +512,7 @@ describe("Table", function() {
       it("findOne(where, callback)", function(done) {
         tab.findOne({userId: 2}, function(error, record) {
           should.assert(error === undefined);
-          record.should.not.be.instanceOf(IndexedDBResult);
+          record.should.not.be.instanceOf(Result);
           record.should.be.eql(RECORDS[1]);
           done();
         });
@@ -377,14 +521,6 @@ describe("Table", function() {
       it("findOne(where, callback) - No rows matched", function(done) {
         tab.findOne({userId: 111}, function(error, record) {
           should.assert(error === undefined);
-          should.assert(record === undefined);
-          done();
-        });
-      });
-
-      it("findOne(where, callback) - No key path", function(done) {
-        tab.findOne({noKeyPath: 1}, function(error, record) {
-          error.message.should.be.eql("Invalid find criteria.");
           should.assert(record === undefined);
           done();
         });
