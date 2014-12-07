@@ -11,7 +11,7 @@ describe("Table", function() {
     var tab;
 
     before(function(done) {
-      cx.createDatabase(schema, done);
+      cx.createDatabase(indexedSchema, done);
     });
 
     before(function(done) {
@@ -44,8 +44,21 @@ describe("Table", function() {
       tab.keyPath.should.be.eql("userId");
     });
 
+    it("autoIncrement", function() {
+      tab.autoIncrement.should.be.eql(false);
+    });
+
     it("connection", function() {
       tab.connection.should.be.instanceOf(IndexedDBConnection);
+    });
+
+    it("indexes", function() {
+      Object.keys(tab.indexes).length.should.be.eql(1);
+    });
+
+    it("indexed", function() {
+      Object.keys(tab.indexed).length.should.be.eql(1);
+      tab.indexed["username"].name.should.be.eql("ix_username");
     });
   });
 
@@ -164,9 +177,10 @@ describe("Table", function() {
               (function() {
                 tab.dropIndex();
               }).should.throwError("Index name expected.");
-
-              done();
             });
+          }, function(error) {
+            should.assert(error === undefined);
+            done();
           });
         });
 
@@ -174,19 +188,16 @@ describe("Table", function() {
           cx.alterDatabase(function(db) {
             db.findTable("user", function(error, tab) {
               should.assert(error === undefined);
-
               tab.dropIndex("ix_username");
-
-              setTimeout(function() {
-                auxCx.open(function(error, db) {
-                  should.assert(error === undefined);
-                  db.hasIndex("user", "ix_username", function(error, exists) {
-                    should.assert(error === undefined);
-                    exists.should.be.eql(false);
-                    done();
-                  });
-                });
-              }, 1000);
+            });
+          }, function(error) {
+            auxCx.open(function(error, db) {
+              should.assert(error === undefined);
+              db.hasIndex("user", "ix_username", function(error, exists) {
+                should.assert(error === undefined);
+                exists.should.be.eql(false);
+                done();
+              });
             });
           });
         });
@@ -195,29 +206,26 @@ describe("Table", function() {
           cx.alterDatabase(function(db) {
             db.findTable("user", function(error, tab) {
               should.assert(error === undefined);
-
               tab.dropIndex("ix_unknown");
-
-              setTimeout(function() {
-                done();
-              }, 1000);
             });
-          });
+          }, done);
         });
 
         it("dropIndex(index, callback)", function(done) {
           cx.alterDatabase(function(db) {
             db.findTable("user", function(error, tab) {
               should.assert(error === undefined);
-
               tab.dropIndex("ix_username", function(error) {
                 should.assert(error === undefined);
-
-                tab.hasIndex("ix_username", function(error, exists) {
-                  should.assert(error === undefined);
-                  exists.should.be.eql(false);
-                  done();
-                });
+              });
+            });
+          }, function(error) {
+            should.assert(error === undefined);
+            auxCx.open(function(error, db) {
+              db.hasIndex("user", "ix_username", function(error, exists) {
+                should.assert(error === undefined);
+                exists.should.be.eql(false);
+                done();
               });
             });
           });
@@ -227,13 +235,11 @@ describe("Table", function() {
           cx.alterDatabase(function(db) {
             db.findTable("user", function(error, tab) {
               should.assert(error === undefined);
-
               tab.dropIndex("ix_unknown", function(error) {
                 should.assert(error === undefined);
-                done();
               });
             });
-          });
+          }, done);
         });
       });
     });
@@ -780,6 +786,8 @@ describe("Table", function() {
 
       it("save(record, callback)", function(done) {
         tab.save({userId: 2, username: "USER02", password: "pwd02"}, function(error) {
+          should.assert(error === undefined);
+
           tab.findOne({userId: 2}, function(error, record) {
             should.assert(error === undefined);
             record.should.be.eql({userId: 2, username: "USER02", password: "pwd02"});

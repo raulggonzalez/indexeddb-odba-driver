@@ -257,17 +257,15 @@ describe("Database", function() {
       it("dropTable(name)", function(done) {
         cx.alterDatabase(function(db) {
           db.dropTable("user");
-        });
+        }, function(error) {
+          should.assert(error === undefined);
 
-        setTimeout(function() {
           auxCx.open(function(error, db) {
-            db.hasTable("user", function(error, exists) {
-              should.assert(error === undefined);
-              exists.should.be.eql(false);
-              done();
-            });
+            should.assert(error === undefined);
+            db.containsObjectStore("user").should.be.eql(false);
+            done();
           });
-        }, 1000);
+        });
       });
 
       it("dropTable('unknown')", function(done) {
@@ -279,12 +277,10 @@ describe("Database", function() {
       it("dropTable(name, callback)", function(done) {
         cx.alterDatabase(function(db) {
           db.dropTable("session", function(error) {
+            should.assert(error === undefined);
             auxCx.open(function(error, db) {
-              db.hasTable("session", function(error, exists) {
-                should.assert(error === undefined);
-                exists.should.be.eql(false);
-                done();
-              });
+              db.containsObjectStore("session").should.be.eql(false);
+              done();
             });
           });
         });
@@ -325,27 +321,35 @@ describe("Database", function() {
       it("createTable(name)", function(done) {
         cx.alterDatabase(function(db) {
           db.createTable("table");
-        });
+        }, function(error) {
+          should.assert(error === undefined);
 
-        setTimeout(function() {
           auxCx.open(function(error, db) {
             db.findTable("table", function(error, tab) {
               should.assert(error === undefined);
               tab.name.should.be.eql("table");
+              should.assert(tab.keyPath === null);
+              tab.autoIncrement.should.be.eql(false);
               done();
             });
           });
-        }, 1000);
+        });
       });
 
       it("createTable(name, callback)", function(done) {
         cx.alterDatabase(function(db) {
           db.createTable("table", function(error) {
             should.assert(error === undefined);
+          });
+        }, function(error) {
+          should.assert(error === undefined);
 
-            db.hasTable("table", function(error, exists) {
+          auxCx.open(function(error, db) {
+            db.findTable("table", function(error, tab) {
               should.assert(error === undefined);
-              exists.should.be.eql(true);
+              tab.name.should.be.eql("table");
+              should.assert(tab.keyPath === null);
+              tab.autoIncrement.should.be.eql(false);
               done();
             });
           });
@@ -354,31 +358,37 @@ describe("Database", function() {
 
       it("createTable(name, options)", function(done) {
         cx.alterDatabase(function(db) {
-          db.createTable("table", {keyPath: "id"});
-        });
+          db.createTable("table", {keyPath: "id", autoIncrement: true});
+        }, function(error) {
+          should.assert(error === undefined);
 
-        setTimeout(function() {
           auxCx.open(function(error, db) {
             db.findTable("table", function(error, tab) {
               should.assert(error === undefined);
               tab.name.should.be.eql("table");
               tab.keyPath.should.be.eql("id");
+              tab.autoIncrement.should.be.eql(true);
               done();
             });
           });
-        }, 1000);
+        });
       });
 
       it("createTable(name, options, callback)", function(done) {
         cx.alterDatabase(function(db) {
           db.createTable("table", {keyPath: "id"}, function(error) {
-            auxCx.open(function(error, db) {
-              db.findTable("table", function(error, tab) {
-                should.assert(error === undefined);
-                tab.name.should.be.eql("table");
-                tab.keyPath.should.be.eql("id");
-                done();
-              });
+            should.assert(error === undefined);
+          });
+        }, function(error) {
+          should.assert(error === undefined);
+
+          auxCx.open(function(error, db) {
+            db.findTable("table", function(error, tab) {
+              should.assert(error === undefined);
+              tab.name.should.be.eql("table");
+              tab.keyPath.should.be.eql("id");
+              tab.autoIncrement.should.be.eql(false);
+              done();
             });
           });
         });
@@ -432,27 +442,27 @@ describe("Database", function() {
       it("createTables(tables)", function(done) {
         cx.alterDatabase(function(db) {
           db.createTables(TABLES);
-        });
+        }, function(error) {
+          should.assert(error === undefined);
 
-        setTimeout(function() {
           auxCx.open(function(error, db) {
-            db.hasTables(["table1", "table2"], function(error, exist) {
-              should.assert(error === undefined);
-              exist.should.be.eql(true);
-              done();
-            });
+            db.containsObjectStores(["table1", "table2"]).should.be.eql(true);
+            done();
           });
-        }, 1000);
+        });
       });
 
       it("createTables(tables, callback)", function(done) {
         cx.alterDatabase(function(db) {
           db.createTables(TABLES, function(error) {
-            db.hasTables(["table1", "table2"], function(error, exist) {
-              should.assert(error === undefined);
-              exist.should.be.eql(true);
-              done();
-            });
+            should.assert(error === undefined);
+          });
+        }, function(error) {
+          should.assert(error === undefined);
+
+          auxCx.open(function(error, db) {
+            db.containsObjectStores(["table1", "table2"]).should.be.eql(true);
+            done();
           });
         });
       });
@@ -653,16 +663,16 @@ describe("Database", function() {
       it("createIndex(table, ix, col)", function(done) {
         cx.alterDatabase(function(db) {
           db.createIndex("user", "ix_username", "username");
+        }, function(error) {
+          should.assert(error === undefined);
 
-          setTimeout(function() {
-            auxCx.open(function(error, db) {
-              db.hasIndex("user", "ix_username", function(error, exists) {
-                should.assert(error === undefined);
-                exists.should.be.eql(true);
-                done();
-              });
+          auxCx.open(function(error, db) {
+            db.hasIndex("user", "ix_username", function(error, exists) {
+              should.assert(error === undefined);
+              exists.should.be.eql(true);
+              done();
             });
-          }, 1000);
+          });
         });
       });
 
@@ -679,7 +689,24 @@ describe("Database", function() {
         cx.alterDatabase(function(db) {
           db.createIndex("user", "ix_username", "username", function(error) {
             should.assert(error === undefined);
+          });
+        }, function(error) {
+          auxCx.open(function(error, db) {
+            db.hasIndex("user", "ix_username", function(error, exists) {
+              should.assert(error === undefined);
+              exists.should.be.eql(true);
+              done();
+            });
+          })
+        });
+      });
 
+      it("createIndex(table, ix, col, options)", function(done) {
+        cx.alterDatabase(function(db) {
+          db.createIndex("user", "ix_username", "username", {unique: true});
+        }, function(error) {
+          should.assert(error === undefined);
+          auxCx.open(function(error, db) {
             db.hasIndex("user", "ix_username", function(error, exists) {
               should.assert(error === undefined);
               exists.should.be.eql(true);
@@ -689,27 +716,14 @@ describe("Database", function() {
         });
       });
 
-      it("createIndex(table, ix, col, options)", function(done) {
-        cx.alterDatabase(function(db) {
-          db.createIndex("user", "ix_username", "username", {unique: true});
-
-          setTimeout(function() {
-            auxCx.open(function(error, db) {
-              db.hasIndex("user", "ix_username", function(error, exists) {
-                should.assert(error === undefined);
-                exists.should.be.eql(true);
-                done();
-              });
-            });
-          }, 1000);
-        });
-      });
-
       it("createIndex(table, ix, col, options, callback)", function(done) {
         cx.alterDatabase(function(db) {
           db.createIndex("user", "ix_username", "username", {unique: true}, function(error) {
             should.assert(error === undefined);
-
+          });
+        }, function(error) {
+          should.assert(error === undefined);
+          auxCx.open(function(error, db) {
             db.hasIndex("user", "ix_username", function(error, exists) {
               should.assert(error === undefined);
               exists.should.be.eql(true);
@@ -779,16 +793,16 @@ describe("Database", function() {
       it("dropIndex(table, index)", function(done) {
         cx.alterDatabase(function(db) {
           db.dropIndex("user", "ix_username");
+        }, function(error) {
+          should.assert(error === undefined);
 
-          setTimeout(function() {
-            auxCx.open(function(error, db) {
-              db.hasIndex("user", "ix_username", function(error, exists) {
-                should.assert(error === undefined);
-                exists.should.be.eql(false);
-                done();
-              });
+          auxCx.open(function(error, db) {
+            db.hasIndex("user", "ix_username", function(error, exists) {
+              should.assert(error === undefined);
+              exists.should.be.eql(false);
+              done();
             });
-          }, 1000);
+          });
         });
       });
 
@@ -814,7 +828,11 @@ describe("Database", function() {
         cx.alterDatabase(function(db) {
           db.dropIndex("user", "ix_username", function(error) {
             should.assert(error === undefined);
+          });
+        }, function(error) {
+          should.assert(error === undefined);
 
+          auxCx.open(function(error, db) {
             db.hasIndex("user", "ix_username", function(error, exists) {
               should.assert(error === undefined);
               exists.should.be.eql(false);
@@ -826,14 +844,18 @@ describe("Database", function() {
 
       it("dropIndex('unknown', index, callback)", function(done) {
         cx.alterDatabase(function(db) {
-          db.dropIndex("unknown", "ix_username", done);
-        });
+          db.dropIndex("unknown", "ix_username", function(error) {
+            should.assert(error === undefined);
+          });
+        }, done);
       });
 
       it("dropIndex(table, 'unknown', callback)", function(done) {
         cx.alterDatabase(function(db) {
-          db.dropIndex("user", "ix_unknown", done);
-        });
+          db.dropIndex("user", "ix_unknown", function(error) {
+            should.assert(error === undefined);
+          });
+        }, done);
       });
 
       it("dropIndex(...) - Out of version change transaction", function(done) {

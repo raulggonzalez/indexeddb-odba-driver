@@ -6,7 +6,70 @@ describe("Connection", function() {
     cx.dropDatabase(done);
   });
 
+  describe("Properties", function() {
+    after(function(done) {
+      cx.dropDatabase(done);
+    });
+
+    describe("Closed connection", function() {
+      var cx = drv.createConnection({database: "odba"});
+
+      it("config", function() {
+        cx.config.should.be.eql({database: "odba"});
+      });
+
+      it("transaction", function() {
+        should.assert(cx.transaction === undefined);
+      });
+
+      it("database", function() {
+        should.assert(cx.database === undefined);
+      });
+
+      it("indexedDB", function() {
+        should.assert(!!cx.indexedDB);
+      });
+    });
+
+    describe("Open connection", function() {
+      var cx = drv.createConnection({database: "odba"});
+
+      before(function(done) {
+        cx.open(done);
+      });
+
+      after(function(done) {
+        cx.close(done);
+      });
+
+      it("database", function() {
+        cx.database.should.be.instanceOf(IndexedDBDatabase);
+      });
+
+      it("transaction", function() {
+        should.assert(cx.transaction === undefined);
+      });
+    });
+  });
+
   describe("Databases", function() {
+    describe("#dropDatabase()", function() {
+      it("dropDatabase(name, callback)", function(done) {
+        cx.dropDatabase(function(error) {
+          cx.hasDatabase("odba", function(error, exists) {
+            should.assert(error === undefined);
+            exists.should.be.eql(false);
+            done();
+          });
+        });
+      });
+
+      it("dropDatabase(name)", function(done) {
+        cx.dropDatabase();
+        done();
+      });
+    });
+
     describe("#createDatabase()", function() {
       describe("w/connection closed", function() {
         var cx = drv.createConnection({database: "odba"});
@@ -63,7 +126,7 @@ describe("Connection", function() {
               exists.should.be.eql(true);
               cx.connected.should.be.eql(false);
               done();
-            });
+            })
           });
         });
       });
@@ -152,10 +215,10 @@ describe("Connection", function() {
         });
 
         it("alterDatabase(ddl, callback)", function(done) {
-          cx.alterDatabase(function(db) {
-            db.createTable("alter", {keyPath: "alterId"}, function(error) {
-              should.assert(error === undefined);
+          function callback(error) {
+            should.assert(error === undefined);
 
+            setTimeout(function() {
               chkCx.open(function(error, db) {
                 should.assert(error === undefined);
                 cx.connected.should.be.eql(false);
@@ -166,8 +229,12 @@ describe("Connection", function() {
                   chkCx.close(done);
                 });
               });
-            });
-          });
+            }, 1500);
+          }
+
+          cx.alterDatabase(function(db) {
+            db.createTable("alter", {keyPath: "alterId"});
+          }, callback);
         });
       });
 
@@ -175,51 +242,39 @@ describe("Connection", function() {
         var cx = drv.createConnection({database: "odba"});
 
         before(function(done) {
-          cx.createDatabase(undefined, function(error) {
-            cx.open(done);
-          });
+          cx.open(done);
         });
 
         after(function(done) {
-          cx.dropDatabase(function(error) {
-            cx.close(done);
-          });
+          cx.close(done);
+        });
+
+        afterEach(function(done) {
+          cx.dropDatabase(done);
         });
 
         it("alterDatabase()", function() {
           (function() {
             cx.alterDatabase();
-          }).should.throwError("Operation to alter schema expected.");
+          }).should.throwError("Connection opened.");
         });
 
-        it("alterDatabase(ddl)", function(done) {
-          cx.alterDatabase(function(db) {
-            db.createTable("table1", {keyPath: "id"});
-          });
-
-          setTimeout(function() {
-            cx.connected.should.be.eql(true);
-
-            cx.database.hasTable("table1", function(error, exists) {
-              should.assert(error === undefined);
-              exists.should.be.eql(true);
-              done();
-            });
-          }, 1500);
+        it("alterDatabase(ddl)", function() {
+          (function() {
+            cx.alterDatabase(schema);
+          }).should.throwError("Connection opened.");
         });
 
-        it("alterDatabase(ddl, callback)", function(done) {
-          cx.alterDatabase(function(db) {
-            db.createTable("table2", {keyPath: "id"});
-          }, function(error) {
-            should.assert(error === undefined);
-            cx.connected.should.be.eql(true);
-            cx.database.hasTable("table2", function(error, exists) {
-              should.assert(error === undefined);
-              exists.should.be.eql(true);
-              done();
-            });
-          });
+        it("alterDatabase(ddl, callback)", function() {
+          (function() {
+            cx.alterDatabase(schema, function(error) {});
+          }).should.throwError("Connection opened.");
+        });
+
+        it("alterDatabase(null, callback)", function() {
+          (function() {
+            cx.createDatabase(null, function(error) {});
+          }).should.throwError("Connection opened.");
         });
       });
     });
@@ -277,23 +332,6 @@ describe("Connection", function() {
         });
       });
     });
-
-    describe("#dropDatabase()", function() {
-      it("dropDatabase(name, callback)", function(done) {
-        cx.dropDatabase(function(error) {
-          cx.hasDatabase("odba", function(error, exists) {
-            should.assert(error === undefined);
-            exists.should.be.eql(false);
-            done();
-          });
-        });
-      });
-
-      it("dropDatabase(name)", function(done) {
-        cx.dropDatabase();
-        done();
-      });
-    });
   });
 
   describe("#open()", function() {
@@ -315,7 +353,9 @@ describe("Connection", function() {
       });
 
       it("open()", function() {
-        (function() { cx.open(); }).should.throwError("Callback expected.");
+        (function() {
+          cx.open();
+        }).should.throwError("Callback expected.");
       });
 
       it("open(callback)", function(done) {

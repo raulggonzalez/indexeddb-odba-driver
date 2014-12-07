@@ -124,31 +124,34 @@ Dropping a table is easy, we have to use the `Database.dropTable()` into a
 
 ## Creating indexes
 
-Similar to tables.
-
-During the database creation:
-
-  ```
-  cx.createDatabase(function(db) {
-    db.createTable("user", {keyPath: "userId"}, function(error) {
-      if (!error) db.createIndex("user", "ix_username", "username", {unique: true});
-    });
-  });
-  ```
-
-After the database creation:
-
-  ```
-  cx.alterDatabase(function(db) {
-    db.createIndex("user", "ix_username", "username", {unique: true});
-  });
-  ```
+The indexes can be created from a `Database` instance or a `Table` instance. In both cases,
+we have to perfom into `Connection.createDatabase()` or `Connection.alterDatabase()`.
 
 **Important** Nowdays, we only can create simple indexes.
 
+From a `Database` instance:
+
+  ```
+  cx.createDatabase(function(db) {
+    db.createIndex("user", "ix_username", "username", {unique: true});
+    db.createIndex("user", "ix_username", "username", {unique: true}, function(error) { ... });
+  });
+  ```
+
+From a `Table` instance:
+
+  ```
+  cx.alterDatabase(function(db) {
+    db.findTable("user", function(error, tab) {
+      tab.createIndex("ix_username", "username", {unique: true});
+      tab.createIndex("ix_username", "username", {unique: true}, function(error) { ... });
+    };
+  });
+  ```
+
 ## Dropping indexes
 
-Similar to tables:
+Similar to tables, in `Connection.alterDatabase()` using a `Database` or a `Table`:
 
   ```
   cx.alterDatabase(function(db) {
@@ -214,7 +217,7 @@ The methods `find()` and `findAll()` returns an object with the next properties:
   - `length` (Number). The number of records.
   - `rows` (Object[]). The records.
   - `byKey` (Boolean). Whether the query has been resolved using the key path.
-  - `byIndex` (Boolean). Whether the qury has been resolved using an index.
+  - `byIndex` (Boolean). Whether the query has been resolved using an index.
 
 ### Operators
 
@@ -276,3 +279,27 @@ We can use `Table.remove()`:
   table.remove({userId: 1});
   table.remove({userId: 1}, function(error) { ... });
   ```
+
+## Transactions
+
+IndexedDB is a transactional engine. The driver works in auto-commit mode. If
+a bounded transaction needed, we can use the method `Connection.runTransaction`
+with a connection opened:
+
+  ```
+  cx.runTransaction(mode, function(db) { ... });
+  cx.runTransaction(mode, function(db) { ... }, function(error) { ... });
+  ```
+
+The transaction mode can be: `readonly` or `readwrite`. The second parameter is a
+function with the transaction code. The third parameter is an optional function that
+is invoked when the first operation ends.
+
+If the first function ends in success, the transaction is commited. If we want
+to abort it, use the method `Transaction.rollback`:
+
+  ```
+  cx.transaction.rollback();
+  ```
+
+**Important** IndexedDB doesn't support nested transactions.
