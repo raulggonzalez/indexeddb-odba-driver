@@ -145,7 +145,7 @@ describe("ResultFilter", function() {
 
       it("$gt(row, prop, val+)", function() {
         filter.$gt(rows[0], "userId", 2).should.be.eql(false);
-      })
+      });
 
       it("$gt(row, prop, undefined)", function() {
         filter.$gt(rows[0], "userId", undefined).should.be.eql(false);
@@ -167,7 +167,7 @@ describe("ResultFilter", function() {
 
       it("$ge(row, prop, val+)", function() {
         filter.$ge(rows[0], "userId", 2).should.be.eql(false);
-      })
+      });
 
       it("$ge(row, prop, undefined)", function() {
         filter.$ge(rows[0], "userId", undefined).should.be.eql(false);
@@ -574,7 +574,7 @@ describe("ResultFilter", function() {
   });
 
   describe("#find()", function() {
-    var result = new Result(rows)
+    var result = new Result(rows);
 
     it("find(result)", function() {
       filter.find(result).should.be.eql(rows);

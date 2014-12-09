@@ -11,6 +11,8 @@ The unit testing is performed using `Should.js` and `Mocha` on:
   - Chrome.
   - Firefox.
 
+`Grunt` is used to automate tasks: `uglify` and `jshint`.
+
 ## Terminology
 
 IndexedDB is a document-oriented database and it uses its own terminology:
