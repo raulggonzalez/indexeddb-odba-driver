@@ -1,4 +1,31 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: driver/Table.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: driver/Table.js</h1>
+
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * An IndexedDB store.
  *
  * @class
@@ -26,7 +53,7 @@ function IndexedDBTable(db, store) {
   Object.defineProperty(this, "indexed", {value: indexed});
 
   //(2) extract indexes info
-  for (var i = 0; i < store.indexNames.length; ++i) {
+  for (var i = 0; i &lt; store.indexNames.length; ++i) {
     var ixName = store.indexNames[i];
     var ix = new IndexedDBIndex(this, store.index(ixName));
     indexes[ixName] = ix;
@@ -49,7 +76,7 @@ IndexedDBTable.prototype.__defineGetter__("transaction", function() {
  */
 IndexedDBTable.prototype.hasIndex = function hasIndex(name, callback) {
   //(1) arguments
-  if (arguments.length < 2) {
+  if (arguments.length &lt; 2) {
     throw new Error("Index name and callback expected.");
   }
 
@@ -65,7 +92,7 @@ IndexedDBTable.prototype.hasIndex = function hasIndex(name, callback) {
  */
 IndexedDBTable.prototype.findIndex = function findIndex(name, callback) {
   //(1) arguments
-  if (arguments.length < 2) {
+  if (arguments.length &lt; 2) {
     throw new Error("Index name and callback expected.");
   }
 
@@ -88,7 +115,7 @@ IndexedDBTable.prototype.findIndex = function findIndex(name, callback) {
  */
 IndexedDBTable.prototype.createIndex = function createIndex(name, col, options, callback) {
   //(1) arguments
-  if (arguments.length < 2) {
+  if (arguments.length &lt; 2) {
     throw new Error("Index name and indexing column expected.");
   } else if (arguments.length == 3) {
     if (arguments[2] instanceof Function) {
@@ -113,7 +140,7 @@ IndexedDBTable.prototype.createIndex = function createIndex(name, col, options, 
  */
 IndexedDBTable.prototype.dropIndex = function dropIndex(name, callback) {
   //(1) arguments
-  if (arguments.length < 1) {
+  if (arguments.length &lt; 1) {
     throw new Error("Index name expected.");
   }
 
@@ -140,7 +167,7 @@ IndexedDBTable.prototype.find = function find(where, callback) {
   var fields;
 
   //(1) arguments
-  if (arguments.length < 1) {
+  if (arguments.length &lt; 1) {
     throw new Error("Callback expected.");
   } else if (arguments.length == 1) {
     if (arguments[0] instanceof Function) {
@@ -184,7 +211,7 @@ IndexedDBTable.prototype.findByFilter = function findByFilter(where, callback) {
   var filter = new ResultFilter();
 
    //(1) arguments
-  if (arguments.length < 1) {
+  if (arguments.length &lt; 1) {
     throw new Error("Callback expected.");
   } else if (arguments.length == 1) {
     if (arguments[0] instanceof Function) {
@@ -368,7 +395,7 @@ IndexedDBTable.prototype.findAll = function findAll(callback) {
   var tran, store, req, records = [];
 
   //(1) arguments
-  if (arguments.length < 1) {
+  if (arguments.length &lt; 1) {
     throw new Error("Callback expected.");
   }
 
@@ -401,7 +428,7 @@ IndexedDBTable.prototype.findAll = function findAll(callback) {
  */
 IndexedDBTable.prototype.findOne = function findOne(where, callback) {
   //(1) arguments
-  if (arguments.length < 1) {
+  if (arguments.length &lt; 1) {
     throw new Error("Callback expected.");
   } else if (arguments.length == 1) {
     if (arguments[0] instanceof Function) {
@@ -460,7 +487,7 @@ IndexedDBTable.prototype.insert = function insert(records, callback) {
   //          see the note 1.
 
   //(1) arguments
-  if (arguments.length < 1) {
+  if (arguments.length &lt; 1) {
     throw new Error("Object(s) to insert expected.");
   }
 
@@ -473,7 +500,7 @@ IndexedDBTable.prototype.insert = function insert(records, callback) {
   tran = this.connection.beginTransaction(undefined, this.name);
 
   tran.on("abort", function(e) {
-    if (abortError && callback) {
+    if (abortError &amp;&amp; callback) {
       callback(new Error(abortError.message));
     }
   });
@@ -497,7 +524,7 @@ IndexedDBTable.prototype.insert = function insert(records, callback) {
   function add(i) {
     var req;
 
-    if (i < records.length) {
+    if (i &lt; records.length) {
       try {
         req = store.add(records[i]);
 
@@ -526,7 +553,7 @@ IndexedDBTable.prototype.save = function save(record, callback) {
   var tran;
 
   //(1) arguments
-  if (arguments.length < 1) {
+  if (arguments.length &lt; 1) {
     throw new Error("Object to update expected.");
   }
 
@@ -586,7 +613,7 @@ IndexedDBTable.prototype.remove = function remove(where, callback) {
       if (callback) callback(e);
     };
   } else {
-    if (Object.keys(where).indexOf(this.keyPath) < 0) {
+    if (Object.keys(where).indexOf(this.keyPath) &lt; 0) {
       throw new Error("Key path expected.");
     }
 
@@ -596,4 +623,26 @@ IndexedDBTable.prototype.remove = function remove(where, callback) {
       if (callback) callback(e);
     };
   }
-};
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Driver.html">Driver</a></li><li><a href="IndexedDBConnection.html">IndexedDBConnection</a></li><li><a href="IndexedDBDatabase.html">IndexedDBDatabase</a></li><li><a href="IndexedDBDriver.html">IndexedDBDriver</a></li><li><a href="IndexedDBIndex.html">IndexedDBIndex</a></li><li><a href="IndexedDBResult.html">IndexedDBResult</a></li><li><a href="IndexedDBTable.html">IndexedDBTable</a></li><li><a href="Result.html">Result</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha9</a> on Wed Dec 10 2014 08:37:23 GMT+0100 (Hora estándar romance)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

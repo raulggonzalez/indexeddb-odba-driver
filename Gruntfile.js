@@ -7,14 +7,14 @@ module.exports = function(grunt) {
   grunt.config.init({
     pkg: grunt.file.readJSON("package.json"),
 
-    app: {
+    test: {
       host: "localhost",
       port: 51792,
       chromeFolder: "C:\\Program Files (x86)\\Google\\Chrome\\Application",
       firefoxFolder: "C:\\Program Files (x86)\\Mozilla Firefox",
-      app: "http://<%= app.host %>:<%= app.port %>/<%= pkg.name %>",
-      index: "<%= app.app %>/test/index.html",
-      minIndex: "<%= app.app %>/test/index.min.html",
+      app: "http://<%= test.host %>:<%= test.port %>/<%= pkg.name %>",
+      index: "<%= test.app %>/test/index.html",
+      minIndex: "<%= test.app %>/test/index.min.html",
     },
 
     jshint: {
@@ -48,26 +48,42 @@ module.exports = function(grunt) {
           "odba-indexeddb.min.js": ["lib/*.js", "lib/driver/*"]
         }
       }
+    },
+
+    jsdoc: {
+      pub: {
+        src: ["lib/"],
+        options: {
+          recurse: true,
+          template: "templates/default",
+          destination: "doc",
+          "private": false
+        }
+      }
     }
   });
 
   //(2) enable plugins
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-contrib-jshint");
+  grunt.loadNpmTasks("grunt-jsdoc");
 
   //(3) define tasks
-  grunt.registerTask("test", "Performs the unit testing.", function(browser, min) {
+  grunt.registerTask("minify", "Generate the min version.", ["uglify"]);
+  grunt.registerTask("test", "Perform the unit testing.", function test(browser, min) {
     var chrome = (browser == "chrome" || !browser);
     var firefox = (browser == "firefox" || !browser);
+    var index = grunt.config.get(min ? "test.minIndex" : "test.index");
 
     if (chrome) {
-      process.env.PATH += ";" + grunt.config.get("app.chromeFolder");
-      child_process.exec("chrome --new-window " + grunt.config.get(min ? "app.minIndex" : "app.index"), undefined, this.async());
+      process.env.PATH += ";" + grunt.config.get("test.chromeFolder");
+      child_process.exec("chrome --new-window " + index, undefined, this.async());
     }
 
     if (firefox) {
-      process.env.PATH += ";" + grunt.config.get("app.firefoxFolder");
-      child_process.exec("firefox -new-window " + grunt.config.get(min ? "app.minIndex" : "app.index"), undefined, this.async());
+      process.env.PATH += ";" + grunt.config.get("test.firefoxFolder");
+      child_process.exec("firefox -new-window " + index, undefined, this.async());
     }
   });
 };
+
