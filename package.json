@@ -1,6 +1,6 @@
 {
   "name": "odba-indexeddb",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "IndexedDB ODBA driver.",
   "author": "Raúl G. González <raulggonzalezsw@outlook.com>",
   "keywords": [

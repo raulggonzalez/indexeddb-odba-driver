@@ -264,11 +264,34 @@ To insert several objects:
 
 ## Updating data
 
-Using `Table.save()`:
+Two methods can be used to update data: `Table.save()` and `Table.update`.
+
+### Saving data
+
+The data save is used to replace an record by other and it's performed using `Table.save()`.
+The first argument indicates the record(s) to set, being needed that the
+record(s) have the key path.
 
   ```
   table.save({userId: 1, username: "user01", password: "PwD01"}, function(error) { ... });
+  table.save([{...}, {...}, {...}], function(error) { ... });
   ```
+
+### Updating data
+
+We also can use the `Table.update()` method to replace some fields.
+
+  ```
+  user.update({userId: 1}, {password: "newPwd"}, function(error) { ... });
+  user.update({state: "locked"}, function(error) { ... });
+  ```
+
+The update modifiers are:
+
+- `$set` replaces the value by another. Example: {prop: {$set: newValue}}, similar to {prop: newValue}.
+- `$inc` increments the value by the specified number of units. Example: {prop: {$inc: 1}}.
+- `$dec` decrements the alue by the specified number of units. Example: {prop: {$dec: 1}}.
+- `$mul` multiplies the value by the specified amount. Example: {prop: {$mul: 0.5}}.
 
 ## Deleting data
 

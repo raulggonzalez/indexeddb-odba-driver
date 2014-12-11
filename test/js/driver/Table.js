@@ -457,6 +457,24 @@ describe("Table", function() {
             done();
           });
         });
+
+        it("find({}, callback)", function(done) {
+          tab.find({}, function(error, result) {
+            should.assert(error === undefined);
+            result.should.be.instanceOf(Result);
+            result.length.should.be.eql(3);
+            done();
+          });
+        });
+
+        it("find(undefined, callback)", function(done) {
+          tab.find(undefined, function(error, result) {
+            should.assert(error === undefined);
+            result.should.be.instanceOf(Result);
+            result.length.should.be.eql(3);
+            done();
+          });
+        });
       });
 
       describe("By key", function() {
@@ -784,6 +802,22 @@ describe("Table", function() {
         }, 1000);
       });
 
+      it("save(records)", function(done) {
+        tab.save([{userId: 1, username: "USER01"}, {userId: 2, username: "USER02"}]);
+
+        setTimeout(function() {
+          tab.findOne({userId: 1}, function(error, record) {
+            should.assert(error === undefined);
+            record.should.be.eql({userId: 1, username: "USER01"});
+            tab.findOne({userId: 2}, function(error, record) {
+              should.assert(error === undefined);
+              record.should.be.eql({userId: 2, username: "USER02"});
+              done();
+            });
+          });
+        }, 1000);
+      });
+
       it("save(record, callback)", function(done) {
         tab.save({userId: 2, username: "USER02", password: "pwd02"}, function(error) {
           should.assert(error === undefined);
@@ -794,6 +828,133 @@ describe("Table", function() {
             done();
           });
         });
+      });
+
+      it("save(records, callback)", function(done) {
+        tab.save([{userId: 1, username: "USER01"}, {userId: 2, username: "USER02"}], function(error) {
+          should.assert(error === undefined);
+
+          tab.findOne({userId: 1}, function(error, record) {
+            should.assert(error === undefined);
+            record.should.be.eql({userId: 1, username: "USER01"});
+            tab.findOne({userId: 2}, function(error, record) {
+              should.assert(error === undefined);
+              record.should.be.eql({userId: 2, username: "USER02"});
+              done();
+            });
+          });
+        });
+      });
+    });
+
+    describe("#update()", function() {
+      var cx = drv.createConnection({database: "odba"});
+      var tab;
+
+      beforeEach(function(done) {
+        cx.createDatabase(schema, done);
+      });
+
+      beforeEach(function(done) {
+        cx.open(function(error, db) {
+          db.findTable("user", function(error, table) {
+            tab = table;
+            done();
+          });
+        });
+      });
+
+      beforeEach(function(done) {
+        tab.insert(RECORDS, done);
+      });
+
+      afterEach(function(done) {
+        cx.close(done);
+      });
+
+      afterEach(function(done) {
+        cx.dropDatabase(done);
+      });
+
+      it("update()", function() {
+        (function() {
+          tab.update();
+        }).should.throwError("Fields expected.");
+      });
+
+      it("update(callback)", function() {
+        (function() {
+          tab.update(function() {});
+        }).should.throwError("Fields expected.");
+      });
+
+      it("update(fields)", function(done) {
+        tab.update({password: "PWD"}, function(error) {
+          should.assert(error === undefined);
+        });
+
+        setTimeout(function() {
+          tab.findAll(function(error, result) {
+            should.assert(error === undefined);
+            result.rows.should.be.eql([
+              {userId: 1, username: "user01", password: "PWD"},
+              {userId: 2, username: "user02", password: "PWD"},
+              {userId: 3, username: "user03", password: "PWD"}
+            ]);
+            done();
+          });
+        }, 1000);
+      });
+
+      it("update(fields, callback)", function(done) {
+        tab.update({password: "PWD"}, function(error) {
+          should.assert(error === undefined);
+
+          tab.findAll(function(error, result) {
+            should.assert(error === undefined);
+            result.rows.should.be.eql([
+              {userId: 1, username: "user01", password: "PWD"},
+              {userId: 2, username: "user02", password: "PWD"},
+              {userId: 3, username: "user03", password: "PWD"}
+            ]);
+            done();
+          });
+        });
+      });
+
+      it("update(where, fields, callback)", function(done) {
+        tab.update({userId: 1}, {password: "PWD"}, function(error) {
+          should.assert(error === undefined);
+
+          tab.findAll(function(error, result) {
+            should.assert(error === undefined);
+            result.rows.should.be.eql([
+              {userId: 1, username: "user01", password: "PWD"},
+              {userId: 2, username: "user02", password: "pwd02"},
+              {userId: 3, username: "user03", password: "pwd03"}
+            ]);
+            done();
+          });
+        });
+      });
+
+      it("update(where, fields)", function(done) {
+        tab.update({userId: 1}, {password: "PWD"}, function(error) {
+          should.assert(error === undefined);
+        });
+
+        setTimeout(function() {
+          tab.findAll(function(error, result) {
+            should.assert(error === undefined);
+
+            result.rows.should.be.eql([
+              {userId: 1, username: "user01", password: "PWD"},
+              {userId: 2, username: "user02", password: "pwd02"},
+              {userId: 3, username: "user03", password: "pwd03"}
+            ]);
+            done();
+          });
+        }, 1000);
       });
     });
 
