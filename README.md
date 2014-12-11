@@ -288,10 +288,10 @@ We also can use the `Table.update()` method to replace some fields.
 
 The update modifiers are:
 
-- `$set` replaces the value by another. Example: {prop: {$set: newValue}}, similar to {prop: newValue}.
-- `$inc` increments the value by the specified number of units. Example: {prop: {$inc: 1}}.
-- `$dec` decrements the alue by the specified number of units. Example: {prop: {$dec: 1}}.
-- `$mul` multiplies the value by the specified amount. Example: {prop: {$mul: 0.5}}.
+- `$set` replaces the value by another. Example: `{prop: {$set: newValue}}`, similar to `{prop: newValue}`.
+- `$inc` increments the value by the specified number of units. Example: `{prop: {$inc: 1}}`.
+- `$dec` decrements the alue by the specified number of units. Example: `{prop: {$dec: 1}}`.
+- `$mul` multiplies the value by the specified amount. Example: `{prop: {$mul: 0.5}}`.
 
 ## Deleting data
 
