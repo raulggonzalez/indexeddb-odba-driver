@@ -11,7 +11,7 @@ The unit testing is performed using `Should.js` and `Mocha` on:
   - Chrome.
   - Firefox.
 
-`Grunt` is used to automate tasks: `uglify`, `jshint` and `jsdoc`.
+`Grunt` is used to automate tasks. Used plugins: `uglify`, `jshint`, `jsdoc` and `clean`.
 
 The API documentation is in the `doc` directory.
 
