@@ -51,33 +51,50 @@ module.exports = function(grunt) {
     },
 
     jsdoc: {
-      pub: {
+      "public": {
         src: ["lib/"],
         options: {
           recurse: true,
           template: "templates/default",
-          destination: "doc",
+          destination: "doc/api/",
           "private": false
         }
       }
     },
 
+    compress: {
+      jsdoc: {
+        options: {
+          mode: "zip",
+          archive: "doc/api.html.zip",
+          level: 3,
+        },
+
+        expand: true,
+        cwd: "doc/api/",
+        src: "**",
+        /*dest: "api"*/
+
+      }
+    },
+
     clean: {
       jsdoc: {
-        src: ["doc/"]
+        src: ["doc/api/"]
       }
-    }
+    },
   });
 
   //(2) enable plugins
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-contrib-jshint");
   grunt.loadNpmTasks("grunt-contrib-clean");
+  grunt.loadNpmTasks("grunt-contrib-compress");
   grunt.loadNpmTasks("grunt-jsdoc");
 
   //(3) define tasks
   grunt.registerTask("minify", "Generate the min version.", ["uglify"]);
-  grunt.registerTask("apidoc", "Generate the API JSDoc.", ["clean", "jsdoc"]);
+  grunt.registerTask("jspubdoc", "Generate the API JSDoc.", ["clean:jsdoc", "jsdoc:public", "compress:jsdoc", "clean:jsdoc"]);
 
   grunt.registerTask("test", "Perform the unit testing.", function test(browser, min) {
     var chrome = (browser == "chrome" || !browser);

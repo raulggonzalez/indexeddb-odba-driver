@@ -54,19 +54,17 @@ describe("Connection", function() {
 
   describe("Databases", function() {
     describe("#dropDatabase()", function() {
-      it("dropDatabase(name, callback)", function(done) {
+      it("dropDatabase(callback)", function(done) {
         cx.dropDatabase(function(error) {
+          should.assert(error === undefined);
+          cx.connected.should.be.eql(false);
+
           cx.hasDatabase("odba", function(error, exists) {
             should.assert(error === undefined);
             exists.should.be.eql(false);
             done();
           });
         });
-      });
-
-      it("dropDatabase(name)", function(done) {
-        cx.dropDatabase();
-        done();
       });
     });
 
@@ -89,6 +87,16 @@ describe("Connection", function() {
               done();
             });
           }, 1000);
+        });
+
+        it("createDatabase(ddl) - Check connection", function(done) {
+          cx.createDatabase(function(db) {
+            cx.database.should.be.exactly(db);
+          }, function(error) {
+            should.assert(error === undefined);
+            cx.connected.should.be.eql(false);
+            done();
+          });
         });
 
         it("createDatabase(ddl)", function(done) {
@@ -134,12 +142,8 @@ describe("Connection", function() {
       describe("w/connection opened", function() {
         var cx = drv.createConnection({database: "odba"});
 
-        before(function(done) {
+        beforeEach(function(done) {
           cx.open(done);
-        });
-
-        after(function(done) {
-          cx.close(done);
         });
 
         afterEach(function(done) {
@@ -241,12 +245,8 @@ describe("Connection", function() {
       describe("w/connection opened", function() {
         var cx = drv.createConnection({database: "odba"});
 
-        before(function(done) {
+        beforeEach(function(done) {
           cx.open(done);
-        });
-
-        after(function(done) {
-          cx.close(done);
         });
 
         afterEach(function(done) {

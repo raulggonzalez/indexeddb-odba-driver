@@ -9,15 +9,14 @@ The ODBA philosophy is similar to the `Node.js` API's.
 The unit testing is performed using `Should.js` and `Mocha` on:
 
   - Chrome.
-  - Firefox.
 
-`Grunt` is used to automate tasks. Used plugins: `uglify`, `jshint`, `jsdoc` and `clean`.
+`Grunt` is used to automate tasks.
 
-The API documentation is in the `doc` directory.
+The API documentation is in the `doc/api.html.zip` file.
 
 ## Terminology
 
-IndexedDB is a document-oriented database and it uses its own terminology:
+IndexedDB is a key-value database and it uses its own terminology:
 
 - Database = Database
 - Object store = Table (SQL) or Collection (MongoDB or CouchDB)
@@ -237,6 +236,18 @@ We can use the following operators:
   - `$notLike`. Not like. Example: `{email: {$notLike: ".*@gmail\.com"}}`.
   - `$in`. In. Example: `{username: {$in: ["ecostello", "elvisc"]}}`.
   - `$notIn`. Not in. Example: `{username: {$notIn: ["costello", "elvisc"]}}`.
+
+## Joining tables (or object stores)
+
+IndexedDB doesn't support joins, this is implemented by the driver.
+
+To join two object stores, we have to use the methods `Table.join()` or `Query.join()`.
+Examples:
+
+  ```
+  user.join("session", "userId", function(error, result) { ... });
+  user.join("session", "userId").find(function(error, result) { ... });
+  ```
 
 ## Inserting data
 
