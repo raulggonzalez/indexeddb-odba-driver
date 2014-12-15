@@ -26,7 +26,7 @@ IndexedDB is a key-value database and it uses its own terminology:
 
 ## Use
 
-To use `odba-indexeddb`, we have to include:
+To use `indexeddb-odba-driver`, we have to include:
 
   ```
   <script src="indexeddb-odba-driver.min.js"></script>
