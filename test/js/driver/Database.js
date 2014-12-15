@@ -1,5 +1,5 @@
 describe("Database", function() {
-  var drv = Driver.getDriver("IndexedDB");
+  var drv = odba.Driver.getDriver("IndexedDB");
   var cx = drv.createConnection({database: "odba"});
 
   describe("Properties", function() {

@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 
     test: {
       host: "localhost",
-      port: 51792,
+      port: 53298,
       chromeFolder: "C:\\Program Files (x86)\\Google\\Chrome\\Application",
       firefoxFolder: "C:\\Program Files (x86)\\Mozilla Firefox",
       app: "http://<%= test.host %>:<%= test.port %>/<%= pkg.name %>",
@@ -22,6 +22,17 @@ module.exports = function(grunt) {
         jshintrc: true,
         all: ["Gruntfile.js", "lib/*.js", "lib/driver/*.js", "test/js/*.js"],
         force: false
+      }
+    },
+
+    concat: {
+      options: {
+        separator: "\n\n"
+      },
+
+      "indexeddb-odba-driver.min.js": {
+        src: ["lib/index.js", "lib/odba/*.js", "lib/odba/indexeddb/*"],
+        dest: "indexeddb-odba-driver.min.js"
       }
     },
 
@@ -43,9 +54,9 @@ module.exports = function(grunt) {
         preserveComments: false
       },
 
-      build: {
+      "indexeddb-odba-driver.min.js": {
         files: {
-          "indexeddb-odba-driver.min.js": ["lib/*.js", "lib/driver/*"]
+          "indexeddb-odba-driver.min.js": ["lib/index.js", "lib/odba/*.js", "lib/odba/indexeddb/*"]
         }
       }
     },
@@ -86,15 +97,17 @@ module.exports = function(grunt) {
   });
 
   //(2) enable plugins
-  grunt.loadNpmTasks("grunt-contrib-uglify");
-  grunt.loadNpmTasks("grunt-contrib-jshint");
   grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks("grunt-contrib-compress");
+  grunt.loadNpmTasks("grunt-contrib-concat");
+  grunt.loadNpmTasks("grunt-contrib-jshint");
+  grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-jsdoc");
 
   //(3) define tasks
-  grunt.registerTask("minify", "Generate the min version.", ["uglify"]);
+  grunt.registerTask("minify", "Generate the min version.", ["uglify:indexeddb-odba-driver.min.js"]);
   grunt.registerTask("jspubdoc", "Generate the API JSDoc.", ["clean:jsdoc", "jsdoc:public", "compress:jsdoc", "clean:jsdoc"]);
+  grunt.registerTask("minifyAndDocify", "Generate the min version and the API JSDoc.", ["jspubdoc", "minify"]);
 
   grunt.registerTask("test", "Perform the unit testing.", function test(browser, min) {
     var chrome = (browser == "chrome" || !browser);

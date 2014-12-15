@@ -1,4 +1,6 @@
 describe("Driver", function() {
+  var Driver = odba.Driver;
+
   describe("#getDriver()", function() {
     it("getDriver('IndexedDB')", function() {
       var drv = Driver.getDriver("IndexedDB");

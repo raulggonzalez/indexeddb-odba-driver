@@ -1,5 +1,5 @@
 describe("Table", function() {
-  var drv = Driver.getDriver("IndexedDB");
+  var drv = odba.Driver.getDriver("IndexedDB");
   var users = [
     {userId: 1, username: "user01", password: "pwd01"},
     {userId: 2, username: "user02", password: "pwd02"},

@@ -1,5 +1,5 @@
 describe("Table - DQO", function() {
-  var drv = Driver.getDriver("IndexedDB");
+  var drv = odba.Driver.getDriver("IndexedDB");
   var cx = drv.createConnection({database: "odba"});
   var db, user, session;
 

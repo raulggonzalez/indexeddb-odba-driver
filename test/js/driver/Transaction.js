@@ -1,5 +1,5 @@
 describe("Transaction", function() {
-  var drv = Driver.getDriver("IndexedDB");
+  var drv = odba.Driver.getDriver("IndexedDB");
 
   describe("Handlers", function() {
     describe("Complete handler", function() {

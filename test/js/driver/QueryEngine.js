@@ -1,5 +1,5 @@
 describe("QueryEngine", function() {
-  var drv = Driver.getDriver("IndexedDB");
+  var drv = odba.Driver.getDriver("IndexedDB");
   var cx = drv.createConnection({database: "odba"});
   var engine = new QueryEngine();
   var records = [

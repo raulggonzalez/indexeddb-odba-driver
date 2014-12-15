@@ -1,5 +1,5 @@
 describe("Connection-Transaction", function() {
-  var drv = Driver.getDriver("IndexedDB");
+  var drv = odba.Driver.getDriver("IndexedDB");
 
   describe("#hasTransaction()", function() {
     describe("Into read/write transaction", function() {

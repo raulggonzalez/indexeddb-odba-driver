@@ -32,12 +32,17 @@ To use `indexeddb-odba-driver`, we have to include:
   <script src="indexeddb-odba-driver.min.js"></script>
   ```
 
+## odba namespace
+
+When the driver is included, an `odba` object is created automatically.
+This is the API start point.
+
 ## Getting the driver
 
 First of all, we have to get the IndexedDB driver:
 
   ```
-  var drv = Driver.getDriver("IndexedDB");
+  var drv = odba.Driver.getDriver("IndexedDB");
   ```
 
 ## Getting the connection
