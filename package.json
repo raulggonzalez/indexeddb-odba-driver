@@ -1,5 +1,5 @@
 {
-  "name": "odba-indexeddb",
+  "name": "indexeddb-odba-driver",
   "version": "0.3.0",
   "description": "IndexedDB ODBA driver.",
   "author": "Raúl G. González <raulggonzalezsw@outlook.com>",
@@ -12,15 +12,15 @@
     "storage",
     "local storage"
   ],
-  "homepage": "https://github.com/raulggonzalez/odba-indexeddb",
+  "homepage": "https://github.com/raulggonzalez/indexeddb-odba-driver",
   "bugs": {
-    "url": "https://github.com/raulggonzalez/odba-indexeddb/issues"
+    "url": "https://github.com/raulggonzalez/indexeddb-odba-driver/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/raulggonzalez/odba-indexeddb.git"
+    "url": "https://github.com/raulggonzalez/indexeddb-odba-driver.git"
   },
-  "main": "odba-indexeddb.min.js",
+  "main": "indexeddb-odba-driver.min.js",
   "dependencies": {},
   "devDependencies": {
     "grunt": "^0.4.5",

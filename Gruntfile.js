@@ -45,7 +45,7 @@ module.exports = function(grunt) {
 
       build: {
         files: {
-          "odba-indexeddb.min.js": ["lib/*.js", "lib/driver/*"]
+          "indexeddb-odba-driver.min.js": ["lib/*.js", "lib/driver/*"]
         }
       }
     },

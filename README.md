@@ -1,10 +1,10 @@
-# odba-indexeddb
+# indexeddb-odba-driver
 
 `ODBA` (Open Database API) is an asynchronous API for the JavaScript language
 that programmers can use to access data such as databases.
 The ODBA philosophy is similar to the `Node.js` API's.
 
-`odba-indexeddb` is the `IndexedDB` driver to use with the browsers.
+`indexeddb-odba-driver` is the `IndexedDB` driver to use with the browsers.
 
 The unit testing is performed using `Should.js` and `Mocha` on:
 
@@ -29,7 +29,7 @@ IndexedDB is a key-value database and it uses its own terminology:
 To use `odba-indexeddb`, we have to include:
 
   ```
-  <script src="odba-indexeddb.min.js"></script>
+  <script src="indexeddb-odba-driver.min.js"></script>
   ```
 
 ## Getting the driver
