@@ -1,4 +1,6 @@
 describe("Connection-Transaction", function() {
+  var IndexedDBDatabase = odba.indexeddb.IndexedDBDatabase;
+  var IndexedDBTransaction = odba.indexeddb.IndexedDBTransaction;
   var drv = odba.Driver.getDriver("IndexedDB");
 
   describe("#hasTransaction()", function() {
@@ -760,7 +762,7 @@ describe("Connection-Transaction", function() {
           cx.transaction.should.be.eql(outer);
         });
       });
-    })
+    });
   });
 
   describe("#runTransaction()", function() {
@@ -802,7 +804,7 @@ describe("Connection-Transaction", function() {
       }, function(error) {
         should.assert(error === undefined);
         done();
-      })
+      });
     });
 
     it("runTransaction('readwrite', op)", function(done) {
@@ -813,7 +815,7 @@ describe("Connection-Transaction", function() {
       }, function(error) {
         should.assert(error === undefined);
         done();
-      })
+      });
     });
   });
 });

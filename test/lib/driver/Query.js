@@ -1,6 +1,9 @@
 describe("Query", function() {
+  var IndexedDBQuery = odba.indexeddb.IndexedDBQuery;
+
   var drv = odba.Driver.getDriver("IndexedDB");
   var cx = drv.createConnection({database: "odba"});
+  var Result = odba.Result;
 
   var users = [
     {userId: 1, username: "user01", password: "pwd01"},

@@ -1,5 +1,16 @@
 describe("Driver", function() {
   var Driver = odba.Driver;
+  var IndexedDBDriver = odba.indexeddb.IndexedDBDriver;
+  var IndexedDBConnection = odba.indexeddb.IndexedDBConnection;
+
+  describe("Driver caching", function() {
+    it("Regetting", function() {
+      var drv1 = Driver.getDriver("IndexedDB");
+      var drv2 = Driver.getDriver("IndexedDB");
+
+      drv1.should.be.exactly(drv2);
+    });
+  });
 
   describe("#getDriver()", function() {
     it("getDriver('IndexedDB')", function() {
@@ -15,7 +26,11 @@ describe("Driver", function() {
   });
 
   describe("#createConnection()", function() {
-    var drv = Driver.getDriver("IndexedDB");
+    var drv;
+
+    before(function() {
+      drv = Driver.getDriver("IndexedDB");
+    });
 
     it("createConnection()", function() {
       (function() {

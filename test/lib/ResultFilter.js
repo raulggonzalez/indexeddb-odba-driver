@@ -1,5 +1,6 @@
 describe("ResultFilter", function() {
-  var filter = new ResultFilter();
+  var IndexedDBResult = odba.indexeddb.IndexedDBResult;
+  var filter = new odba.ResultFilter();
   var rows = [
     {userId: 1, username: "user01", password: "pwd01"},
     {userId: 2, username: "user02", password: "pwd02"},
@@ -574,7 +575,7 @@ describe("ResultFilter", function() {
   });
 
   describe("#find()", function() {
-    var result = new Result(rows);
+    var result = new IndexedDBResult(rows);
 
     it("find(result)", function() {
       filter.find(result).should.be.eql(rows);

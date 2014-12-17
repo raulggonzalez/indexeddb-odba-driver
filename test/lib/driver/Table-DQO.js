@@ -1,6 +1,7 @@
 describe("Table - DQO", function() {
   var drv = odba.Driver.getDriver("IndexedDB");
   var cx = drv.createConnection({database: "odba"});
+  var Result = odba.Result;
   var db, user, session;
 
   var users = [
@@ -40,7 +41,7 @@ describe("Table - DQO", function() {
       db = database;
       done();
     });
-  })
+  });
 
   before(function(done) {
     db.findTable("user", function(error, table) {

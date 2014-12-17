@@ -1,4 +1,8 @@
 describe("QueryEngine", function() {
+  var Result = odba.Result;
+  var IndexedDBQuery = odba.indexeddb.IndexedDBQuery;
+  var QueryEngine = odba.indexeddb.QueryEngine;
+
   var drv = odba.Driver.getDriver("IndexedDB");
   var cx = drv.createConnection({database: "odba"});
   var engine = new QueryEngine();

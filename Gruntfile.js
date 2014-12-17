@@ -1,5 +1,5 @@
 //imports
-const child_process = require("child_process");
+var child_process = require("child_process");
 
 //Grunt
 module.exports = function(grunt) {
@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 
     test: {
       host: "localhost",
-      port: 53298,
+      port: 51792,
       chromeFolder: "C:\\Program Files (x86)\\Google\\Chrome\\Application",
       firefoxFolder: "C:\\Program Files (x86)\\Mozilla Firefox",
       app: "http://<%= test.host %>:<%= test.port %>/<%= pkg.name %>",
@@ -18,10 +18,30 @@ module.exports = function(grunt) {
     },
 
     jshint: {
-      options: {
-        jshintrc: true,
-        all: ["Gruntfile.js", "lib/*.js", "lib/driver/*.js", "test/js/*.js"],
-        force: false
+      grunt: {
+        files: {
+          src: ["Gruntfile.js"]
+        }
+      },
+
+      lib: {
+        options: {
+          jshintrc: true
+        },
+
+        files: {
+          src: ["lib/***"]
+        }
+      },
+
+      test: {
+        options: {
+          ignores: ["test/vendor/**", "test/**.html"]
+        },
+
+        files: {
+          src: ["test/**"]
+        }
       }
     },
 
@@ -107,7 +127,7 @@ module.exports = function(grunt) {
   //(3) define tasks
   grunt.registerTask("minify", "Generate the min version.", ["uglify:indexeddb-odba-driver.min.js"]);
   grunt.registerTask("jspubdoc", "Generate the API JSDoc.", ["clean:jsdoc", "jsdoc:public", "compress:jsdoc", "clean:jsdoc"]);
-  grunt.registerTask("minifyAndDocify", "Generate the min version and the API JSDoc.", ["jspubdoc", "minify"]);
+  grunt.registerTask("all", "Generate all things.", ["jspubdoc", "minify", "test:chrome:true"]);
 
   grunt.registerTask("test", "Perform the unit testing.", function test(browser, min) {
     var chrome = (browser == "chrome" || !browser);

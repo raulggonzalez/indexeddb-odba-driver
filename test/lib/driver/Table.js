@@ -1,4 +1,8 @@
 describe("Table", function() {
+  var IndexedDBConnection = odba.indexeddb.IndexedDBConnection;
+  var IndexedDBDatabase = odba.indexeddb.IndexedDBDatabase;
+  var IndexedDBIndex = odba.indexeddb.IndexedDBIndex;
+
   var drv = odba.Driver.getDriver("IndexedDB");
   var users = [
     {userId: 1, username: "user01", password: "pwd01"},
@@ -58,7 +62,7 @@ describe("Table", function() {
 
     it("indexed", function() {
       Object.keys(tab.indexed).length.should.be.eql(1);
-      tab.indexed["username"].name.should.be.eql("ix_username");
+      tab.indexed.username.name.should.be.eql("ix_username");
     });
   });
 

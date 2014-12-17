@@ -1,4 +1,8 @@
 describe("Database", function() {
+  var IndexedDBConnection = odba.indexeddb.IndexedDBConnection;
+  var IndexedDBTable = odba.indexeddb.IndexedDBTable;
+  var IndexedDBIndex = odba.indexeddb.IndexedDBIndex;
+
   var drv = odba.Driver.getDriver("IndexedDB");
   var cx = drv.createConnection({database: "odba"});
 
@@ -15,7 +19,7 @@ describe("Database", function() {
         db = cx.database;
         done();
       });
-    })
+    });
 
     after(function(done) {
       cx.dropDatabase(done);
@@ -422,7 +426,7 @@ describe("Database", function() {
     describe("#createTables()", function() {
       var cx = drv.createConnection({database: "odba"});
       var auxCx = cx.clone();
-      const TABLES = [
+      var TABLES = [
         {name: "table1", keyPath: "id"},
         {name: "table2", keyPath: "id"}
       ];
@@ -498,7 +502,7 @@ describe("Database", function() {
 
       after(function(done)  {
         cx.close(done);
-      })
+      });
 
       after(function(done) {
         cx.dropDatabase(done);
@@ -697,7 +701,7 @@ describe("Database", function() {
               exists.should.be.eql(true);
               done();
             });
-          })
+          });
         });
       });
 
@@ -772,12 +776,12 @@ describe("Database", function() {
 
       afterEach(function(done) {
         cx.dropDatabase(done);
-      })
+      });
 
       it("dropIndex()", function() {
         cx.alterDatabase(function(db) {
           (function() {
-            db.dropIndex()
+            db.dropIndex();
           }).should.throwError("Table name and index name expected.");
         });
       });

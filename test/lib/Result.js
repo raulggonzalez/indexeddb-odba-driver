@@ -1,4 +1,6 @@
 describe("Result", function() {
+  var Result = odba.indexeddb.IndexedDBResult;
+
   var rows = [
     {userId: 1, username: "user01", password: "pwd01"},
     {userId: 2, username: "user02", password: "pwd02"},

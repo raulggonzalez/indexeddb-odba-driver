@@ -1,6 +1,7 @@
 describe("Connection", function() {
   var drv = odba.Driver.getDriver("IndexedDB");
   var cx = drv.createConnection({database: "odba"});
+  var IndexedDBDatabase = odba.indexeddb.IndexedDBDatabase;
 
   after(function(done) {
     cx.dropDatabase(done);
@@ -134,7 +135,7 @@ describe("Connection", function() {
               exists.should.be.eql(true);
               cx.connected.should.be.eql(false);
               done();
-            })
+            });
           });
         });
       });
@@ -296,11 +297,11 @@ describe("Connection", function() {
 
       afterEach(function(done) {
         cx.dropDatabase(done);
-      })
+      });
 
       afterEach(function(done) {
         drv.createConnection({database: "unknown"}).dropDatabase(done);
-      })
+      });
 
       it("hasDatabase()", function() {
         (function() {

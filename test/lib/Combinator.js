@@ -1,5 +1,5 @@
 describe("Combinator", function() {
-  var combinator = new Combinator();
+  var combinator = new odba.Combinator();
 
   var users = [
     {userId: 1, username: "user01", password: "pwd01"},
