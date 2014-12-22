@@ -81,7 +81,7 @@ module.exports = function(grunt) {
 
     test: {
       host: "localhost",
-      port: 59611,
+      port: 51792,
       chromeFolder: "C:\\Program Files (x86)\\Google\\Chrome\\Application",
       firefoxFolder: "C:\\Program Files (x86)\\Mozilla Firefox",
       app: "http://<%= test.host %>:<%= test.port %>/<%= pkg.name %>",

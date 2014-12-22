@@ -85,6 +85,8 @@ We have to use the `Server.dropDatabase()` method to delete a database:
   cx.server.dropDatabase("mydb", function(error) { ... });
   ```
 
+**Important** If a connection opened, the operation waits for it to be closed.
+
 ## Checking whether a database exists
 
 To check whether a database exists, we must use the `Server.hasDatabase()` method:

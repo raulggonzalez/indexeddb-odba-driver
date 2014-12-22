@@ -1,4 +1,4 @@
-/*! indexeddb-odba-driver - 0.5.1 (2014-12-22) */
+/*! indexeddb-odba-driver - 0.5.2 (2014-12-22) */
 /*! odba-core - 0.4.1 (2014-12-21) */
 
 (function() {
@@ -3079,6 +3079,7 @@ IndexedDBServer.prototype.createDatabase = function createDatabase(name, ddl, ca
 
 /**
  * Drops a database.
+ * This operation only can be used as not connected; if connected, error.
  *
  * @name dropDatabase
  * @function
@@ -3092,14 +3093,28 @@ IndexedDBServer.prototype.createDatabase = function createDatabase(name, ddl, ca
  * server.dropDatabase("mydb", function(error) { ... });
  */
 IndexedDBServer.prototype.dropDatabase = function dropDatabase(name, callback) {
-  //(1) arguments
+  var req, self = this, cx = this.connection;
+
+  //(1) pre: arguments
   if (!name || typeof(name) != "string") {
     throw new Error("Database name expected.");
   }
 
-  //(2) drop
-  this.connection.indexedDB.deleteDatabase(name);
-  this.connection.close(callback);
+  //(2) pre: connected?
+  if (cx.connected) {
+    throw new Error("Connection opened.");
+  }
+
+  //(3) drop
+  req = cx.indexedDB.deleteDatabase(name);
+
+  req.onerror = function(e) {
+    if (callback) callback(e);
+  };
+
+  req.onsuccess = function() {
+    if (callback) callback();
+  };
 };
 
 /**

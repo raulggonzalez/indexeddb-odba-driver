@@ -47,40 +47,80 @@ describe("odba.indexeddb.IndexedDBServer", function() {
 
   describe("Databases", function() {
     describe("#dropDatabase()", function() {
-      var cx;
+      describe("Unique connection", function() {
+        var cx;
 
-      before(function() {
-        cx = drv.createConnection({database: "odba"});
-      });
-
-      after(function(done) {
-        cx.close(done);
-      });
-
-      describe("Error handling", function() {
-        it("dropDatabase()", function() {
-          (function() {
-            cx.server.dropDatabase();
-          }).should.throwError("Database name expected.");
+        before(function() {
+          cx = drv.createConnection({database: "odba"});
         });
 
-        it("dropDatabase(callback)", function() {
-          (function() {
-            cx.server.dropDatabase(function() {});
-          }).should.throwError("Database name expected.");
+        after(function(done) {
+          cx.close(done);
         });
-      });
 
-      it("dropDatabase(name, callback)", function(done) {
-        cx.server.dropDatabase("odba", function(error) {
-          should.assert(error === undefined);
-          cx.connected.should.be.eql(false);
+        describe("Error handling", function() {
+          it("dropDatabase()", function() {
+            (function() {
+              cx.server.dropDatabase();
+            }).should.throwError("Database name expected.");
+          });
 
-          cx.server.hasDatabase("odba", function(error, exists) {
+          it("dropDatabase(callback)", function() {
+            (function() {
+              cx.server.dropDatabase(function() {});
+            }).should.throwError("Database name expected.");
+          });
+        });
+
+        it("dropDatabase(name, callback)", function(done) {
+          cx.server.dropDatabase("odba", function(error) {
             should.assert(error === undefined);
-            exists.should.be.eql(false);
+            cx.connected.should.be.eql(false);
+
+            cx.server.hasDatabase("odba", function(error, exists) {
+              should.assert(error === undefined);
+              exists.should.be.eql(false);
+              done();
+            });
+          });
+        });
+      });
+
+      describe("Concurrent connections", function() {
+        var cx, auxCx;
+
+        before(function() {
+          cx = drv.createConnection({database: "odba"});
+          auxCx = cx.clone();
+        });
+
+        beforeEach(function(done) {
+          cx.server.createDatabase("odba", schema, done);
+        });
+
+        beforeEach(function(done) {
+          auxCx.open(done);
+        });
+
+        after(function(done) {
+          auxCx.close(done);
+        });
+
+        it("dropDatabase()", function(done) {
+          var timeout = false;
+
+          cx.server.dropDatabase("odba", function(error) {
+            should.assert(error === undefined);
+            timeout.should.be.eql(true, "Drop should be greater than 3000ms.");
             done();
           });
+
+          setTimeout(function() {
+            auxCx.close(function(error) {
+              should.assert(error === undefined);
+              timeout = true;
+            });
+          }, 3000);
         });
       });
     });
@@ -173,6 +213,10 @@ describe("odba.indexeddb.IndexedDBServer", function() {
             cx = con;
             done();
           });
+        });
+
+        afterEach(function(done) {
+          cx.close(done);
         });
 
         afterEach(function(done) {
