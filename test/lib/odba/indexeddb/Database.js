@@ -273,7 +273,7 @@ describe("odba.indexeddb.IndexedDBDatabase", function() {
       it("dropTable(...) - Out of version change transaction", function(done) {
         auxCx.open(function(error, db) {
           db.dropTable("user", function(error) {
-            error.message.should.be.eql("Database.dropTable() only into Connection.alterDatabase().");
+            error.message.should.be.eql("Database.dropTable() only into Server.alterDatabase().");
             done();
           });
         });
@@ -379,7 +379,7 @@ describe("odba.indexeddb.IndexedDBDatabase", function() {
       it("createTable(...) - Out of version change transaction", function(done) {
         auxCx.open(function(error, db) {
           db.createTable("table", function(error) {
-            error.message.should.be.eql("Database.createTable() only into Connection.createDatabase() or Connection.alterDatabase().");
+            error.message.should.be.eql("Database.createTable() only into Server.createDatabase() or Server.alterDatabase().");
             done();
           });
         });
@@ -457,7 +457,7 @@ describe("odba.indexeddb.IndexedDBDatabase", function() {
           should.assert(error === undefined);
 
           db.createTables(TABLES, function(error) {
-            error.message.should.be.eql("Database.createTables() only into Connection.createDatabase() or Connection.alterDatabase().");
+            error.message.should.be.eql("Database.createTables() only into Server.createDatabase() or Server.alterDatabase().");
             done();
           });
         });
@@ -711,7 +711,7 @@ describe("odba.indexeddb.IndexedDBDatabase", function() {
       it("createIndex(...) - Out of version change transaction", function(done) {
         auxCx.open(function(error, db) {
           db.createIndex("user", "ix_username", "username", function(error) {
-            error.message.should.be.eql("Database.createIndex() only into Connection.createDatabase() or Connection.alterDatabase().");
+            error.message.should.be.eql("Database.createIndex() only into Server.createDatabase() or Server.alterDatabase().");
             done();
           });
         });
@@ -842,7 +842,7 @@ describe("odba.indexeddb.IndexedDBDatabase", function() {
       it("dropIndex(...) - Out of version change transaction", function(done) {
         auxCx.open(function(error, db) {
           db.dropIndex("user", "ix_username", function(error) {
-            error.message.should.be.eql("Database.dropIndex() only into Connection.alterDatabase().");
+            error.message.should.be.eql("Database.dropIndex() only into Server.alterDatabase().");
             done();
           });
         });

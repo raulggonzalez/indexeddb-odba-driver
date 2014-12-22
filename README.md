@@ -96,7 +96,7 @@ To check whether a database exists, we must use the `Server.hasDatabase()` metho
 ## Creating tables (object stores)
 
 To create a table, we use the method `Database.createTable()` whitin the
-methods `createDatabase()` or `alterDatabase()`.
+methods `Server.createDatabase()` or `Server.alterDatabase()`.
 
 During the database creation:
 
@@ -105,7 +105,7 @@ During the database creation:
   var cx = drv.createConnection({database: "mydb"});
 
   //(2) create database
-  cx.createDatabase(function(db) {
+  cx.server.createDatabase("mydb", function(db) {
     db.createTable("user", {keyPath: "userId"});
     db.createTable("session", {keyPath: "sessionId"});
   }, function(error) {
@@ -117,10 +117,10 @@ After the database creation:
 
   ```
   //(1) create connection
-  var cx= drv.createConnection({database: "mydb"});
+  var cx = drv.createConnection({database: "mydb"});
 
   //(2) alter database
-  cx.alterDatabase(function(db) {
+  cx.server.alterDatabase("mydb", function(db) {
     db.createTable("user", {keyPath: "userId"});
     db.createTable("session", {keyPath: "sessionId"});
   }, function(error) {
@@ -136,10 +136,10 @@ Options:
 ## Dropping tables (object stores)
 
 Dropping a table is easy, we have to use the `Database.dropTable()` into a
-`Connection.alterDatabase()` method:
+`Server.alterDatabase()` method:
 
   ```
-  cx.alterDatabase(function(db) {
+  cx.server.alterDatabase("mydb", function(db) {
     db.dropTable("store");
     db.dropTable("store", function(error) { ... });
   }, function(error) {
@@ -150,14 +150,14 @@ Dropping a table is easy, we have to use the `Database.dropTable()` into a
 ## Creating indexes
 
 The indexes can be created from a `Database` instance or a `Table` instance. In both cases,
-we have to perfom into `Connection.createDatabase()` or `Connection.alterDatabase()`.
+we have to perfom into `Server.createDatabase()` or `Server.alterDatabase()`.
 
 **Important** Nowdays, we only can create simple indexes.
 
 From a `Database` instance:
 
   ```
-  cx.createDatabase(function(db) {
+  cx.server.createDatabase("mydb", function(db) {
     db.createIndex("user", "ix_username", "username", {unique: true});
     db.createIndex("user", "ix_username", "username", {unique: true}, function(error) { ... });
   });
@@ -166,7 +166,7 @@ From a `Database` instance:
 From a `Table` instance:
 
   ```
-  cx.alterDatabase(function(db) {
+  cx.server.alterDatabase("mydb", function(db) {
     db.findTable("user", function(error, tab) {
       tab.createIndex("ix_username", "username", {unique: true});
       tab.createIndex("ix_username", "username", {unique: true}, function(error) { ... });
@@ -176,10 +176,10 @@ From a `Table` instance:
 
 ## Dropping indexes
 
-Similar to tables, in `Connection.alterDatabase()` using a `Database` or a `Table`:
+Similar to tables, in `Server.alterDatabase()` using a `Database` or a `Table`:
 
   ```
-  cx.alterDatabase(function(db) {
+  cx.server.alterDatabase("mydb", function(db) {
     db.dropIndex("store", "index");
     db.dropIndex("store", "index", function(error) { ... });
   });

@@ -1,4 +1,4 @@
-/*! indexeddb-odba-driver - 0.5.0 (2014-12-22) */
+/*! indexeddb-odba-driver - 0.5.1 (2014-12-22) */
 /*! odba-core - 0.4.1 (2014-12-21) */
 
 (function() {
@@ -2034,7 +2034,7 @@ IndexedDBDatabase.prototype.createTable = function createTable(name, options, ca
   tran = this.transaction;
 
   if (!tran) {
-    if (callback) callback(new Error("Database.createTable() only into Connection.createDatabase() or Connection.alterDatabase()."));
+    if (callback) callback(new Error("Database.createTable() only into Server.createDatabase() or Server.alterDatabase()."));
     return;
   }
 
@@ -2072,7 +2072,7 @@ IndexedDBDatabase.prototype.createTables = function createTables(stores, callbac
   tran = this.transaction;
 
   if (!tran) {
-    if (callback) callback(new Error("Database.createTables() only into Connection.createDatabase() or Connection.alterDatabase()."));
+    if (callback) callback(new Error("Database.createTables() only into Server.createDatabase() or Server.alterDatabase()."));
     return;
   }
 
@@ -2102,7 +2102,7 @@ IndexedDBDatabase.prototype.dropTable = function dropTable(name, callback) {
 
   //(1) get tran
   if (!this.connection.hasTransaction("versionchange")) {
-    if (callback) callback(new Error("Database.dropTable() only into Connection.alterDatabase()."));
+    if (callback) callback(new Error("Database.dropTable() only into Server.alterDatabase()."));
     return;
   }
 
@@ -2228,7 +2228,7 @@ IndexedDBDatabase.prototype.createIndex = function createIndex(table, index, col
 
   //(2) create
   if (!this.connection.hasTransaction("versionchange")) {
-    if (callback) callback(new Error("Database.createIndex() only into Connection.createDatabase() or Connection.alterDatabase()."));
+    if (callback) callback(new Error("Database.createIndex() only into Server.createDatabase() or Server.alterDatabase()."));
   } else {
     tran = this.transaction;
 
@@ -2272,7 +2272,7 @@ IndexedDBDatabase.prototype.dropIndex = function dropIndex(table, index, callbac
 
   //(2) drop
   if (!this.connection.hasTransaction("versionchange")) {
-    if (callback) callback(new Error("Database.dropIndex() only into Connection.alterDatabase()."));
+    if (callback) callback(new Error("Database.dropIndex() only into Server.alterDatabase()."));
   } else {
     tran = this.transaction;
 
