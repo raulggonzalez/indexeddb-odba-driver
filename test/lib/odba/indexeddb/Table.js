@@ -1,21 +1,27 @@
-describe("Table", function() {
+describe("odba.indexeddb.IndexedDBTable", function() {
   var IndexedDBConnection = odba.indexeddb.IndexedDBConnection;
   var IndexedDBDatabase = odba.indexeddb.IndexedDBDatabase;
   var IndexedDBIndex = odba.indexeddb.IndexedDBIndex;
 
-  var drv = odba.Driver.getDriver("IndexedDB");
-  var users = [
+  var drv, users = [
     {userId: 1, username: "user01", password: "pwd01"},
     {userId: 2, username: "user02", password: "pwd02"},
     {userId: 3, username: "user03", password: "pwd03"}
   ];
 
+  before(function() {
+    drv = odba.Driver.getDriver("IndexedDB");
+  });
+
   describe("Properties", function() {
-    var cx = drv.createConnection({database: "odba"});
-    var tab;
+    var cx, tab;
+
+    before(function() {
+      cx = drv.createConnection({database: "odba"});
+    });
 
     before(function(done) {
-      cx.createDatabase(indexedSchema, done);
+      cx.server.createDatabase("odba", indexedSchema, done);
     });
 
     before(function(done) {
@@ -32,7 +38,7 @@ describe("Table", function() {
     });
 
     after(function(done) {
-      cx.dropDatabase(done);
+      cx.server.dropDatabase("odba", done);
     });
 
     it("database", function() {
@@ -67,12 +73,15 @@ describe("Table", function() {
   });
 
   describe("Indexes", function() {
-    describe("DQO", function() {
-      var cx = drv.createConnection({database: "odba"});
-      var db, tab;
+    describe("Query", function() {
+      var cx, db, tab;
+
+      before(function() {
+        cx = drv.createConnection({database: "odba"});
+      });
 
       before(function(done) {
-        cx.createDatabase(indexedSchema, done);
+        cx.server.createDatabase("odba", indexedSchema, done);
       });
 
       before(function(done) {
@@ -90,20 +99,22 @@ describe("Table", function() {
       });
 
       after(function(done) {
-        cx.dropDatabase(done);
+        cx.server.dropDatabase("odba", done);
       });
 
       describe("#hasIndex()", function() {
-        it("hasIndex()", function() {
-          (function() {
-            tab.hasIndex();
-          }).should.throwError("Index name and callback expected.");
-        });
+        describe("Error handling", function() {
+          it("hasIndex()", function() {
+            (function() {
+              tab.hasIndex();
+            }).should.throwError("Index name and callback expected.");
+          });
 
-        it("hasIndex(name)", function() {
-          (function() {
-            tab.hasIndex("ix_username");
-          }).should.throwError("Index name and callback expected.");
+          it("hasIndex(name)", function() {
+            (function() {
+              tab.hasIndex("ix_username");
+            }).should.throwError("Index name and callback expected.");
+          });
         });
 
         it("hasIndex(name, callback)", function(done) {
@@ -124,16 +135,18 @@ describe("Table", function() {
       });
 
       describe("#findIndex()", function() {
-        it("findIndex()", function() {
-          (function() {
-            tab.findIndex();
-          }).should.throwError("Index name and callback expected.");
-        });
+        describe("Error handling", function() {
+          it("findIndex()", function() {
+            (function() {
+              tab.findIndex();
+            }).should.throwError("Index name and callback expected.");
+          });
 
-        it("findIndex(name)", function() {
-          (function() {
-            tab.findIndex("ix_username");
-          }).should.throwError("Index name and callback expected.");
+          it("findIndex(name)", function() {
+            (function() {
+              tab.findIndex("ix_username");
+            }).should.throwError("Index name and callback expected.");
+          });
         });
 
         it("findIndex(name, callback)", function(done) {
@@ -158,11 +171,15 @@ describe("Table", function() {
 
     describe("DDO", function() {
       describe("#dropIndex()", function() {
-        var cx = drv.createConnection({database: "odba"});
-        var auxCx = cx.clone();
+        var cx, auxCx;
+
+        beforeEach(function() {
+          cx = drv.createConnection({database: "odba"});
+          auxCx = cx.clone();
+        });
 
         beforeEach(function(done) {
-          cx.createDatabase(indexedSchema, done);
+          cx.server.createDatabase("odba", indexedSchema, done);
         });
 
         afterEach(function(done) {
@@ -170,11 +187,11 @@ describe("Table", function() {
         });
 
         afterEach(function(done) {
-          cx.dropDatabase(done);
+          cx.server.dropDatabase("odba", done);
         });
 
         it("dropIndex()", function(done) {
-          cx.alterDatabase(function(db) {
+          cx.server.alterDatabase("odba", function(db) {
             db.findTable("user", function(error, tab) {
               should.assert(error === undefined);
 
@@ -189,7 +206,7 @@ describe("Table", function() {
         });
 
         it("dropIndex(index)", function(done) {
-          cx.alterDatabase(function(db) {
+          cx.server.alterDatabase("odba", function(db) {
             db.findTable("user", function(error, tab) {
               should.assert(error === undefined);
               tab.dropIndex("ix_username");
@@ -207,7 +224,7 @@ describe("Table", function() {
         });
 
         it("dropIndex(unknown)", function(done) {
-          cx.alterDatabase(function(db) {
+          cx.server.alterDatabase("odba", function(db) {
             db.findTable("user", function(error, tab) {
               should.assert(error === undefined);
               tab.dropIndex("ix_unknown");
@@ -216,7 +233,7 @@ describe("Table", function() {
         });
 
         it("dropIndex(index, callback)", function(done) {
-          cx.alterDatabase(function(db) {
+          cx.server.alterDatabase("odba", function(db) {
             db.findTable("user", function(error, tab) {
               should.assert(error === undefined);
               tab.dropIndex("ix_username", function(error) {
@@ -236,7 +253,7 @@ describe("Table", function() {
         });
 
         it("dropIndex(unexisting, callback)", function(done) {
-          cx.alterDatabase(function(db) {
+          cx.server.alterDatabase("odba", function(db) {
             db.findTable("user", function(error, tab) {
               should.assert(error === undefined);
               tab.dropIndex("ix_unknown", function(error) {
@@ -252,16 +269,18 @@ describe("Table", function() {
   describe("DMO", function() {
     describe("#insert()", function() {
       describe("Auto increment", function() {
-        var cx = drv.createConnection({database: "odba"});
-        var tab;
-        var users = [
+        var cx, tab, users = [
           {username: "user01", password: "pwd01"},
           {username: "user02", password: "pwd02"},
           {username: "user03", password: "pwd03"}
         ];
 
+        beforeEach(function() {
+          cx = drv.createConnection({database: "odba"});
+        });
+
         beforeEach(function(done) {
-          cx.createDatabase(autoIncrementSchema, done);
+          cx.server.createDatabase("odba", autoIncrementSchema, done);
         });
 
         beforeEach(function(done) {
@@ -278,7 +297,7 @@ describe("Table", function() {
         });
 
         afterEach(function(done) {
-          cx.dropDatabase(done);
+          cx.server.dropDatabase("odba", done);
         });
 
         it("insert(record, callback)", function(done) {
@@ -311,11 +330,14 @@ describe("Table", function() {
       });
 
       describe("Non-auto increment", function() {
-        var cx = drv.createConnection({database: "odba"});
-        var tab;
+        var cx, tab;
+
+        beforeEach(function() {
+          cx = drv.createConnection({database: "odba"});
+        });
 
         beforeEach(function(done) {
-          cx.createDatabase(schema, done);
+          cx.server.createDatabase("odba", schema, done);
         });
 
         beforeEach(function(done) {
@@ -332,7 +354,7 @@ describe("Table", function() {
         });
 
         afterEach(function(done) {
-          cx.dropDatabase(done);
+          cx.server.dropDatabase("odba", done);
         });
 
         it("insert()", function() {
@@ -437,11 +459,14 @@ describe("Table", function() {
     });
 
     describe("#save()", function() {
-      var cx = drv.createConnection({database: "odba"});
-      var tab;
+      var cx, tab;
+
+      beforeEach(function() {
+        cx = drv.createConnection({database: "odba"});
+      });
 
       beforeEach(function(done) {
-        cx.createDatabase(schema, done);
+        cx.server.createDatabase("odba", schema, done);
       });
 
       beforeEach(function(done) {
@@ -462,7 +487,7 @@ describe("Table", function() {
       });
 
       afterEach(function(done) {
-        cx.dropDatabase(done);
+        cx.server.dropDatabase("odba", done);
       });
 
       it("save()", function() {
@@ -535,11 +560,14 @@ describe("Table", function() {
     });
 
     describe("#update()", function() {
-      var cx = drv.createConnection({database: "odba"});
-      var tab;
+      var cx, tab;
+
+      beforeEach(function() {
+        cx = drv.createConnection({database: "odba"});
+      });
 
       beforeEach(function(done) {
-        cx.createDatabase(schema, done);
+        cx.server.createDatabase("odba", schema, done);
       });
 
       beforeEach(function(done) {
@@ -560,7 +588,7 @@ describe("Table", function() {
       });
 
       afterEach(function(done) {
-        cx.dropDatabase(done);
+        cx.server.dropDatabase("odba", done);
       });
 
       it("update()", function() {
@@ -646,11 +674,14 @@ describe("Table", function() {
     });
 
     describe("#remove()", function() {
-      var cx= drv.createConnection({database: "odba"});
-      var tab;
+      var cx, tab;
+
+      beforeEach(function() {
+        cx = drv.createConnection({database: "odba"});
+      });
 
       beforeEach(function(done) {
-        cx.createDatabase(schema, done);
+        cx.server.createDatabase("odba", schema, done);
       });
 
       beforeEach(function(done) {
@@ -671,7 +702,7 @@ describe("Table", function() {
       });
 
       afterEach(function(done) {
-        cx.dropDatabase(done);
+        cx.server.dropDatabase("odba", done);
       });
 
       it("remove()", function(done) {

@@ -1,6 +1,9 @@
-describe("Updater", function() {
-  var updater = new odba.indexeddb.Updater();
-  var records;
+describe("odba.indexeddb.Updater", function() {
+  var updater, records;
+
+  before(function() {
+    updater  = new odba.indexeddb.Updater();
+  });
 
   beforeEach(function() {
     records = [

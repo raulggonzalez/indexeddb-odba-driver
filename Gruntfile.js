@@ -7,14 +7,48 @@ module.exports = function(grunt) {
   grunt.config.init({
     pkg: grunt.file.readJSON("package.json"),
 
-    test: {
-      host: "localhost",
-      port: 51792,
-      chromeFolder: "C:\\Program Files (x86)\\Google\\Chrome\\Application",
-      firefoxFolder: "C:\\Program Files (x86)\\Mozilla Firefox",
-      app: "http://<%= test.host %>:<%= test.port %>/<%= pkg.name %>",
-      index: "<%= test.app %>/test/index.html",
-      minIndex: "<%= test.app %>/test/index.min.html",
+    clean: {
+      doc: {
+        src: ["doc/api/"]
+      }
+    },
+
+    compress: {
+      "api.html": {
+        options: {
+          mode: "zip",
+          archive: "doc/api.html.zip",
+          level: 3,
+        },
+
+        expand: true,
+        cwd: "doc/api/",
+        src: "**"
+      }
+    },
+
+    concat: {
+      options: {
+        banner: "/*! <%= pkg.name %> - <%= pkg.version %> (<%= grunt.template.today('yyyy-mm-dd') %>) */\n",
+        separator: "\n\n"
+      },
+
+      "indexeddb-odba-driver.js": {
+        src: ["lib/browser-odba-core.js", "lib/index.js", "lib/odba/indexeddb/**"],
+        dest: "indexeddb-odba-driver.js"
+      }
+    },
+
+    jsdoc: {
+      "api.html": {
+        src: ["lib/"],
+        options: {
+          recurse: true,
+          template: "templates/default",
+          destination: "doc/api/",
+          "private": false
+        }
+      }
     },
 
     jshint: {
@@ -45,15 +79,14 @@ module.exports = function(grunt) {
       }
     },
 
-    concat: {
-      options: {
-        separator: "\n\n"
-      },
-
-      "indexeddb-odba-driver.min.js": {
-        src: ["lib/index.js", "lib/odba/*.js", "lib/odba/indexeddb/*"],
-        dest: "indexeddb-odba-driver.min.js"
-      }
+    test: {
+      host: "localhost",
+      port: 51792,
+      chromeFolder: "C:\\Program Files (x86)\\Google\\Chrome\\Application",
+      firefoxFolder: "C:\\Program Files (x86)\\Mozilla Firefox",
+      app: "http://<%= test.host %>:<%= test.port %>/<%= pkg.name %>",
+      index: "<%= test.app %>/test/index.html",
+      minIndex: "<%= test.app %>/test/index.min.html",
     },
 
     uglify: {
@@ -76,44 +109,10 @@ module.exports = function(grunt) {
 
       "indexeddb-odba-driver.min.js": {
         files: {
-          "indexeddb-odba-driver.min.js": ["lib/index.js", "lib/odba/*.js", "lib/odba/indexeddb/*"]
+          "indexeddb-odba-driver.min.js": ["indexeddb-odba-driver.js"]
         }
       }
-    },
-
-    jsdoc: {
-      "public": {
-        src: ["lib/"],
-        options: {
-          recurse: true,
-          template: "templates/default",
-          destination: "doc/api/",
-          "private": false
-        }
-      }
-    },
-
-    compress: {
-      jsdoc: {
-        options: {
-          mode: "zip",
-          archive: "doc/api.html.zip",
-          level: 3,
-        },
-
-        expand: true,
-        cwd: "doc/api/",
-        src: "**",
-        /*dest: "api"*/
-
-      }
-    },
-
-    clean: {
-      jsdoc: {
-        src: ["doc/api/"]
-      }
-    },
+    }
   });
 
   //(2) enable plugins
@@ -125,9 +124,18 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-jsdoc");
 
   //(3) define tasks
-  grunt.registerTask("minify", "Generate the min version.", ["uglify:indexeddb-odba-driver.min.js"]);
-  grunt.registerTask("jspubdoc", "Generate the API JSDoc.", ["clean:jsdoc", "jsdoc:public", "compress:jsdoc", "clean:jsdoc"]);
-  grunt.registerTask("all", "Generate all things.", ["jspubdoc", "minify", "test:chrome:true"]);
+  grunt.registerTask("all", "Generate all modules.", [
+    "jshint:grunt",
+    "jshint:lib",
+    "jshint:test",
+    "clean:doc",
+    "jsdoc:api.html",
+    "compress:api.html",
+    "clean:doc",
+    "concat:indexeddb-odba-driver.js",
+    "uglify:indexeddb-odba-driver.min.js",
+    "test:chrome:true"
+  ]);
 
   grunt.registerTask("test", "Perform the unit testing.", function test(browser, min) {
     var chrome = (browser == "chrome" || !browser);

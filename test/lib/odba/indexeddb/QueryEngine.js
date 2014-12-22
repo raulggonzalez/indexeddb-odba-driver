@@ -3,18 +3,19 @@ describe("QueryEngine", function() {
   var IndexedDBQuery = odba.indexeddb.IndexedDBQuery;
   var QueryEngine = odba.indexeddb.QueryEngine;
 
-  var drv = odba.Driver.getDriver("IndexedDB");
-  var cx = drv.createConnection({database: "odba"});
-  var engine = new QueryEngine();
-  var records = [
+  var drv, cx, engine = new QueryEngine(), user, query, records = [
     {userId: 1, username: "user01", password: "pwd01"},
     {userId: 2, username: "user02", password: "pwd02"},
     {userId: 3, username: "user03", password: "pwd03"}
   ];
-  var user, query;
+
+  before(function() {
+    drv = odba.Driver.getDriver("IndexedDB");
+    cx = drv.createConnection({database: "odba"});
+  });
 
   before(function(done) {
-    cx.createDatabase(indexedSchema, done);
+    cx.server.createDatabase("odba", indexedSchema, done);
   });
 
   before(function(done) {
@@ -39,7 +40,7 @@ describe("QueryEngine", function() {
   });
 
   after(function(done) {
-    cx.dropDatabase(done);
+    cx.server.dropDatabase("odba", done);
   });
 
   describe("#findAll()", function() {

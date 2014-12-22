@@ -1,8 +1,5 @@
-describe("Query", function() {
+describe("odba.indexeddb.IndexedDBQuery", function() {
   var IndexedDBQuery = odba.indexeddb.IndexedDBQuery;
-
-  var drv = odba.Driver.getDriver("IndexedDB");
-  var cx = drv.createConnection({database: "odba"});
   var Result = odba.Result;
 
   var users = [
@@ -33,10 +30,15 @@ describe("Query", function() {
     ]}
   ];
 
-  var db, user, session;
+  var drv, cx, db, user, session;
+
+  before(function() {
+    drv = odba.Driver.getDriver("IndexedDB");
+    cx = drv.createConnection({database: "odba"});
+  });
 
   before(function(done) {
-    cx.createDatabase(indexedSchema, done);
+    cx.server.createDatabase("odba", indexedSchema, done);
   });
 
   before(function(done) {
@@ -70,7 +72,7 @@ describe("Query", function() {
   });
 
   after(function(done) {
-    cx.dropDatabase(done);
+    cx.server.dropDatabase("odba", done);
   });
 
   describe("Simple query", function() {

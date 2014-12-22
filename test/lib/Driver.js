@@ -1,16 +1,7 @@
-describe("Driver", function() {
+describe("odba.Driver", function() {
   var Driver = odba.Driver;
   var IndexedDBDriver = odba.indexeddb.IndexedDBDriver;
   var IndexedDBConnection = odba.indexeddb.IndexedDBConnection;
-
-  describe("Driver caching", function() {
-    it("Regetting", function() {
-      var drv1 = Driver.getDriver("IndexedDB");
-      var drv2 = Driver.getDriver("IndexedDB");
-
-      drv1.should.be.exactly(drv2);
-    });
-  });
 
   describe("#getDriver()", function() {
     it("getDriver('IndexedDB')", function() {
@@ -18,10 +9,6 @@ describe("Driver", function() {
 
       drv.should.be.instanceOf(IndexedDBDriver);
       drv.name.should.be.eql("IndexedDB");
-    });
-
-    it("getDriver('Unknown')", function() {
-      should.assert(Driver.getDriver("Unknown") === undefined);
     });
   });
 
@@ -32,16 +19,18 @@ describe("Driver", function() {
       drv = Driver.getDriver("IndexedDB");
     });
 
-    it("createConnection()", function() {
-      (function() {
-        drv.createConnection();
-      }).should.throwError("Database name expected.");
-    });
+    describe("Error handling", function() {
+      it("createConnection()", function() {
+        (function() {
+          drv.createConnection();
+        }).should.throwError("Configuration expected.");
+      });
 
-    it("createConnection({})", function() {
-      (function() {
-        drv.createConnection({});
-      }).should.throwError("Database name expected.");
+      it("createConnection({})", function() {
+        (function() {
+          drv.createConnection({});
+        }).should.throwError("Database name expected.");
+      });
     });
 
     it("createConnection({database: 'odba'})", function() {
@@ -49,6 +38,47 @@ describe("Driver", function() {
 
       cx.should.be.instanceOf(IndexedDBConnection);
       cx.config.should.be.eql({database: "odba"});
+    });
+  });
+
+  describe("#openConnection()", function() {
+    var drv;
+
+    before(function() {
+      drv = Driver.getDriver("IndexedDB");
+    });
+
+    after(function(done) {
+      drv.createConnection({database: "odba"}).server.dropDatabase("odba", done);
+    });
+
+    describe("Error handling", function() {
+      it("openConnection()", function() {
+        (function() {
+          drv.openConnection();
+        }).should.throwError("Configuration expected.");
+      });
+
+      it("openConnection({})", function() {
+        (function() {
+          drv.openConnection({});
+        }).should.throwError("Callback expected.");
+      });
+
+      it("openConnection({}, callback)", function() {
+        (function() {
+          drv.openConnection({}, function() {});
+        }).should.throwError("Database name expected.");
+      });
+    });
+
+    it("openConnection(config, callback)", function(done) {
+      drv.openConnection({database: "odba"}, function(error, cx) {
+        should.assert(error === undefined);
+        cx.should.be.instanceOf(IndexedDBConnection);
+        cx.connected.should.be.eql(true);
+        cx.close(done);
+      });
     });
   });
 });

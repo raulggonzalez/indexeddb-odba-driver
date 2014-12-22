@@ -55,7 +55,7 @@ Once we have the driver, the next thing is getting a connection:
 
 ## Creating a database
 
-To create a database, we must use the method `Connection.createDatabase()`, with a closed
+To create a database, we must use the method `Server.createDatabase()` with a closed
 connection.
 
 ### Creating an empty database
@@ -63,8 +63,8 @@ connection.
 To create an empty database:
 
   ```
-  cx.createDatabase();
-  cx.createDatabase(null, function(error) { ... });
+  cx.server.createDatabase("mydb");
+  cx.server.createDatabase("mydb", null, function(error) { ... });
   ```
 
 ### Creating a non-empty database
@@ -72,8 +72,25 @@ To create an empty database:
 To create a database with tables:
 
   ```
-  cx.createDatabase(function(db) { ... });
-  cx.createDatabase(function(db) { ... }, function(error) { ... });
+  cx.server.createDatabase("mydb", function(db) { ... });
+  cx.server.createDatabase("mydb", function(db) { ... }, function(error) { ... });
+  ```
+
+## Dropping databases
+
+We have to use the `Server.dropDatabase()` method to delete a database:
+
+  ```
+  cx.server.dropDatabase("mydb");
+  cx.server.dropDatabase("mydb", function(error) { ... });
+  ```
+
+## Checking whether a database exists
+
+To check whether a database exists, we must use the `Server.hasDatabase()` method:
+
+  ```
+  cx.server.hasDatabase("mydb", function(error, exists) { ... });
   ```
 
 ## Creating tables (object stores)

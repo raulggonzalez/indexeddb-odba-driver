@@ -1,14 +1,23 @@
-describe("Connection-Transaction", function() {
+describe("odba.indexeddb.IndexedDBConnection (Transaction)", function() {
   var IndexedDBDatabase = odba.indexeddb.IndexedDBDatabase;
   var IndexedDBTransaction = odba.indexeddb.IndexedDBTransaction;
-  var drv = odba.Driver.getDriver("IndexedDB");
+  var drv;
+
+  before(function() {
+    drv = odba.Driver.getDriver("IndexedDB");
+  });
 
   describe("#hasTransaction()", function() {
     describe("Into read/write transaction", function() {
-      var cx = drv.createConnection({database: "odba"});
+      var cx, svr;
 
-      before(function(done) {
-        cx.createDatabase(schema, done);
+      beforeEach(function() {
+        cx = drv.createConnection({database: "odba"});
+        svr = cx.server;
+      });
+
+      beforeEach(function(done) {
+        svr.createDatabase("odba", schema, done);
       });
 
       beforeEach(function(done) {
@@ -19,8 +28,8 @@ describe("Connection-Transaction", function() {
         cx.close(done);
       });
 
-      after(function(done) {
-        cx.dropDatabase(done);
+      afterEach(function(done) {
+        svr.dropDatabase("odba", done);
       });
 
       it("hasTransaction()", function() {
@@ -45,10 +54,15 @@ describe("Connection-Transaction", function() {
     });
 
     describe("Into read-only transaction", function() {
-      var cx = drv.createConnection({database: "odba"});
+      var cx, svr;
+
+      before(function() {
+        cx = drv.createConnection({database: "odba"});
+        svr = cx.server;
+      });
 
       before(function(done) {
-        cx.createDatabase(schema, done);
+        svr.createDatabase("odba", schema, done);
       });
 
       beforeEach(function(done) {
@@ -60,7 +74,7 @@ describe("Connection-Transaction", function() {
       });
 
       after(function(done) {
-        cx.dropDatabase(done);
+        svr.dropDatabase("odba", done);
       });
 
       it("hasTransaction()", function() {
@@ -85,36 +99,41 @@ describe("Connection-Transaction", function() {
     });
 
     describe("Into version change transaction", function() {
-      var cx = drv.createConnection({database: "odba"});
+      var cx, svr;
+
+      before(function() {
+        cx = drv.createConnection({database: "odba"});
+        svr = cx.server;
+      });
 
       before(function(done) {
-        cx.createDatabase(schema, done);
+        svr.createDatabase("odba", schema, done);
       });
 
       after(function(done) {
-        cx.dropDatabase(done);
+        svr.dropDatabase("odba", done);
       });
 
       it("hasTransaction()", function(done) {
-        cx.alterDatabase(function(db) {
+        svr.alterDatabase("odba", function(db) {
           cx.hasTransaction().should.be.eql(true);
         }, done);
       });
 
       it("hasTransaction('versionchange')", function(done) {
-        cx.alterDatabase(function(db) {
+        svr.alterDatabase("odba", function(db) {
           cx.hasTransaction("versionchange").should.be.eql(true);
         }, done);
       });
 
       it("hasTransaction('readonly')", function(done) {
-        cx.alterDatabase(function(db) {
+        svr.alterDatabase("odba", function(db) {
           cx.hasTransaction("readonly").should.be.eql(false);
         }, done);
       });
 
       it("hasTransaction('readwrite')", function(done) {
-        cx.alterDatabase(function(db) {
+        svr.alterDatabase("odba", function(db) {
           cx.hasTransaction("readwrite").should.be.eql(false);
           done();
         });
@@ -122,56 +141,17 @@ describe("Connection-Transaction", function() {
     });
   });
 
-  describe("#createDatabase()", function() {
-    var cx = drv.createConnection({database: "odba"});
-
-    after(function(done) {
-      cx.close(done);
-    });
-
-    after(function(done) {
-      cx.dropDatabase(done);
-    });
-
-    it("createDatabase(ddl, callback)", function(done) {
-      cx.createDatabase(function(db) {
-        cx.hasTransaction().should.be.eql(true);
-        cx.transaction.should.be.instanceOf(IndexedDBTransaction);
-        cx.transaction.mode.should.be.eql("versionchange");
-      }, function(error) {
-        should.assert(cx.transaction === undefined);
-        cx.hasTransaction().should.be.eql(false);
-        done();
-      });
-    });
-  });
-
-  describe("#alterDatabase()", function() {
-    var cx = drv.createConnection({database: "odba"});
-
-    after(function(done) {
-      cx.dropDatabase(done);
-    });
-
-    it("alterDatabase(ddl, callback)", function(done) {
-      cx.alterDatabase(function(db) {
-        cx.hasTransaction().should.be.eql(true);
-        cx.transaction.should.be.instanceOf(IndexedDBTransaction);
-        cx.transaction.mode.should.be.eql("versionchange");
-      }, function(error) {
-        cx.hasTransaction().should.be.eql(false);
-        should.assert(cx.transaction === undefined);
-        done();
-      });
-    });
-  });
-
   describe("#beginTransaction()", function() {
     describe("Calls", function() {
-      var cx = drv.createConnection({database: "odba"});
+      var cx, svr;
+
+      before(function() {
+        cx = drv.createConnection({database: "odba"});
+        svr = cx.server;
+      });
 
       before(function(done) {
-        cx.createDatabase(schema, done);
+        svr.createDatabase("odba", schema, done);
       });
 
       beforeEach(function(done) {
@@ -183,7 +163,7 @@ describe("Connection-Transaction", function() {
       });
 
       after(function(done) {
-        cx.dropDatabase(done);
+        svr.dropDatabase("odba", done);
       });
 
       it("beginTransaction()", function(done) {
@@ -332,14 +312,19 @@ describe("Connection-Transaction", function() {
     });
 
     describe("Into Connection.createDatabase()", function() {
-      var cx = drv.createConnection({database: "odba"});
+      var cx, svr;
+
+      before(function() {
+        cx = drv.createConnection({database: "odba"});
+        svr = cx.server;
+      });
 
       afterEach(function(done) {
-        cx.dropDatabase(done);
+        svr.dropDatabase("odba", done);
       });
 
       it("beginTransaction()", function(done) {
-        cx.createDatabase(function(db) {
+        svr.createDatabase("odba", function(db) {
           cx.beginTransaction().should.be.eql(cx.transaction);
           cx.transaction.mode.should.be.eql("versionchange");
           done();
@@ -347,7 +332,7 @@ describe("Connection-Transaction", function() {
       });
 
       it("beginTransaction('readonly')", function(done) {
-        cx.createDatabase(function(db) {
+        svr.createDatabase("odba", function(db) {
           cx.beginTransaction("readonly").should.be.eql(cx.transaction);
           cx.transaction.mode.should.be.eql("versionchange");
           done();
@@ -355,7 +340,7 @@ describe("Connection-Transaction", function() {
       });
 
       it("beginTransaction('readonly', store)", function(done) {
-        cx.createDatabase(function(db) {
+        svr.createDatabase("odba", function(db) {
           cx.beginTransaction("readonly", "user").should.be.eql(cx.transaction);
           cx.transaction.mode.should.be.eql("versionchange");
           done();
@@ -363,7 +348,7 @@ describe("Connection-Transaction", function() {
       });
 
       it("beginTransaction('readwrite')", function(done) {
-        cx.createDatabase(function(db) {
+        svr.createDatabase("odba", function(db) {
           cx.beginTransaction("readwrite").should.be.eql(cx.transaction);
           cx.transaction.mode.should.be.eql("versionchange");
           done();
@@ -371,7 +356,7 @@ describe("Connection-Transaction", function() {
       });
 
       it("beginTransaction('readwrite', store)", function(done) {
-        cx.createDatabase(function(db) {
+        svr.createDatabase("odba", function(db) {
           cx.beginTransaction("readwrite", "user").should.be.eql(cx.transaction);
           cx.transaction.mode.should.be.eql("versionchange");
           done();
@@ -380,14 +365,19 @@ describe("Connection-Transaction", function() {
     });
 
     describe("Into Connection.alterDatabase()", function() {
-      var cx = drv.createConnection({database: "odba"});
+      var cx, svr;
+
+      before(function() {
+        cx = drv.createConnection({database: "odba"});
+        svr = cx.server;
+      });
 
       afterEach(function(done) {
-        cx.dropDatabase(done);
+        svr.dropDatabase("odba", done);
       });
 
       it("beginTransaction()", function(done) {
-        cx.alterDatabase(function(db) {
+        svr.alterDatabase("odba", function(db) {
           cx.beginTransaction().should.be.eql(cx.transaction);
           cx.transaction.mode.should.be.eql("versionchange");
           done();
@@ -395,7 +385,7 @@ describe("Connection-Transaction", function() {
       });
 
       it("beginTransaction('readonly')", function(done) {
-        cx.alterDatabase(function(db) {
+        svr.alterDatabase("odba", function(db) {
           cx.beginTransaction("readonly").should.be.eql(cx.transaction);
           cx.transaction.mode.should.be.eql("versionchange");
           done();
@@ -403,14 +393,14 @@ describe("Connection-Transaction", function() {
       });
 
       it("beginTransaction('readonly', store)", function(done) {
-        cx.alterDatabase(function(db) {
+        svr.alterDatabase("odba", function(db) {
           cx.beginTransaction("readonly", "user").should.be.eql(cx.transaction);
           done();
         });
       });
 
       it("beginTransaction('readwrite')", function(done) {
-        cx.alterDatabase(function(db) {
+        svr.alterDatabase("odba", function(db) {
           cx.beginTransaction("readwrite").should.be.eql(cx.transaction);
           cx.transaction.mode.should.be.eql("versionchange");
           done();
@@ -418,7 +408,7 @@ describe("Connection-Transaction", function() {
       });
 
       it("beginTransaction('readwrite', store)", function(done) {
-        cx.alterDatabase(function(db) {
+        svr.alterDatabase("odba", function(db) {
           cx.beginTransaction("readwrite", "user").should.be.eql(cx.transaction);
           cx.transaction.mode.should.be.eql("versionchange");
           done();
@@ -427,10 +417,15 @@ describe("Connection-Transaction", function() {
     });
 
     describe("No active transaction", function() {
-      var cx = drv.createConnection({database: "odba"});
+      var cx, svr;
+
+      before(function() {
+        cx = drv.createConnection({database: "odba"});
+        svr = cx.server;
+      });
 
       before(function(done) {
-        cx.createDatabase(schema, done);
+        svr.createDatabase("odba", schema, done);
       });
 
       beforeEach(function(done) {
@@ -442,7 +437,7 @@ describe("Connection-Transaction", function() {
       });
 
       after(function(done) {
-        cx.dropDatabase(done);
+        svr.dropDatabase("odba", done);
       });
 
       it("beginTransaction()", function(done) {
@@ -523,10 +518,15 @@ describe("Connection-Transaction", function() {
 
     describe("In active transaction", function() {
       describe("In version change transaction", function() {
-        var cx = drv.createConnection({database: "odba"});
+        var cx, svr;
+
+        before(function() {
+          cx = drv.createConnection({database: "odba"});
+          svr = cx.server;
+        });
 
         before(function(done) {
-          cx.createDatabase(schema, done);
+          svr.createDatabase("odba", schema, done);
         });
 
         afterEach(function(done) {
@@ -534,11 +534,11 @@ describe("Connection-Transaction", function() {
         });
 
         after(function(done) {
-          cx.dropDatabase(done);
+          svr.dropDatabase("odba", done);
         });
 
         it("beginTransaction()", function(done) {
-          cx.alterDatabase(function(db) {
+          svr.alterDatabase("odba", function(db) {
             var tran = cx.beginTransaction();
             tran.should.be.eql(cx.transaction);
             tran.mode.should.be.eql("versionchange");
@@ -547,7 +547,7 @@ describe("Connection-Transaction", function() {
         });
 
         it("beginTransaction('readonly')", function(done) {
-          cx.alterDatabase(function(db) {
+          svr.alterDatabase("odba", function(db) {
             var tran = cx.beginTransaction("readonly");
             tran.should.be.eql(cx.transaction);
             tran.mode.should.be.eql("versionchange");
@@ -556,7 +556,7 @@ describe("Connection-Transaction", function() {
         });
 
         it("beginTransaction('readonly', store)", function(done) {
-          cx.alterDatabase(function(db) {
+          svr.alterDatabase("odba", function(db) {
             var tran = cx.beginTransaction("readonly", "user");
             tran.should.be.eql(cx.transaction);
             tran.mode.should.be.eql("versionchange");
@@ -565,7 +565,7 @@ describe("Connection-Transaction", function() {
         });
 
         it("beginTransaction('readwrite')", function(done) {
-          cx.alterDatabase(function(db) {
+          svr.alterDatabase("odba", function(db) {
             var tran = cx.beginTransaction("readwrite");
             tran.should.be.eql(cx.transaction);
             tran.mode.should.be.eql("versionchange");
@@ -574,7 +574,7 @@ describe("Connection-Transaction", function() {
         });
 
         it("beginTransaction('readwrite', store)", function(done) {
-          cx.alterDatabase(function(db) {
+          svr.alterDatabase("odba", function(db) {
             var tran = cx.beginTransaction("readwrite", "user");
             tran.should.be.eql(cx.transaction);
             tran.mode.should.be.eql("versionchange");
@@ -584,10 +584,15 @@ describe("Connection-Transaction", function() {
       });
 
       describe("In read-only transaction", function() {
-        var cx = drv.createConnection({database: "odba"});
+        var cx, svr;
+
+        before(function() {
+          cx = drv.createConnection({database: "odba"});
+          svr = cx.server;
+        });
 
         before(function(done) {
-          cx.createDatabase(schema, done);
+          svr.createDatabase("odba", schema, done);
         });
 
         beforeEach(function(done) {
@@ -599,7 +604,7 @@ describe("Connection-Transaction", function() {
         });
 
         after(function(done) {
-          cx.dropDatabase(done);
+          svr.dropDatabase("odba", done);
         });
 
         it("beginTransaction()", function() {
@@ -655,10 +660,15 @@ describe("Connection-Transaction", function() {
       });
 
       describe("In read/write transaction", function() {
-        var cx = drv.createConnection({database: "odba"});
+        var cx, svr;
+
+        before(function() {
+          cx = drv.createConnection({database: "odba"});
+          svr = cx.server;
+        });
 
         before(function(done) {
-          cx.createDatabase(schema, done);
+          svr.createDatabase("odba", schema, done);
         });
 
         beforeEach(function(done) {
@@ -670,7 +680,7 @@ describe("Connection-Transaction", function() {
         });
 
         after(function(done) {
-          cx.dropDatabase(done);
+          svr.dropDatabase("odba", done);
         });
 
         it("beginTransaction()", function() {
@@ -766,10 +776,15 @@ describe("Connection-Transaction", function() {
   });
 
   describe("#runTransaction()", function() {
-    var cx = drv.createConnection({database: "odba"});
+    var cx, svr;
+
+    before(function() {
+      cx = drv.createConnection({database: "odba"});
+      svr = cx.server;
+    });
 
     before(function(done) {
-      cx.createDatabase(schema, done);
+      svr.createDatabase("odba", schema, done);
     });
 
     beforeEach(function(done) {
@@ -781,7 +796,7 @@ describe("Connection-Transaction", function() {
     });
 
     after(function(done) {
-      cx.dropDatabase(done);
+      svr.dropDatabase("odba", done);
     });
 
     it("runTransaction()", function() {

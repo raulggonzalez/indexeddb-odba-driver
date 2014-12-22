@@ -1,8 +1,6 @@
-describe("Table - DQO", function() {
-  var drv = odba.Driver.getDriver("IndexedDB");
-  var cx = drv.createConnection({database: "odba"});
+describe("odba.indexeddb.IndexedDBTable (DQO)", function() {
   var Result = odba.Result;
-  var db, user, session;
+  var drv, cx, db, user, session;
 
   var users = [
     {userId: 1, username: "user01", password: "pwd01"},
@@ -32,8 +30,13 @@ describe("Table - DQO", function() {
     ]}
   ];
 
+  before(function() {
+    drv = odba.Driver.getDriver("IndexedDB");
+    cx = drv.createConnection({database: "odba"});
+  });
+
   before(function(done) {
-    cx.createDatabase(indexedSchema, done);
+    cx.server.createDatabase("odba", indexedSchema, done);
   });
 
   before(function(done) {
@@ -62,7 +65,7 @@ describe("Table - DQO", function() {
   });
 
   after(function(done) {
-    cx.dropDatabase(done);
+    cx.server.dropDatabase("odba", done);
   });
 
   describe("#findAll()", function() {
