@@ -1,19 +1,19 @@
-describe("odba.indexeddb.IndexedDBServer", function() {
+describe("vdba.indexeddb.IndexedDBServer", function() {
   var drv;
 
   before(function() {
-    drv = odba.Driver.getDriver("IndexedDB");
+    drv = vdba.Driver.getDriver("IndexedDB");
   });
 
   describe("Properties", function() {
     var cx;
 
     before(function() {
-      cx = drv.createConnection({database: "odba"});
+      cx = drv.createConnection({database: "vdba"});
     });
 
     before(function(done) {
-      cx.server.createDatabase("odba", schema, done);
+      cx.server.createDatabase("vdba", schema, done);
     });
 
     before(function(done) {
@@ -25,7 +25,7 @@ describe("odba.indexeddb.IndexedDBServer", function() {
     });
 
     after(function(done) {
-      cx.server.dropDatabase("odba", done);
+      cx.server.dropDatabase("vdba", done);
     });
 
     it("host", function() {
@@ -51,7 +51,7 @@ describe("odba.indexeddb.IndexedDBServer", function() {
         var cx;
 
         before(function() {
-          cx = drv.createConnection({database: "odba"});
+          cx = drv.createConnection({database: "vdba"});
         });
 
         after(function(done) {
@@ -73,11 +73,11 @@ describe("odba.indexeddb.IndexedDBServer", function() {
         });
 
         it("dropDatabase(name, callback)", function(done) {
-          cx.server.dropDatabase("odba", function(error) {
+          cx.server.dropDatabase("vdba", function(error) {
             should.assert(error === undefined);
             cx.connected.should.be.eql(false);
 
-            cx.server.hasDatabase("odba", function(error, exists) {
+            cx.server.hasDatabase("vdba", function(error, exists) {
               should.assert(error === undefined);
               exists.should.be.eql(false);
               done();
@@ -90,12 +90,12 @@ describe("odba.indexeddb.IndexedDBServer", function() {
         var cx, auxCx;
 
         before(function() {
-          cx = drv.createConnection({database: "odba"});
+          cx = drv.createConnection({database: "vdba"});
           auxCx = cx.clone();
         });
 
         beforeEach(function(done) {
-          cx.server.createDatabase("odba", schema, done);
+          cx.server.createDatabase("vdba", schema, done);
         });
 
         beforeEach(function(done) {
@@ -109,7 +109,7 @@ describe("odba.indexeddb.IndexedDBServer", function() {
         it("dropDatabase()", function(done) {
           var timeout = false;
 
-          cx.server.dropDatabase("odba", function(error) {
+          cx.server.dropDatabase("vdba", function(error) {
             should.assert(error === undefined);
             timeout.should.be.eql(true, "Drop should be greater than 3000ms.");
             done();
@@ -130,11 +130,11 @@ describe("odba.indexeddb.IndexedDBServer", function() {
         var cx;
 
         beforeEach(function() {
-          cx = drv.createConnection({database: "odba"});
+          cx = drv.createConnection({database: "vdba"});
         });
 
         afterEach(function(done) {
-          cx.server.dropDatabase("odba", done);
+          cx.server.dropDatabase("vdba", done);
         });
 
         afterEach(function(done) {
@@ -156,7 +156,7 @@ describe("odba.indexeddb.IndexedDBServer", function() {
         });
 
         it("createDatabase(name, ddl) - Check connection", function(done) {
-          cx.server.createDatabase("odba", function(db) {
+          cx.server.createDatabase("vdba", function(db) {
             cx.database.should.be.exactly(db);
           }, function(error) {
             should.assert(error === undefined);
@@ -166,10 +166,10 @@ describe("odba.indexeddb.IndexedDBServer", function() {
         });
 
         it("createDatabase(name, ddl)", function(done) {
-          cx.server.createDatabase("odba", schema);
+          cx.server.createDatabase("vdba", schema);
 
           setTimeout(function() {
-            cx.server.hasDatabase("odba", function(error, exists) {
+            cx.server.hasDatabase("vdba", function(error, exists) {
               should.assert(error === undefined);
               exists.should.be.eql(true);
               cx.connected.should.be.eql(false);
@@ -179,10 +179,10 @@ describe("odba.indexeddb.IndexedDBServer", function() {
         });
 
         it("createDatabase(name, ddl, callback)", function(done) {
-          cx.server.createDatabase("odba", schema, function(error) {
+          cx.server.createDatabase("vdba", schema, function(error) {
             should.assert(error === undefined);
 
-            cx.server.hasDatabase("odba", function(error, exists) {
+            cx.server.hasDatabase("vdba", function(error, exists) {
               should.assert(error === undefined);
               exists.should.be.eql(true);
               cx.connected.should.be.eql(false);
@@ -192,10 +192,10 @@ describe("odba.indexeddb.IndexedDBServer", function() {
         });
 
         it("createDatabase(name, null, callback)", function(done) {
-          cx.server.createDatabase("odba", null, function(error) {
+          cx.server.createDatabase("vdba", null, function(error) {
             should.assert(error === undefined);
 
-            cx.server.hasDatabase("odba", function(error, exists) {
+            cx.server.hasDatabase("vdba", function(error, exists) {
               should.assert(error === undefined);
               exists.should.be.eql(true);
               cx.connected.should.be.eql(false);
@@ -209,7 +209,7 @@ describe("odba.indexeddb.IndexedDBServer", function() {
         var cx;
 
         beforeEach(function(done) {
-          drv.openConnection({database: "odba"}, function(error, con) {
+          drv.openConnection({database: "vdba"}, function(error, con) {
             cx = con;
             done();
           });
@@ -220,7 +220,7 @@ describe("odba.indexeddb.IndexedDBServer", function() {
         });
 
         afterEach(function(done) {
-          cx.server.dropDatabase("odba", done);
+          cx.server.dropDatabase("vdba", done);
         });
 
         it("createDatabase()", function() {
@@ -231,19 +231,19 @@ describe("odba.indexeddb.IndexedDBServer", function() {
 
         it("createDatabase(name)", function() {
           (function() {
-            cx.server.createDatabase("odba");
+            cx.server.createDatabase("vdba");
           }).should.throwError("Connection opened.");
         });
 
         it("createDatabase(name, ddl, callback)", function() {
           (function() {
-            cx.server.createDatabase("odba", schema, function() {});
+            cx.server.createDatabase("vdba", schema, function() {});
           }).should.throwError("Connection opened.");
         });
 
         it("createDatabase(null, callback)", function() {
           (function() {
-            cx.server.createDatabase("odba", null, function() {});
+            cx.server.createDatabase("vdba", null, function() {});
           }).should.throwError("Connection opened.");
         });
       });
@@ -254,12 +254,12 @@ describe("odba.indexeddb.IndexedDBServer", function() {
         var cx, auxCx;
 
         before(function() {
-          cx = drv.createConnection({database: "odba"});
+          cx = drv.createConnection({database: "vdba"});
           auxCx = cx.clone();
         });
 
         before(function(done) {
-          cx.server.createDatabase("odba", schema, done);
+          cx.server.createDatabase("vdba", schema, done);
         });
 
         afterEach(function(done) {
@@ -267,7 +267,7 @@ describe("odba.indexeddb.IndexedDBServer", function() {
         });
 
         afterEach(function(done) {
-          cx.server.dropDatabase("odba", done);
+          cx.server.dropDatabase("vdba", done);
         });
 
         describe("Error handling", function() {
@@ -279,7 +279,7 @@ describe("odba.indexeddb.IndexedDBServer", function() {
 
           it("alterDatabase(name)", function() {
             (function() {
-              cx.server.alterDatabase("odba");
+              cx.server.alterDatabase("vdba");
             }).should.throwError("Operation to alter schema expected.");
           });
 
@@ -291,7 +291,7 @@ describe("odba.indexeddb.IndexedDBServer", function() {
         });
 
         it("alterDatabase(name, ddl, callback) - Check connection", function(done) {
-          cx.server.alterDatabase("odba", function(db) {
+          cx.server.alterDatabase("vdba", function(db) {
             cx.database.should.be.exactly(db);
           }, function(error) {
             should.assert(error === undefined);
@@ -301,7 +301,7 @@ describe("odba.indexeddb.IndexedDBServer", function() {
         });
 
         it("alterDatabase(name, ddl)", function(done) {
-          cx.server.alterDatabase("odba", function(db) {
+          cx.server.alterDatabase("vdba", function(db) {
             db.createTable("alter", {keyPath: "alterId"});
           });
 
@@ -320,7 +320,7 @@ describe("odba.indexeddb.IndexedDBServer", function() {
         });
 
         it("alterDatabase(name, ddl, callback)", function(done) {
-          cx.server.alterDatabase("odba", function(db) {
+          cx.server.alterDatabase("vdba", function(db) {
             db.createTable("alter", {keyPath: "alterId"});
           }, function callback(error) {
             should.assert(error === undefined);
@@ -342,7 +342,7 @@ describe("odba.indexeddb.IndexedDBServer", function() {
         var cx;
 
         beforeEach(function(done) {
-          drv.openConnection({database: "odba"}, function(error, con) {
+          drv.openConnection({database: "vdba"}, function(error, con) {
             cx = con;
             done();
           });
@@ -353,7 +353,7 @@ describe("odba.indexeddb.IndexedDBServer", function() {
         });
 
         afterEach(function(done) {
-          cx.server.dropDatabase("odba", done);
+          cx.server.dropDatabase("vdba", done);
         });
 
         it("alterDatabase()", function() {
@@ -370,19 +370,19 @@ describe("odba.indexeddb.IndexedDBServer", function() {
 
         it("alterDatabase(name)", function() {
           (function() {
-            cx.server.alterDatabase("odba");
+            cx.server.alterDatabase("vdba");
           }).should.throwError("Operation to alter schema expected.");
         });
 
         it("alterDatabase(name, ddl)", function() {
           (function() {
-            cx.server.alterDatabase("odba", schema);
+            cx.server.alterDatabase("vdba", schema);
           }).should.throwError("Connection opened.");
         });
 
         it("alterDatabase(name, ddl, callback)", function() {
           (function() {
-            cx.server.alterDatabase("odba", schema, function() {});
+            cx.server.alterDatabase("vdba", schema, function() {});
           }).should.throwError("Connection opened.");
         });
       });
@@ -392,11 +392,11 @@ describe("odba.indexeddb.IndexedDBServer", function() {
       var cx;
 
       beforeEach(function() {
-        cx = drv.createConnection({database: "odba"});
+        cx = drv.createConnection({database: "vdba"});
       });
 
       beforeEach(function(done) {
-        cx.server.createDatabase("odba", null, done);
+        cx.server.createDatabase("vdba", null, done);
       });
 
       beforeEach(function(done) {
@@ -408,7 +408,7 @@ describe("odba.indexeddb.IndexedDBServer", function() {
       });
 
       afterEach(function(done) {
-        cx.server.dropDatabase("odba", done);
+        cx.server.dropDatabase("vdba", done);
       });
 
       afterEach(function(done) {
@@ -424,7 +424,7 @@ describe("odba.indexeddb.IndexedDBServer", function() {
 
         it("hasDatabase(name)", function() {
           (function() {
-            cx.server.hasDatabase("odba");
+            cx.server.hasDatabase("vdba");
           }).should.throwError("Callback expected.");
         });
 
@@ -436,7 +436,7 @@ describe("odba.indexeddb.IndexedDBServer", function() {
       });
 
       it("hasDatabase(name, callback)", function(done) {
-        cx.server.hasDatabase("odba", function(error, exists) {
+        cx.server.hasDatabase("vdba", function(error, exists) {
           should.assert(error === undefined);
           exists.should.be.eql(true);
           done();

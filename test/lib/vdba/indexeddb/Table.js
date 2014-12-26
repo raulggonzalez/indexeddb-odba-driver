@@ -1,7 +1,7 @@
-describe("odba.indexeddb.IndexedDBTable", function() {
-  var IndexedDBConnection = odba.indexeddb.IndexedDBConnection;
-  var IndexedDBDatabase = odba.indexeddb.IndexedDBDatabase;
-  var IndexedDBIndex = odba.indexeddb.IndexedDBIndex;
+describe("vdba.indexeddb.IndexedDBTable", function() {
+  var IndexedDBConnection = vdba.indexeddb.IndexedDBConnection;
+  var IndexedDBDatabase = vdba.indexeddb.IndexedDBDatabase;
+  var IndexedDBIndex = vdba.indexeddb.IndexedDBIndex;
 
   var drv, users = [
     {userId: 1, username: "user01", password: "pwd01"},
@@ -10,18 +10,18 @@ describe("odba.indexeddb.IndexedDBTable", function() {
   ];
 
   before(function() {
-    drv = odba.Driver.getDriver("IndexedDB");
+    drv = vdba.Driver.getDriver("IndexedDB");
   });
 
   describe("Properties", function() {
     var cx, tab;
 
     before(function() {
-      cx = drv.createConnection({database: "odba"});
+      cx = drv.createConnection({database: "vdba"});
     });
 
     before(function(done) {
-      cx.server.createDatabase("odba", indexedSchema, done);
+      cx.server.createDatabase("vdba", indexedSchema, done);
     });
 
     before(function(done) {
@@ -38,12 +38,12 @@ describe("odba.indexeddb.IndexedDBTable", function() {
     });
 
     after(function(done) {
-      cx.server.dropDatabase("odba", done);
+      cx.server.dropDatabase("vdba", done);
     });
 
     it("database", function() {
       tab.database.should.be.instanceOf(IndexedDBDatabase);
-      tab.database.name.should.be.eql("odba");
+      tab.database.name.should.be.eql("vdba");
     });
 
     it("name", function() {
@@ -77,11 +77,11 @@ describe("odba.indexeddb.IndexedDBTable", function() {
       var cx, db, tab;
 
       before(function() {
-        cx = drv.createConnection({database: "odba"});
+        cx = drv.createConnection({database: "vdba"});
       });
 
       before(function(done) {
-        cx.server.createDatabase("odba", indexedSchema, done);
+        cx.server.createDatabase("vdba", indexedSchema, done);
       });
 
       before(function(done) {
@@ -99,7 +99,7 @@ describe("odba.indexeddb.IndexedDBTable", function() {
       });
 
       after(function(done) {
-        cx.server.dropDatabase("odba", done);
+        cx.server.dropDatabase("vdba", done);
       });
 
       describe("#hasIndex()", function() {
@@ -174,12 +174,12 @@ describe("odba.indexeddb.IndexedDBTable", function() {
         var cx, auxCx;
 
         beforeEach(function() {
-          cx = drv.createConnection({database: "odba"});
+          cx = drv.createConnection({database: "vdba"});
           auxCx = cx.clone();
         });
 
         beforeEach(function(done) {
-          cx.server.createDatabase("odba", indexedSchema, done);
+          cx.server.createDatabase("vdba", indexedSchema, done);
         });
 
         afterEach(function(done) {
@@ -187,11 +187,11 @@ describe("odba.indexeddb.IndexedDBTable", function() {
         });
 
         afterEach(function(done) {
-          cx.server.dropDatabase("odba", done);
+          cx.server.dropDatabase("vdba", done);
         });
 
         it("dropIndex()", function(done) {
-          cx.server.alterDatabase("odba", function(db) {
+          cx.server.alterDatabase("vdba", function(db) {
             db.findTable("user", function(error, tab) {
               should.assert(error === undefined);
 
@@ -206,7 +206,7 @@ describe("odba.indexeddb.IndexedDBTable", function() {
         });
 
         it("dropIndex(index)", function(done) {
-          cx.server.alterDatabase("odba", function(db) {
+          cx.server.alterDatabase("vdba", function(db) {
             db.findTable("user", function(error, tab) {
               should.assert(error === undefined);
               tab.dropIndex("ix_username");
@@ -224,7 +224,7 @@ describe("odba.indexeddb.IndexedDBTable", function() {
         });
 
         it("dropIndex(unknown)", function(done) {
-          cx.server.alterDatabase("odba", function(db) {
+          cx.server.alterDatabase("vdba", function(db) {
             db.findTable("user", function(error, tab) {
               should.assert(error === undefined);
               tab.dropIndex("ix_unknown");
@@ -233,7 +233,7 @@ describe("odba.indexeddb.IndexedDBTable", function() {
         });
 
         it("dropIndex(index, callback)", function(done) {
-          cx.server.alterDatabase("odba", function(db) {
+          cx.server.alterDatabase("vdba", function(db) {
             db.findTable("user", function(error, tab) {
               should.assert(error === undefined);
               tab.dropIndex("ix_username", function(error) {
@@ -253,7 +253,7 @@ describe("odba.indexeddb.IndexedDBTable", function() {
         });
 
         it("dropIndex(unexisting, callback)", function(done) {
-          cx.server.alterDatabase("odba", function(db) {
+          cx.server.alterDatabase("vdba", function(db) {
             db.findTable("user", function(error, tab) {
               should.assert(error === undefined);
               tab.dropIndex("ix_unknown", function(error) {
@@ -276,11 +276,11 @@ describe("odba.indexeddb.IndexedDBTable", function() {
         ];
 
         beforeEach(function() {
-          cx = drv.createConnection({database: "odba"});
+          cx = drv.createConnection({database: "vdba"});
         });
 
         beforeEach(function(done) {
-          cx.server.createDatabase("odba", autoIncrementSchema, done);
+          cx.server.createDatabase("vdba", autoIncrementSchema, done);
         });
 
         beforeEach(function(done) {
@@ -297,7 +297,7 @@ describe("odba.indexeddb.IndexedDBTable", function() {
         });
 
         afterEach(function(done) {
-          cx.server.dropDatabase("odba", done);
+          cx.server.dropDatabase("vdba", done);
         });
 
         it("insert(record, callback)", function(done) {
@@ -333,11 +333,11 @@ describe("odba.indexeddb.IndexedDBTable", function() {
         var cx, tab;
 
         beforeEach(function() {
-          cx = drv.createConnection({database: "odba"});
+          cx = drv.createConnection({database: "vdba"});
         });
 
         beforeEach(function(done) {
-          cx.server.createDatabase("odba", schema, done);
+          cx.server.createDatabase("vdba", schema, done);
         });
 
         beforeEach(function(done) {
@@ -354,7 +354,7 @@ describe("odba.indexeddb.IndexedDBTable", function() {
         });
 
         afterEach(function(done) {
-          cx.server.dropDatabase("odba", done);
+          cx.server.dropDatabase("vdba", done);
         });
 
         it("insert()", function() {
@@ -462,11 +462,11 @@ describe("odba.indexeddb.IndexedDBTable", function() {
       var cx, tab;
 
       beforeEach(function() {
-        cx = drv.createConnection({database: "odba"});
+        cx = drv.createConnection({database: "vdba"});
       });
 
       beforeEach(function(done) {
-        cx.server.createDatabase("odba", schema, done);
+        cx.server.createDatabase("vdba", schema, done);
       });
 
       beforeEach(function(done) {
@@ -487,7 +487,7 @@ describe("odba.indexeddb.IndexedDBTable", function() {
       });
 
       afterEach(function(done) {
-        cx.server.dropDatabase("odba", done);
+        cx.server.dropDatabase("vdba", done);
       });
 
       it("save()", function() {
@@ -563,11 +563,11 @@ describe("odba.indexeddb.IndexedDBTable", function() {
       var cx, tab;
 
       beforeEach(function() {
-        cx = drv.createConnection({database: "odba"});
+        cx = drv.createConnection({database: "vdba"});
       });
 
       beforeEach(function(done) {
-        cx.server.createDatabase("odba", schema, done);
+        cx.server.createDatabase("vdba", schema, done);
       });
 
       beforeEach(function(done) {
@@ -588,7 +588,7 @@ describe("odba.indexeddb.IndexedDBTable", function() {
       });
 
       afterEach(function(done) {
-        cx.server.dropDatabase("odba", done);
+        cx.server.dropDatabase("vdba", done);
       });
 
       it("update()", function() {
@@ -677,11 +677,11 @@ describe("odba.indexeddb.IndexedDBTable", function() {
       var cx, tab;
 
       beforeEach(function() {
-        cx = drv.createConnection({database: "odba"});
+        cx = drv.createConnection({database: "vdba"});
       });
 
       beforeEach(function(done) {
-        cx.server.createDatabase("odba", schema, done);
+        cx.server.createDatabase("vdba", schema, done);
       });
 
       beforeEach(function(done) {
@@ -702,7 +702,7 @@ describe("odba.indexeddb.IndexedDBTable", function() {
       });
 
       afterEach(function(done) {
-        cx.server.dropDatabase("odba", done);
+        cx.server.dropDatabase("vdba", done);
       });
 
       it("remove()", function(done) {

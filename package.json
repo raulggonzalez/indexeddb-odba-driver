@@ -1,26 +1,26 @@
 {
-  "name": "indexeddb-odba-driver",
-  "version": "0.5.2",
-  "description": "IndexedDB ODBA driver.",
+  "name": "indexeddb-vdba-driver",
+  "version": "0.6.0",
+  "description": "IndexedDB VDBA driver.",
   "author": "Raúl G. González <raulggonzalezsw@outlook.com>",
   "keywords": [
     "browser",
-    "ODBA",
+    "VDBA",
     "IndexedDB",
     "databases",
     "local databases",
     "storage",
     "local storage"
   ],
-  "homepage": "https://github.com/raulggonzalez/indexeddb-odba-driver",
+  "homepage": "https://github.com/raulggonzalez/indexeddb-vdba-driver",
   "bugs": {
-    "url": "https://github.com/raulggonzalez/indexeddb-odba-driver/issues"
+    "url": "https://github.com/raulggonzalez/indexeddb-vdba-driver/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/raulggonzalez/indexeddb-odba-driver.git"
+    "url": "https://github.com/raulggonzalez/indexeddb-vdba-driver.git"
   },
-  "main": "indexeddb-odba-driver.min.js",
+  "main": "indexeddb-vdba-driver.min.js",
   "dependencies": {},
   "devDependencies": {
     "grunt": "^0.4.5",

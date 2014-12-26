@@ -1,12 +1,12 @@
-/*! indexeddb-odba-driver - 0.5.2 (2014-12-22) */
-/*! odba-core - 0.4.1 (2014-12-21) */
+/*! indexeddb-vdba-driver - 0.6.0 (2014-12-26) */
+/*! vdba-core - 0.6.1 (2014-12-26) */
 
 (function() {
 
 /**
  * A combinator.
  *
- * @class odba.Combinator
+ * @class vdba.Combinator
  * @private
  */
 function Combinator() {
@@ -16,7 +16,7 @@ function Combinator() {
 /**
  * Joins two row sets.
  *
- * memberof odba.Combinator#
+ * @memberof vdba.Combinator#
  *
  * @param {Object[]} source   The source-side rows.
  * @param {Object[]} target   The target-side rows.
@@ -28,7 +28,7 @@ function Combinator() {
  * @param {Object[]}
  */
 Combinator.prototype.join = function join(source, target, sourceCol, targetCol, opts) {
-  var res = [], arrayAgg, util = odba.util;
+  var res = [], arrayAgg, util = vdba.util;
 
   //(1) pre: arguments
   arrayAgg = opts.arrayAgg;
@@ -54,7 +54,7 @@ Combinator.prototype.join = function join(source, target, sourceCol, targetCol, 
 /**
  * A connection.
  *
- * @class odba.Connection
+ * @class vdba.Connection
  * @abstract
  *
  * @param {Object} config The configuration.
@@ -65,7 +65,7 @@ function Connection(config) {
    *
    * @name config
    * @type {Object}
-   * @memberof odba.Connection#
+   * @memberof vdba.Connection#
    */
   Object.defineProperty(this, "config", {value: config, enumerable: true});
 }
@@ -75,7 +75,7 @@ function Connection(config) {
  *
  * @name clone
  * @function
- * @memberof odba.Connection#
+ * @memberof vdba.Connection#
  * @abstract
  */
 Connection.prototype.clone = function clone() {
@@ -87,7 +87,7 @@ Connection.prototype.clone = function clone() {
  *
  * @name connected
  * @type {Boolean}
- * @memberof odba.Connection#
+ * @memberof vdba.Connection#
  * @abstract
  */
 Connection.prototype.__defineGetter__("connected", function() {
@@ -98,8 +98,8 @@ Connection.prototype.__defineGetter__("connected", function() {
  * The server object as connected.
  *
  * @name server
- * @type {odba.Server}
- * @memberof odba.Connection#
+ * @type {vdba.Server}
+ * @memberof vdba.Connection#
  * @abstract
  */
 Connection.prototype.__defineGetter__("server", function() {
@@ -111,7 +111,7 @@ Connection.prototype.__defineGetter__("server", function() {
  *
  * @name open
  * @function
- * @memberof odba.Connection#
+ * @memberof vdba.Connection#
  * @abstract
  *
  * @param {Function} [callback] The function to call: fn(error, db).
@@ -128,7 +128,7 @@ Connection.prototype.open = function open() {
  *
  * @name close
  * @function
- * @memberof odba.Connection#
+ * @memberof vdba.Connection#
  * @abstract
  *
  * @param {Function} [callback] The function to call: fn(error).
@@ -146,7 +146,7 @@ Connection.prototype.close = function close() {
  *
  * @name runTransaction
  * @function
- * @memberof odba.Connection#
+ * @memberof vdba.Connection#
  * @abstract
  *
  * @param {String} mode         The transaction mode: readonly or readwrite.
@@ -164,7 +164,7 @@ Connection.prototype.runTransaction = function runTransaction() {
 /**
  * A database.
  *
- * @class odba.Database
+ * @class vdba.Database
  * @abstract
  */
 function Database() {
@@ -176,7 +176,7 @@ function Database() {
  *
  * @name name
  * @type {String}
- * @memberof odba.Database#
+ * @memberof vdba.Database#
  * @abstract
  */
 Database.prototype.__defineGetter__("name", function() {
@@ -188,7 +188,7 @@ Database.prototype.__defineGetter__("name", function() {
  *
  * @name hasTable
  * @function
- * @memberof odba.Database#
+ * @memberof vdba.Database#
  * @abstract
  *
  * @param {String} name       The table name.
@@ -206,7 +206,7 @@ Database.prototype.hasTable = function hasTable() {
  *
  * @name hasTables
  * @function
- * @memberof odba.Database#
+ * @memberof vdba.Database#
  * @abstract
  *
  * @param {String[]} names    The table names.
@@ -224,7 +224,7 @@ Database.prototype.hasTables = function hasTables() {
  *
  * @name findTable
  * @function
- * @memberof odba.Database#
+ * @memberof vdba.Database#
  * @abstract
  *
  * @param {String} name       The table name.
@@ -242,7 +242,7 @@ Database.prototype.findTable = function findTable() {
  *
  * @name createTable
  * @function
- * @memberof odba.Database#
+ * @memberof vdba.Database#
  * @abstract
  *
  * @param {String} name         The table name.
@@ -258,7 +258,7 @@ Database.prototype.createTable = function createTable() {
  *
  * @name createTables
  * @function
- * @memberof odba.Database#
+ * @memberof vdba.Database#
  * @abstract
  *
  * @param {Object[]} tables     The tables info.
@@ -273,7 +273,7 @@ Database.prototype.createTables = function createTables() {
  *
  * @name dropTable
  * @function
- * @memberof odba.Database#
+ * @memberof vdba.Database#
  * @abstract
  *
  * @param {String} name         The table name.
@@ -288,7 +288,7 @@ Database.prototype.dropTable = function dropTable() {
  *
  * @name findIndex
  * @function
- * @memberof odba.Database#
+ * @memberof vdba.Database#
  * @abstract
  *
  * @param {String} table      The table name.
@@ -307,7 +307,7 @@ Database.prototype.findIndex = function findIndex() {
  *
  * @name hasIndex
  * @function
- * @memberof odba.Database#
+ * @memberof vdba.Database#
  * @abstract
  *
  * @param {String} table      The object store name.
@@ -323,7 +323,7 @@ Database.prototype.hasIndex = function hasIndex() {
  *
  * @name createIndex
  * @function
- * @memberof odba.Database#
+ * @memberof vdba.Database#
  * @abstract
  *
  * @param {String} table        The table name.
@@ -347,7 +347,7 @@ Database.prototype.createIndex = function createIndex() {
  *
  * @name dropIndex
  * @function
- * @memberof odba.Database#
+ * @memberof vdba.Database#
  * @abstract
  *
  * @param {String} table        The table name.
@@ -363,9 +363,9 @@ Database.prototype.dropIndex = function dropIndex() {
 };
 
 /**
- * An ODBA driver.
+ * A VDBA driver.
  *
- * @class odba.Driver
+ * @class vdba.Driver
  * @abstract
  *
  * @param {String} name The driver name.
@@ -376,7 +376,7 @@ function Driver(name) {
    *
    * @name name
    * @type {String}
-   * @memberof odba.Driver#
+   * @memberof vdba.Driver#
    */
   Object.defineProperty(this, "name", {value: name, enumerable: true});
 }
@@ -386,7 +386,7 @@ function Driver(name) {
  *
  * @name cache
  * @type {Object}
- * @memberof odba.Driver
+ * @memberof vdba.Driver
  * @private
  */
 Object.defineProperty(Driver, "cache", {value: {}});
@@ -394,17 +394,17 @@ Object.defineProperty(Driver, "cache", {value: {}});
 /**
  * Returns a specified driver.
  *
- * @memberof odba.Driver
+ * @memberof vdba.Driver
  *
  * @param {String} name The driver name: IndexedDB, C*, Cassandra, PostgreSQL, etc.
  * @returns A driver or undefined if the name is invalid.
  *
  * @example
- * drv = odba.Driver.getDriver("IndexedDB");
- * drv = odba.Driver.getDriver("C*");
+ * drv = vdba.Driver.getDriver("IndexedDB");
+ * drv = vdba.Driver.getDriver("C*");
  */
 Driver.getDriver = function getDriver(name) {
-  var cache = odba.Driver.cache;
+  var cache = vdba.Driver.cache;
 
   //(1) pre: arguments
   if (!name) {
@@ -417,21 +417,21 @@ Driver.getDriver = function getDriver(name) {
 
 /**
  * Registers a driver.
- * This method is used by the drivers to register in the ODBA API.
+ * This method is used by the drivers to register in the VDBA API.
  *
  * @name register
  * @function
- * @memberof odba.Driver
+ * @memberof vdba.Driver
  *
- * @param {odba.Driver} driver      The driver.
+ * @param {vdba.Driver} driver      The driver.
  * @param {String|String[]} [alias] The driver alias.
  *
  * @example
- * odba.Driver.register(new IndexedDBDriver());
- * odba.Driver.register(new CassandraDriver(), "C*");
+ * vdba.Driver.register(new IndexedDBDriver());
+ * vdba.Driver.register(new CassandraDriver(), "C*");
  */
 Driver.register = function register(driver, alias) {
-  var cache = odba.Driver.cache;
+  var cache = vdba.Driver.cache;
 
   //(1) pre: arguments
   if (!driver) {
@@ -456,11 +456,11 @@ Driver.register = function register(driver, alias) {
  *
  * @name createConnection
  * @function
- * @memberof odba.Driver#
+ * @memberof vdba.Driver#
  * @abstract
  *
  * @param {Object} config The connection configuration.
- * @returns {odba.Connection}
+ * @returns {vdba.Connection}
  *
  * @example An IndexedDB connection.
  * cx = drv.createConnection({database: "mydb"});
@@ -474,7 +474,7 @@ Driver.prototype.createConnection = function createConnection() {
  *
  * @name openConnection
  * @function
- * @memberof odba.Driver#
+ * @memberof vdba.Driver#
  *
  * @param {Object} config     The configuration object.
  * @param {Function} callback The function to call: fn(error, cx).
@@ -507,7 +507,7 @@ Driver.prototype.openConnection = function openConnection(config, callback) {
 /**
  * An index.
  *
- * @class odba.Index
+ * @class vdba.Index
  * @abstract
  */
 function Index() {
@@ -518,8 +518,8 @@ function Index() {
  * The database.
  *
  * @name table
- * @type {odba.Database}
- * @memberof odba.Index#
+ * @type {vdba.Database}
+ * @memberof vdba.Index#
  * @abstract
  */
 Index.prototype.__defineGetter__("database", function() {
@@ -530,8 +530,8 @@ Index.prototype.__defineGetter__("database", function() {
  * The table.
  *
  * @name table
- * @type {odba.Table}
- * @memberof odba.Index#
+ * @type {vdba.Table}
+ * @memberof vdba.Index#
  * @abstract
  */
 Index.prototype.__defineGetter__("table", function() {
@@ -543,7 +543,7 @@ Index.prototype.__defineGetter__("table", function() {
  *
  * @name name
  * @type {String}
- * @memberof odba.Index#
+ * @memberof vdba.Index#
  * @abstract
  */
 Index.prototype.__defineGetter__("name", function() {
@@ -555,7 +555,7 @@ Index.prototype.__defineGetter__("name", function() {
  *
  * @name unique
  * @type {Boolean}
- * @memberof odba.indexeddb.IndexedDBIndex#
+ * @memberof vdba.indexeddb.IndexedDBIndex#
  * @abstract
  */
 Index.prototype.__defineGetter__("unique", function() {
@@ -563,9 +563,152 @@ Index.prototype.__defineGetter__("unique", function() {
 });
 
 /**
+ * A mapper.
+ *
+ * @class vdba.Mapper
+ * @protected
+ */
+function Mapper() {
+
+}
+
+/**
+ * Maps the rows as indicated.
+ *
+ * @name map
+ * @function
+ * @memberof vdba.Mapper#
+ *
+ * @param {Object|String[]|Function} map  How to map.
+ * @param {vdba.Result|Object[]} rows     The rows or the result to cast.
+ *
+ * @returns {Object[]}
+ */
+Mapper.prototype.map = function(map, rows) {
+  var res;
+
+  //(1) map
+  if (rows instanceof vdba.Result) {
+    res = this.mapResult(map, rows);
+  } else {
+    res = this.mapRows(map, rows);
+  }
+
+  //(2) return result
+  return res;
+};
+
+/**
+ * @private
+ */
+Mapper.prototype.mapRows = function(map, rows) {
+  var res = [];
+
+  //(1) map
+  for (var i = 0; i < rows.length; ++i) {
+    res.push(this.mapRow(map, rows[i]));
+  }
+
+  //(2) return result
+  return res;
+};
+
+/**
+ * @private
+ */
+Mapper.prototype.mapResult = function(map, result) {
+  var res;
+
+  //(1) create result
+  res = new result.constructor([], result.options);
+
+  //(2) map
+  for (var i = 0; i < result.length; ++i) {
+    res.rows.push(this.mapRow(map, result.rows[i]));
+  }
+
+  //(3) return result
+  return res;
+};
+
+/**
+ * Maps a row.
+ *
+ * @name mapRow
+ * @function
+ * @memberof vdba.Mapper#
+ *
+ * @param {Object|String[]|Function} map  How to map.
+ * @param {Object} row                    The row to cast.
+ *
+ * @returns {Object}
+ */
+Mapper.prototype.mapRow = function(map, row) {
+  var instance;
+
+  //(1) cast as needed
+  if (map instanceof Function) {
+    instance = this.customMap(map, row);
+  } else if (map instanceof Array) {
+    instance = this.defaultMap({map: map}, row);
+  } else if (map instanceof Object) {
+    instance = this.defaultMap(map, row);
+  } else {
+    instance = row;
+  }
+
+  //(2) return instance
+  return instance;
+};
+
+/**
+ * @private
+ */
+Mapper.prototype.defaultMap = function(map, row) {
+  var instance, Class, mapping;
+
+  //(1) prepare
+  Class = (map.clss || Object);
+  mapping = (map.map || {});
+
+  if (typeof(mapping) == "string") {
+    mapping = [mapping];
+  }
+
+  if (mapping instanceof Array) {
+    var aux = {};
+
+    for (var i = 0; i < mapping.length; ++i) {
+      var field = mapping[i];
+      aux[field.toLowerCase()] = field;
+    }
+
+    mapping = aux;
+  }
+
+  //(2) create instance
+  instance = Object.create(Class.prototype);
+
+  //(3) initialize instance
+  for (var key in row) {
+    instance[mapping[key] || key] = row[key];
+  }
+
+  //(4) return instance
+  return instance;
+};
+
+/**
+ * @private
+ */
+Mapper.prototype.customMap = function(map, row) {
+  return map(row);
+};
+
+/**
  * A query.
  *
- * @class odba.Query
+ * @class vdba.Query
  * @abstract
  */
 function Query() {
@@ -577,7 +720,7 @@ function Query() {
  *
  * @name findAll
  * @function
- * @memberof odba.Query#
+ * @memberof vdba.Query#
  * @abstract
  *
  * @param {Function} callback The function to call: fn(error, result).
@@ -587,11 +730,39 @@ Query.prototype.findAll = function findAll() {
 };
 
 /**
+ * findAll() with casting.
+ *
+ * @name mapAll
+ * @function
+ * @memberof vdba.Query#
+ *
+ * @param {Object|Function|String[]} map  The mapping.
+ * @param {Function} callback             The function to call: fn(error, result).
+ *
+ * @example
+ * q.mapAll(["userId"], function(error, result) { ... });
+ * q.mapAll({clss: User}, function(error, result) { ... });
+ * q.mapAll({clss: User, map: ["userId"]}, function(error, result) { ... });
+ * q.mapAll({clss: User, map: {userid: "userId"}}, function(error, result) { ... });
+ */
+Query.prototype.mapAll = function mapAll(map, callback) {
+  //(1) pre: arguments
+  if (!map) throw new Error("Map expected.");
+  if (!callback) throw new Error("Callback expected.");
+
+  //(2) find and map
+  this.findAll(function(error, result) {
+    if (error) callback(error);
+    else callback(undefined, new vdba.Mapper().map(map, result));
+  });
+};
+
+/**
  * Runs the query.
  *
  * @name find
  * @function
- * @memberof odba.Query#
+ * @memberof vdba.Query#
  * @abstract
  *
  * @param {Object} [filter]   The filter object.
@@ -602,11 +773,45 @@ Query.prototype.find = function find() {
 };
 
 /**
+ * find() with casting.
+ *
+ * @name map
+ * @function
+ * @memberof vdba.Query#
+ *
+ * @param {Object|Function|String[]} map  The mapping.
+ * @param {Object} [filter]               The condition.
+ * @param {Function} callback             The function to call: fn(error, result).
+ */
+Query.prototype.map = function(map, filter, callback) {
+  //(1) pre: arguments
+  if (arguments.length == 2) {
+    if (arguments[1] instanceof Function) {
+      callback = arguments[1];
+      filter = undefined;
+    }
+  }
+
+  if (!map) throw new Error("Map expected.");
+  if (!callback) throw new Error("Callback expected.");
+
+  //(2) find and map
+  this.find(filter, function(error, result) {
+    if (error) {
+      callback(error);
+    } else {
+      callback(undefined, new vdba.Mapper().map(map, result));
+    }
+  });
+};
+
+/**
  * Runs the query.
  *
  * @name findOne
  * @function
- * @memberof odba.Query#
+ * @memberof vdba.Query#
+ * @abstract
  *
  * @param {Object} [filter]   The filter object.
  * @param {Function} callback The function to call: fn(error, record).
@@ -616,19 +821,53 @@ Query.prototype.findOne = function findOne() {
 };
 
 /**
+ * findOne() with casting.
+ *
+ * @name mapOne
+ * @function
+ * @memberof vdba.Query#
+ *
+ * @param {Object|Function|String[]} map  The mapping.
+ * @param {Object} [filter]               The filter object.
+ * @param {Function} callback             The function to call: fn(error, record).
+ */
+Query.prototype.mapOne = function mapOne(map, filter, callback){
+  //(1) pre: arguments
+  if (arguments.length == 2) {
+    if (arguments[1] instanceof Function) {
+      callback = arguments[1];
+      filter = undefined;
+    }
+  }
+
+  if (!map) throw new Error("Map expected.");
+  if (!callback) throw new Error("Callback expected.");
+
+  //(2) find and map
+  this.findOne(filter, function(error, row) {
+    if (error) {
+      callback(error);
+    } else {
+      if (!row) callback();
+      else callback(undefined, new vdba.Mapper().mapRow(map, row));
+    }
+  });
+};
+
+/**
  * Performs a join.
  *
  * @name join
  * @function
- * @memberof odba.Query#
+ * @memberof vdba.Query#
  * @abstract
  *
- * @param {String|odba.Table} target  The target table.
+ * @param {String|vdba.Table} target  The target table.
  * @param {String} col1               The source column.
  * @param {String} [col2]             The target column.
  * @param {Function} [callback]       The function to call: function(error, result).
  *
- * @returns {odba.Query} If no callback is specified, it returns the query.
+ * @returns {vdba.Query} If no callback is specified, it returns the query.
  *
  * @example Natural join.
  * q.join("session", "userId")
@@ -648,19 +887,29 @@ Query.prototype.join = function join() {
 /**
  * A query result.
  *
- * @class odba.Result
+ * @class vdba.Result
  *
- * @param {Array} rows  The rows.
+ * @param {Array} rows        The rows.
+ * @param {Object} [options]  The options.
  */
-function Result(rows) {
+function Result(rows, options) {
   /**
    * The rows.
    *
    * @name rows
-   * @type {odba.Object[]}
-   * @memberof odba.Result#
+   * @type {Object[]}
+   * @memberof vdba.Result#
    */
   Object.defineProperty(this, "rows", {value: rows});
+
+  /**
+   * The result options.
+   *
+   * @name options
+   * @type {Object}
+   * @memberof vdba.Result#
+   */
+  Object.defineProperty(this, "options", {value: options || {}});
 }
 
 /**
@@ -668,7 +917,7 @@ function Result(rows) {
  *
  * @name length
  * @type {Number}
- * @memberof odba.Result#
+ * @memberof vdba.Result#
  */
 Result.prototype.__defineGetter__("length", function() {
   return this.rows.length;
@@ -679,18 +928,37 @@ Result.prototype.__defineGetter__("length", function() {
  *
  * @name find
  * @function
- * @memberof odba.Result#
+ * @memberof vdba.Result#
  *
- * @param {Object} where  The restriction condition.
+ * @param {Object} [where]  The restriction condition.
+ *
+ * @returns {Object[]}
  */
 Result.prototype.find = function find(where) {
-  return new odba.ResultFilter().find(this, where);
+  return new vdba.ResultFilter().find(this, where);
+};
+
+/**
+ * Returns the rows satisfying the restriction casted as
+ * indicated.
+ *
+ * @name map
+ * @function
+ * @memberof vdba.Result#
+ *
+ * @param {Object} map      The mapping.
+ * @param {Object} [where]  The restriction condition.
+ *
+ * @returns {Object[]}
+ */
+Result.prototype.map = function(map, where) {
+  return new vdba.Mapper().map(map, this.find(where));
 };
 
 /**
  * A result filter.
  *
- * @class
+ * @class vdba.ResultFilter
  * @private
  */
 function ResultFilter() {
@@ -700,7 +968,7 @@ function ResultFilter() {
 /**
  * Filters rows of a result.
  *
- * @memberof odba.ResultFilter#
+ * @memberof vdba.ResultFilter#
  *
  * @param {Result} result The result set.
  * @param {Object} filter The filter.
@@ -727,7 +995,7 @@ ResultFilter.prototype.find = function find(result, filter) {
 /**
  * Checks whether a row satifies the filter.
  *
- * @memberof odba.ResultFilter#
+ * @memberof vdba.ResultFilter#
  *
  * @param {Object} row    The row to check.
  * @param {Object} filter The filter.
@@ -762,7 +1030,7 @@ ResultFilter.prototype.check = function check(row, filter) {
 /**
  * Checks whether a property satisfies its filter.
  *
- * @memberof odba.ResultFilter#
+ * @memberof vdba.ResultFilter#
  * @private
  *
  * @param {Object} row    The row to check.
@@ -806,7 +1074,7 @@ ResultFilter.prototype.checkProp = function checkProp(row, prop, filter) {
 /**
  * Checks a property with an operator.
  *
- * @memberof odba.ResultFilter#
+ * @memberof vdba.ResultFilter#
  * @private
  *
  * @param {Object} row    The row to check.
@@ -839,7 +1107,7 @@ ResultFilter.prototype.checkOp = function checkOp(row, prop, op, filter) {
 /**
  * Checks the operator $eq.
  *
- * @memberof odba.ResultFilter#
+ * @memberof vdba.ResultFilter#
  * @private
  *
  * @param {Object} row    The row to check.
@@ -857,7 +1125,7 @@ ResultFilter.prototype.$eq = function $eq(row, prop, value) {
 /**
  * Checks the operator $ne.
  *
- * @memberof odba.ResultFilter#
+ * @memberof vdba.ResultFilter#
  * @private
  *
  * @param {Object} row    The row to check.
@@ -875,7 +1143,7 @@ ResultFilter.prototype.$ne = function $ne(row, prop, value) {
 /**
  * Checks the operator $lt.
  *
- * @memberof odba.ResultFilter#
+ * @memberof vdba.ResultFilter#
  * @private
  *
  * @param {Object} row    The row to check.
@@ -892,7 +1160,7 @@ ResultFilter.prototype.$lt = function $lt(row, prop, value) {
 /***
  * Checks the operator $le.
  *
- * @memberof odba.ResultFilter#
+ * @memberof vdba.ResultFilter#
  * @private
  *
  * @param {Object} row    The row to check.
@@ -909,7 +1177,7 @@ ResultFilter.prototype.$le = function $le(row, prop, value) {
 /**
  * Checks the operator $gt.
  *
- * @memberof odba.ResultFilter#
+ * @memberof vdba.ResultFilter#
  * @private
  *
  * @param {Object} row    The row to check.
@@ -926,7 +1194,7 @@ ResultFilter.prototype.$gt = function $gt(row, prop, value) {
 /**
  * Checks the operator $ge.
  *
- * @memberof odba.ResultFilter#
+ * @memberof vdba.ResultFilter#
  * @private
  *
  * @param {Object} row    The row to check.
@@ -943,7 +1211,7 @@ ResultFilter.prototype.$ge = function $ge(row, prop, value) {
 /**
  * Checks the operator $like.
  *
- * @memberof odba.ResultFilter#
+ * @memberof vdba.ResultFilter#
  * @private
  *
  * @param {Object} row    The row to check.
@@ -960,7 +1228,7 @@ ResultFilter.prototype.$like = function $like(row, prop, value) {
 /**
  * Checks the operator $notLike.
  *
- * @memberof odba.ResultFilter#
+ * @memberof vdba.ResultFilter#
  * @private
  *
  * @param {Object} row    The row to check.
@@ -977,7 +1245,7 @@ ResultFilter.prototype.$notLike = function $notLike(row, prop, value) {
 /**
  * Checks the operator $in.
  *
- * @memberof odba.ResultFilter#
+ * @memberof vdba.ResultFilter#
  * @private
  *
  * @param {Object} row    The row to check.
@@ -994,7 +1262,7 @@ ResultFilter.prototype.$in = function $in(row, prop, value) {
 /**
  * Checks the operator $notIn.
  *
- * @memberof odba.ResultFilter#
+ * @memberof vdba.ResultFilter#
  * @private
  *
  * @param {Object} row    The row to check.
@@ -1010,7 +1278,7 @@ ResultFilter.prototype.$notIn = function $notIn(row, prop, value) {
 /**
  * A database engine.
  *
- * @class odba.Server
+ * @class vdba.Server
  * @abstract
  */
 function Server() {
@@ -1021,7 +1289,7 @@ function Server() {
  * The hostname.
  *
  * @name host
- * @memberof odba.Server#
+ * @memberof vdba.Server#
  * @abstract
  */
 Server.prototype.__defineGetter__("host", function() {
@@ -1032,7 +1300,7 @@ Server.prototype.__defineGetter__("host", function() {
  * The port.
  *
  * @name port
- * @memberof odba.Server#
+ * @memberof vdba.Server#
  * @abstract
  */
 Server.prototype.__defineGetter__("port", function() {
@@ -1043,7 +1311,7 @@ Server.prototype.__defineGetter__("port", function() {
  * The server version.
  *
  * @name version
- * @memberof odba.Server#
+ * @memberof vdba.Server#
  * @abstract
  */
 Server.prototype.__defineGetter__("version", function() {
@@ -1055,7 +1323,7 @@ Server.prototype.__defineGetter__("version", function() {
  *
  * @name createDatabase
  * @function
- * @memberof odba.Server#
+ * @memberof vdba.Server#
  * @abstract
  *
  * @param {String} name         The database name.
@@ -1071,7 +1339,7 @@ Server.prototype.createDatabase = function createDatabase() {
  *
  * @name hasDatabase
  * @function
- * @memberof odba.Server#
+ * @memberof vdba.Server#
  * @abstract
  *
  * @param {String} name       The database name.
@@ -1086,7 +1354,7 @@ Server.prototype.hasDatabase = function hasDatabase() {
  *
  * @name dropDatabase
  * @function
- * @memberof odba.Server#
+ * @memberof vdba.Server#
  * @abstract
  *
  * @param {String} name         The database name.
@@ -1099,7 +1367,7 @@ Server.prototype.dropDatabase = function dropDatabase() {
 /**
  * A table.
  *
- * @class odba.Table
+ * @class vdba.Table
  * @abstract
  */
 function Table() {
@@ -1110,8 +1378,8 @@ function Table() {
  * The database object.
  *
  * @name database
- * @type {odba.Database}
- * @memberof odba.Table#
+ * @type {vdba.Database}
+ * @memberof vdba.Table#
  * @abstract
  */
 Table.prototype.__defineGetter__("database", function() {
@@ -1123,7 +1391,7 @@ Table.prototype.__defineGetter__("database", function() {
  *
  * @name name
  * @type {String}
- * @memberof odba.Table#
+ * @memberof vdba.Table#
  * @abstract
  */
 Table.prototype.__defineGetter__("name", function() {
@@ -1135,15 +1403,19 @@ Table.prototype.__defineGetter__("name", function() {
  *
  * @name hasIndex
  * @function
- * @memberof odba.Table#
+ * @memberof vdba.Table#
  *
  * @param {String} name       The index name.
  * @param {Function} callback The function to call: fn(error, exists).
  */
 Table.prototype.hasIndex = function hasIndex(name, callback) {
   //(1) arguments
-  if (arguments.length < 2) {
-    throw new Error("Index name and callback expected.");
+  if (!name) {
+    throw new Error("Index name expected.");
+  }
+
+  if (!callback) {
+    throw new Error("Callback expected.");
   }
 
   //(2) check
@@ -1155,7 +1427,7 @@ Table.prototype.hasIndex = function hasIndex(name, callback) {
  *
  * @name findIndex
  * @function
- * @memberof odba.Table#
+ * @memberof vdba.Table#
  *
  * @param {String} name       The index name.
  * @param {Function} callback The function to call: fn(error, exists).
@@ -1175,7 +1447,7 @@ Table.prototype.findIndex = function findIndex(name, callback) {
  *
  * @name createIndex
  * @function
- * @memberof odba.Table#
+ * @memberof vdba.Table#
  *
  * @param {String} name         The index name.
  * @param {String} col          The column.
@@ -1206,7 +1478,7 @@ Table.prototype.createIndex = function createIndex(name, col, options, callback)
  *
  * @name dropIndex
  * @function
- * @memberof odba.Table#
+ * @memberof vdba.Table#
  *
  * @param {String} name         The index name.
  * @param {Function} [callback] The function to call: fn(error).
@@ -1226,18 +1498,58 @@ Table.prototype.dropIndex = function dropIndex(name, callback) {
 };
 
 /**
+ * Returns a query object.
+ *
+ * @name query
+ * @function
+ * @memberof vdba.Table#
+ * @protected
+ * @abstract
+ *
+ * @returns {vdba.Query}
+ */
+Table.prototype.query = function query() {
+  throw new Error("Abstract method.");
+};
+
+/**
  * Returns zero, one or several rows.
  *
  * @name find
  * @function
- * @memberof odba.Table#
- * @abstract
+ * @memberof vdba.Table#
  *
- * @param {Object} where      The condition.
+ * @param {Object} filter     The condition.
  * @param {Function} callback The function to call: fn(error, result).
  */
-Table.prototype.find = function find() {
-  throw new Error("Abstract method.");
+Table.prototype.find = function find(filter, callback) {
+  //(1) pre: arguments
+  if (arguments.length == 1) {
+    callback = arguments[0];
+    filter = undefined;
+  }
+
+  if (!callback) {
+    throw new Error("Callback expected.");
+  }
+
+  //(2) find
+  this.query().find(filter, callback);
+};
+
+/**
+ * find() with casting.
+ *
+ * @name map
+ * @function
+ * @memberof vdba.Table#
+ *
+ * @param {Object|Function|String[]} map  The mapping.
+ * @param {Object} [filter]               The condition.
+ * @param {Function} callback             The function to call: fn(error, result).
+ */
+Table.prototype.map = function(map, filter, callback) {
+  this.query().map(map, filter, callback);
 };
 
 /**
@@ -1245,13 +1557,30 @@ Table.prototype.find = function find() {
  *
  * @name findAll
  * @function
- * @memberof odba.Table#
- * @abstract
+ * @memberof vdba.Table#
  *
  * @param {Function} callback The function to call: fn(error, result).
  */
-Table.prototype.findAll = function findAll() {
-  throw new Error("Abstract method.");
+Table.prototype.findAll = function findAll(callback) {
+  //(1) pre: arguments
+  if (!callback) throw new Error("Callback expected.");
+
+  //(2) find
+  this.query().find(callback);
+};
+
+/**
+ * findAll() with casting.
+ *
+ * @name mapAll
+ * @function
+ * @memberof vdba.Table#
+ *
+ * @param {Object|Function|String[]} map  The mapping.
+ * @param {Function} callback             The function to call: fn(error, result).
+ */
+Table.prototype.mapAll = function mapAll(map, callback) {
+  this.query().mapAll(map, callback);
 };
 
 /**
@@ -1259,14 +1588,35 @@ Table.prototype.findAll = function findAll() {
  *
  * @name findOne
  * @function
- * @memberof odba.Table#
- * @abstract
+ * @memberof vdba.Table#
  *
- * @param {Object} where      The condition.
+ * @param {Object} [filter]   The condition.
  * @param {Function} callback The function to call: fn(error, row).
  */
-Table.prototype.findOne = function findOne() {
-  throw new Error("Abstract method.");
+Table.prototype.findOne = function findOne(filter, callback) {
+  //(1) pre: arguments
+  if (arguments.length == 1) {
+    callback = arguments[0];
+    filter = undefined;
+  }
+
+  //(2) find
+  this.query().findOne(filter, callback);
+};
+
+/**
+ * findOne() with casting.
+ *
+ * @name mapOne
+ * @function
+ * @memberof vdba.Table#
+ *
+ * @param {Object|Function|String[]} map  The mapping.
+ * @param {Object} [filter]               The condition.
+ * @param {Function} callback             The function to call: fn(error, row).
+ */
+Table.prototype.mapOne = function mapOne(map, filter, callback) {
+  this.query().mapOne(map, filter, callback);
 };
 
 /**
@@ -1274,7 +1624,7 @@ Table.prototype.findOne = function findOne() {
  *
  * @name count
  * @function
- * @memberof odba.Table#
+ * @memberof vdba.Table#
  * @abstract
  *
  * @param {Function} callback The function to call: fn(error, count).
@@ -1288,19 +1638,37 @@ Table.prototype.count = function count() {
  *
  * @name join
  * @function
- * @memberof odba.Table#
- * @abstract
+ * @memberof vdba.Table#
  *
- * @param {String|odba.Table} target  The target table name.
+ * @param {String|vdba.Table} target  The target table name.
  * @param {String} col1               The source column.
  * @param {String} [col2]             The target column.
  * @param {Function} [callback]       The function to call: fn(error, result).
  *
- * @returns {odba.Query} If the call doesn't pass a callback, it returns a Query;
+ * @returns {vdba.Query} If the call doesn't pass a callback, it returns a Query;
  *                       otherwise, asynchronous call.
  */
-Table.prototype.join = function join() {
-  throw new Error("Abstract method.");
+Table.prototype.join = function join(target, col1, col2, callback) {
+  //(1) pre: arguments
+  if (arguments.length == 3) {
+    if (arguments[2] instanceof Function) {
+      callback = arguments[2];
+      col2 = undefined;
+    }
+  }
+
+  if (!col2) col2 = col1;
+
+  if (!target) throw new Error("Target table expected.");
+  if (!col1) throw new Error("Source column expected.");
+  if (!col2) throw new Error("Target column expected.");
+
+  //(2) join or return
+  if (callback) {
+    this.query().join(target, col1, col2, callback);
+  } else {
+    return this.query().join(target, col1, col2);
+  }
 };
 
 /**
@@ -1308,7 +1676,7 @@ Table.prototype.join = function join() {
  *
  * @name insert
  * @function
- * @memberof odba.Table#
+ * @memberof vdba.Table#
  * @abstract
  *
  * @param {object|Object[]} rows  The row(s) to insert.
@@ -1324,7 +1692,7 @@ Table.prototype.insert = function insert() {
  *
  * @name save
  * @function
- * @memberof odba.Table#
+ * @memberof vdba.Table#
  * @abstract
  *
  * @param {Object|Object[]} rows  The row(s) to save.
@@ -1343,7 +1711,7 @@ Table.prototype.save = function save() {
  *
  * @name update
  * @function
- * @memberof odba.Table#
+ * @memberof vdba.Table#
  * @abstract
  *
  * @param {Object} [where]      The condition.
@@ -1363,7 +1731,7 @@ Table.prototype.update = function update() {
  *
  * @name remove
  * @function
- * @memberof odba.Table#
+ * @memberof vdba.Table#
  * @abstract
  *
  * @param {Object} where        The condition.
@@ -1380,13 +1748,13 @@ Table.prototype.remove = function remove() {
 };
 
 /**
- * The odba package.
+ * The vdba package.
  *
- * @namespace odba
+ * @namespace vdba
  */
-Object.defineProperty(window, "odba", {value: {}, enumerable: true});
+Object.defineProperty(window, "vdba", {value: {}, enumerable: true});
 
-Object.defineProperty(odba, "util", {
+Object.defineProperty(vdba, "util", {
   value: {
     inherits: function inherits(child, parent) {
       child.super_ = parent;
@@ -1417,25 +1785,26 @@ Object.defineProperty(odba, "util", {
   }
 });
 
-Object.defineProperty(odba, "Combinator", {value: Combinator, enumerable: true});
-Object.defineProperty(odba, "Connection", {value: Connection, enumerable: true});
-Object.defineProperty(odba, "Database", {value: Database, enumerable: true});
-Object.defineProperty(odba, "Driver", {value: Driver, enumerable: true});
-Object.defineProperty(odba, "Index", {value: Index, enumerable: true});
-Object.defineProperty(odba, "Query", {value: Query, enumerable: true});
-Object.defineProperty(odba, "Result", {value: Result, enumerable: true});
-Object.defineProperty(odba, "ResultFilter", {value: ResultFilter, enumerable: true});
-Object.defineProperty(odba, "Server", {value: Server, enumerable: true});
-Object.defineProperty(odba, "Table", {value: Table, enumerable: true});
+Object.defineProperty(vdba, "Combinator", {value: Combinator, enumerable: true});
+Object.defineProperty(vdba, "Connection", {value: Connection, enumerable: true});
+Object.defineProperty(vdba, "Database", {value: Database, enumerable: true});
+Object.defineProperty(vdba, "Driver", {value: Driver, enumerable: true});
+Object.defineProperty(vdba, "Index", {value: Index, enumerable: true});
+Object.defineProperty(vdba, "Mapper", {value: Mapper, enumerable: true});
+Object.defineProperty(vdba, "Query", {value: Query, enumerable: true});
+Object.defineProperty(vdba, "Result", {value: Result, enumerable: true});
+Object.defineProperty(vdba, "ResultFilter", {value: ResultFilter, enumerable: true});
+Object.defineProperty(vdba, "Server", {value: Server, enumerable: true});
+Object.defineProperty(vdba, "Table", {value: Table, enumerable: true});
 
 })();
 
 /**
  * The IndexedDB namespace.
  *
- * @namespace odba.indexeddb
+ * @namespace vdba.indexeddb
  */
-Object.defineProperty(odba, "indexeddb", {value: {}, enumerable: true});
+Object.defineProperty(vdba, "indexeddb", {value: {}, enumerable: true});
 
 
 
@@ -1444,8 +1813,8 @@ Object.defineProperty(odba, "indexeddb", {value: {}, enumerable: true});
 /**
  * An IndexedDB connection.
  *
- * @class odba.indexeddb.IndexedDBConnection
- * @extends odba.Connection
+ * @class vdba.indexeddb.IndexedDBConnection
+ * @extends vdba.Connection
  * @protected
  *
  * @param {Object} config The config object: database (String).
@@ -1456,7 +1825,7 @@ function IndexedDBConnection(config) {
    *
    * @name config
    * @type {Object}
-   * @memberof odba.indexeddb.IndexedDBConnection#
+   * @memberof vdba.indexeddb.IndexedDBConnection#
    * @private
    */
   Object.defineProperty(this, "config", {value: config});
@@ -1465,8 +1834,8 @@ function IndexedDBConnection(config) {
    * The database connected to.
    *
    * @name database
-   * @type {odba.indexeddb.IndexedDBDatabase}
-   * @memberof odba.indexeddb.IndexedDBConnection#
+   * @type {vdba.indexeddb.IndexedDBDatabase}
+   * @memberof vdba.indexeddb.IndexedDBConnection#
    */
   Object.defineProperty(this, "database", {value: undefined, enumerable: true, writable: true});
 
@@ -1474,8 +1843,8 @@ function IndexedDBConnection(config) {
    * The transaction.
    *
    * @name transaction
-   * @type {odba.indexeddb.IndexedDBTransaction}
-   * @memberof odba.indexeddb.IndexedDBConnection#
+   * @type {vdba.indexeddb.IndexedDBTransaction}
+   * @memberof vdba.indexeddb.IndexedDBConnection#
    * @private
    */
   Object.defineProperty(this, "transaction", {value: undefined, writable: true});
@@ -1487,19 +1856,19 @@ function IndexedDBConnection(config) {
   }
 }
 
-odba.util.inherits(IndexedDBConnection, odba.Connection);
-Object.defineProperty(odba.indexeddb, "IndexedDBConnection", {value: IndexedDBConnection});
+vdba.util.inherits(IndexedDBConnection, vdba.Connection);
+Object.defineProperty(vdba.indexeddb, "IndexedDBConnection", {value: IndexedDBConnection});
 
 /**
  * The server object.
  *
  * @name server
- * @type {odba.indexeddb.IndexedDBServer}
- * @memberof odba.indexeddb.IndexedDBConnection#
+ * @type {vdba.indexeddb.IndexedDBServer}
+ * @memberof vdba.indexeddb.IndexedDBConnection#
  */
 IndexedDBConnection.prototype.__defineGetter__("server", function() {
   if (!this._server) {
-    Object.defineProperty(this, "_server", {value: new odba.indexeddb.IndexedDBServer(this), writable: true});
+    Object.defineProperty(this, "_server", {value: new vdba.indexeddb.IndexedDBServer(this), writable: true});
   }
 
   return this._server;
@@ -1511,13 +1880,13 @@ IndexedDBConnection.prototype.__defineGetter__("server", function() {
  *
  * @name clone
  * @function
- * @memberof odba.indexeddb.Connection#
+ * @memberof vdba.indexeddb.Connection#
  * @private
  *
  * @returns {IndexedDBConnection}
  */
 IndexedDBConnection.prototype.clone = function clone() {
-  return new IndexedDBConnection(odba.util._extend({}, this.config));
+  return new IndexedDBConnection(vdba.util._extend({}, this.config));
 };
 
 /**
@@ -1525,7 +1894,7 @@ IndexedDBConnection.prototype.clone = function clone() {
  *
  * @name connected
  * @type {Boolean}
- * @memberof odba.indexeddb.IndexedDBConnection#
+ * @memberof vdba.indexeddb.IndexedDBConnection#
  */
 IndexedDBConnection.prototype.__defineGetter__("connected", function() {
   return (this.database !== undefined && this.database !== null);
@@ -1536,7 +1905,7 @@ IndexedDBConnection.prototype.__defineGetter__("connected", function() {
  *
  * @name open
  * @function
- * @memberof odba.indexeddb.IndexedDBConnection#
+ * @memberof vdba.indexeddb.IndexedDBConnection#
  *
  * @param {Function} [callback] The function to call: fn(error, db).
  *
@@ -1545,7 +1914,7 @@ IndexedDBConnection.prototype.__defineGetter__("connected", function() {
  */
 IndexedDBConnection.prototype.open = function open(callback) {
   var self = this, req, indexedDB = this.indexedDB;
-  var IndexedDBDatabase = odba.indexeddb.IndexedDBDatabase;
+  var IndexedDBDatabase = vdba.indexeddb.IndexedDBDatabase;
 
   //(1) pre: already opened?
   if (this.connected) {
@@ -1577,7 +1946,7 @@ IndexedDBConnection.prototype.open = function open(callback) {
  *
  * @name close
  * @function
- * @memberof odba.indexeddb.IndexedDBConnection#
+ * @memberof vdba.indexeddb.IndexedDBConnection#
  *
  * @param {Function} [callback] The function to call: fn(error).
  *
@@ -1603,7 +1972,7 @@ IndexedDBConnection.prototype.close = function close(callback) {
  *
  * @name beginTransaction
  * @function
- * @memberof odba.indexeddb.IndexedDBConnection#
+ * @memberof vdba.indexeddb.IndexedDBConnection#
  * @private
  *
  * @param {String} mode             The transaction mode: readonly (default) or readwrite.
@@ -1621,7 +1990,7 @@ IndexedDBConnection.prototype.close = function close(callback) {
  * tran = cx.beginTransaction("readonly", "user", {error: function(e) { ... }});
  */
 IndexedDBConnection.prototype.beginTransaction = function beginTransaction(mode, stores, handlers) {
-  var IndexedDBTransaction = odba.indexeddb.IndexedDBTransaction;
+  var IndexedDBTransaction = vdba.indexeddb.IndexedDBTransaction;
   var tran;
 
   //(1) pre: arguments
@@ -1696,7 +2065,7 @@ IndexedDBConnection.prototype.beginTransaction = function beginTransaction(mode,
  *
  * @name hasTransaction
  * @function
- * @memberof odba.indexeddb.IndexedDBConnection#
+ * @memberof vdba.indexeddb.IndexedDBConnection#
  *
  * @param {String} mode The mode to query: versionchange, readonly or readwrite.
  *
@@ -1728,7 +2097,7 @@ IndexedDBConnection.prototype.hasTransaction = function hasTransaction(mode) {
  *
  * @name runTransaction
  * @function
- * @memberof odba.indexeddb.IndexedDBConnection#
+ * @memberof vdba.indexeddb.IndexedDBConnection#
  *
  * @param {String} mode         The transaction mode: readonly or readwrite.
  * @param {Function} op         The operation to run into a transaction.
@@ -1767,8 +2136,8 @@ IndexedDBConnection.prototype.runTransaction = function runTransaction(mode, op,
 /**
  * An IndexedDB database.
  *
- * @class odba.indexeddb.IndexedDBDatabase
- * @extends odba.Database
+ * @class vdba.indexeddb.IndexedDBDatabase
+ * @extends vdba.Database
  * @protected
  *
  * @param {IndexedDBConnection} cx  The connection.
@@ -1779,8 +2148,8 @@ function IndexedDBDatabase(cx, db) {
    * The connection to work with.
    *
    * @name connection
-   * @type {odba.indexeddb.IndexedDBConnection}
-   * @memberof odba.indexeddb.IndexedDBDatabase#
+   * @type {vdba.indexeddb.IndexedDBConnection}
+   * @memberof vdba.indexeddb.IndexedDBDatabase#
    */
   Object.defineProperty(this, "connection", {value: cx});
 
@@ -1789,7 +2158,7 @@ function IndexedDBDatabase(cx, db) {
    *
    * @name name
    * @type {String}
-   * @memberof odba.indexeddb.IndexedDBDatabase#
+   * @memberof vdba.indexeddb.IndexedDBDatabase#
    */
   Object.defineProperty(this, "name", {value: db.name, enumerable: true});
 
@@ -1798,7 +2167,7 @@ function IndexedDBDatabase(cx, db) {
    *
    * @name version
    * @type {Number}
-   * @memberof odba.indexeddb.IndexedDBDatabase#
+   * @memberof vdba.indexeddb.IndexedDBDatabase#
    */
   Object.defineProperty(this, "version", {value: db.version, enumerable: true});
 
@@ -1807,7 +2176,7 @@ function IndexedDBDatabase(cx, db) {
    *
    * @name native
    * @type {IDBDatabase}
-   * @memberof odba.indexeddb.IndexedDBDatabase#
+   * @memberof vdba.indexeddb.IndexedDBDatabase#
    * @private
    */
   Object.defineProperty(this, "native", {value: db});
@@ -1817,7 +2186,7 @@ function IndexedDBDatabase(cx, db) {
    *
    * @name objectStoreNames
    * @type {String[]}
-   * @memberof odba.indexeddb.IndexedDBDatabase#
+   * @memberof vdba.indexeddb.IndexedDBDatabase#
    * @private
    */
   Object.defineProperty(this, "objectStoreNames", {value: []});
@@ -1827,15 +2196,15 @@ function IndexedDBDatabase(cx, db) {
   }
 }
 
-odba.util.inherits(IndexedDBDatabase, odba.Database);
-Object.defineProperty(odba.indexeddb, "IndexedDBDatabase", {value: IndexedDBDatabase});
+vdba.util.inherits(IndexedDBDatabase, vdba.Database);
+Object.defineProperty(vdba.indexeddb, "IndexedDBDatabase", {value: IndexedDBDatabase});
 
 /**
  * The native active transaction of the connection.
  *
  * @name transaction
  * @type {IDBTransaction}
- * @memberof odba.indexeddb.IndexedDBDatabase#
+ * @memberof vdba.indexeddb.IndexedDBDatabase#
  * @private
  */
 IndexedDBDatabase.prototype.__defineGetter__("transaction", function() {
@@ -1878,7 +2247,7 @@ IndexedDBDatabase.prototype.containsObjectStores = function containsObjectStores
  *
  * @name hasTable
  * @function
- * @memberof odba.indexeddb.IndexedDBDatabase#
+ * @memberof vdba.indexeddb.IndexedDBDatabase#
  *
  * @param {String} name       The object store name.
  * @param {Function} callback The function to call: fn(exists).
@@ -1901,7 +2270,7 @@ IndexedDBDatabase.prototype.hasTable = function hasTable(name, callback) {
  *
  * @name hasTables
  * @function
- * @memberof odba.indexeddb.IndexedDBDatabase#
+ * @memberof vdba.indexeddb.IndexedDBDatabase#
  *
  * @param {String[]} names    The object store names.
  * @param {Function} callback The function to call: fn(exist).
@@ -1941,7 +2310,7 @@ IndexedDBDatabase.prototype.hasTables = function hasTables(names, callback) {
  *
  * @name getTable
  * @function
- * @memberof odba.indexeddb.IndexedDBDatabase#
+ * @memberof vdba.indexeddb.IndexedDBDatabase#
  * @private
  *
  * @param {String} name The object store name.
@@ -1949,7 +2318,7 @@ IndexedDBDatabase.prototype.hasTables = function hasTables(names, callback) {
  * @returns {IndexedDBTable}
  */
 IndexedDBDatabase.prototype.getTable = function getTable(name) {
-  return new odba.indexeddb.IndexedDBTable(this, this.transaction.getObjectStore(name));
+  return new vdba.indexeddb.IndexedDBTable(this, this.transaction.getObjectStore(name));
 };
 
 /**
@@ -1957,7 +2326,7 @@ IndexedDBDatabase.prototype.getTable = function getTable(name) {
  *
  * @name findTable
  * @function
- * @memberof odba.indexeddb.IndexedDBDatabase#
+ * @memberof vdba.indexeddb.IndexedDBDatabase#
  *
  * @param {String} name       The object store name.
  * @param {Function} callback The function to call: fn(error, store).
@@ -1966,7 +2335,7 @@ IndexedDBDatabase.prototype.getTable = function getTable(name) {
  * db.findTable("user", function(error, store) { ... });
  */
 IndexedDBDatabase.prototype.findTable = function findTable(name, callback) {
-  var IndexedDBTable = odba.indexeddb.IndexedDBTable;
+  var IndexedDBTable = vdba.indexeddb.IndexedDBTable;
   var table;
 
   //(1) arguments
@@ -1997,7 +2366,7 @@ IndexedDBDatabase.prototype.findTable = function findTable(name, callback) {
  *
  * @name createTable
  * @function
- * @memberof odba.indexeddb.IndexedDBDatabase#
+ * @memberof vdba.indexeddb.IndexedDBDatabase#
  *
  * @param {String} name         The object store name.
  * @param {Object} [options]    The creation options: keyPath or id (String) and
@@ -2011,8 +2380,8 @@ IndexedDBDatabase.prototype.findTable = function findTable(name, callback) {
  * db.createTable("user", {id: "userId", autoIncrement: true}, function(error, store) { ... });
  */
 IndexedDBDatabase.prototype.createTable = function createTable(name, options, callback) {
-  var IndexedDBTable = odba.indexeddb.IndexedDBTable;
-  var tran, util = odba.util;
+  var IndexedDBTable = vdba.indexeddb.IndexedDBTable;
+  var tran, util = vdba.util;
 
   //(1) arguments
   if (arguments.length < 1) {
@@ -2053,7 +2422,7 @@ IndexedDBDatabase.prototype.createTable = function createTable(name, options, ca
  *
  * @name createTables
  * @function
- * @memberof odba.indexeddb.IndexedDBDatabase#
+ * @memberof vdba.indexeddb.IndexedDBDatabase#
  *
  * @param {Object[]} stores     The object stores: name (String), keyPath (String) and autoIncrement (Boolean).
  * @param {Function} [callback] The function to call: fn(error, stores).
@@ -2065,7 +2434,7 @@ IndexedDBDatabase.prototype.createTable = function createTable(name, options, ca
  * ], function(error, stores) { ... });
  */
 IndexedDBDatabase.prototype.createTables = function createTables(stores, callback) {
-  var IndexedDBTable = odba.indexeddb.IndexedDBTable;
+  var IndexedDBTable = vdba.indexeddb.IndexedDBTable;
   var tran, res = [];
 
   //(1) get tran
@@ -2092,7 +2461,7 @@ IndexedDBDatabase.prototype.createTables = function createTables(stores, callbac
  *
  * @name dropTable
  * @function
- * @memberof odba.indexeddb.IndexedDBDatabase#
+ * @memberof vdba.indexeddb.IndexedDBDatabase#
  *
  * @param {String} name         The object store name.
  * @param {Function} [callback] The function to call: fn(error).
@@ -2122,7 +2491,7 @@ IndexedDBDatabase.prototype.dropTable = function dropTable(name, callback) {
  *
  * @name findIndex
  * @function
- * @memberof odba.indexeddb.IndexedDBDatabase#
+ * @memberof vdba.indexeddb.IndexedDBDatabase#
  *
  * @param {String} table      The table name.
  * @param {String} index      The index name.
@@ -2132,7 +2501,7 @@ IndexedDBDatabase.prototype.dropTable = function dropTable(name, callback) {
  * db.findIndex("user", "ix_username", function(error, ix) { ... });
  */
 IndexedDBDatabase.prototype.findIndex = function findIndex(table, index, callback) {
-  var IndexedDBTable = odba.indexeddb.IndexedDBTable;
+  var IndexedDBTable = vdba.indexeddb.IndexedDBTable;
   var tran, store, ix;
 
   //(1) arguments
@@ -2164,7 +2533,7 @@ IndexedDBDatabase.prototype.findIndex = function findIndex(table, index, callbac
  *
  * @name hasIndex
  * @function
- * @memberof odba.indexeddb.IndexedDBDatabase#
+ * @memberof vdba.indexeddb.IndexedDBDatabase#
  *
  * @param {String} table      The object store name.
  * @param {String} ix         The index name.
@@ -2199,7 +2568,7 @@ IndexedDBDatabase.prototype.hasIndex = function hasIndex(table, ix, callback) {
  *
  * @name createIndex
  * @function
- * @memberof odba.indexeddb.IndexedDBDatabase#
+ * @memberof vdba.indexeddb.IndexedDBDatabase#
  *
  * @param {String} table        The object store name.
  * @param {String} index        The index name.
@@ -2252,7 +2621,7 @@ IndexedDBDatabase.prototype.createIndex = function createIndex(table, index, col
  *
  * @name dropIndex
  * @function
- * @memberof odba.indexeddb.IndexedDBDatabase#
+ * @memberof vdba.indexeddb.IndexedDBDatabase#
  *
  * @param {String} table        The object store name.
  * @param {String} index        The index name.
@@ -2292,27 +2661,27 @@ IndexedDBDatabase.prototype.dropIndex = function dropIndex(table, index, callbac
 /**
  * An IndexedDB driver.
  *
- * @class odba.indexeddb.IndexedDBDriver
- * @extends odba.Driver
+ * @class vdba.indexeddb.IndexedDBDriver
+ * @extends vdba.Driver
  * @protected
  */
 function IndexedDBDriver() {
   IndexedDBDriver.super_.call(this, "IndexedDB");
 }
 
-odba.util.inherits(IndexedDBDriver, odba.Driver);
-Object.defineProperty(odba.indexeddb, "IndexedDBDriver", {value: IndexedDBDriver});
-odba.Driver.register(new IndexedDBDriver());
+vdba.util.inherits(IndexedDBDriver, vdba.Driver);
+Object.defineProperty(vdba.indexeddb, "IndexedDBDriver", {value: IndexedDBDriver});
+vdba.Driver.register(new IndexedDBDriver());
 
 /**
  * Creates a connection object to the IndexedDB engine.
  *
  * @name createConnection
  * @function
- * @memberof odba.indexeddb.IndexedDBDriver#
+ * @memberof vdba.indexeddb.IndexedDBDriver#
  *
  * @param {Object} config The connection configuration: database (String).
- * @returns {odba.indexeddb.IndexedDBConnection}
+ * @returns {vdba.indexeddb.IndexedDBConnection}
  *
  * @example
  * cx = drv.createConnection({database: "mydb"});
@@ -2328,7 +2697,7 @@ IndexedDBDriver.prototype.createConnection = function createConnection(config) {
   }
 
   //(2) return connection
-  return new odba.indexeddb.IndexedDBConnection(config);
+  return new vdba.indexeddb.IndexedDBConnection(config);
 };
 
 })();
@@ -2338,8 +2707,8 @@ IndexedDBDriver.prototype.createConnection = function createConnection(config) {
 /**
  * An index.
  *
- * @class odba.indexeddb.IndexedDBIndex
- * @extends odba.Index
+ * @class vdba.indexeddb.IndexedDBIndex
+ * @extends vdba.Index
  * @protected
  *
  * @param {IndexedDBTable} store  The store.
@@ -2350,8 +2719,8 @@ function IndexedDBIndex(store, ix) {
    * The object store.
    *
    * @name table
-   * @type {odba.indexeddb.IndexedDBTable}
-   * @memberof odba.indexeddb.IndexedDBIndex#
+   * @type {vdba.indexeddb.IndexedDBTable}
+   * @memberof vdba.indexeddb.IndexedDBIndex#
    */
   Object.defineProperty(this, "table", {value: store});
 
@@ -2360,7 +2729,7 @@ function IndexedDBIndex(store, ix) {
    *
    * @name name
    * @type {String}
-   * @memberof odba.indexeddb.IndexedDBIndex#
+   * @memberof vdba.indexeddb.IndexedDBIndex#
    */
   Object.defineProperty(this, "name", {value: ix.name});
 
@@ -2369,7 +2738,7 @@ function IndexedDBIndex(store, ix) {
    *
    * @name column
    * @type {String}
-   * @memberof odba.indexeddb.IndexedDBIndex#
+   * @memberof vdba.indexeddb.IndexedDBIndex#
    */
   Object.defineProperty(this, "column", {value: ix.keyPath});
 
@@ -2378,7 +2747,7 @@ function IndexedDBIndex(store, ix) {
    *
    * @name unique
    * @type {Boolean}
-   * @memberof odba.indexeddb.IndexedDBIndex#
+   * @memberof vdba.indexeddb.IndexedDBIndex#
    */
   Object.defineProperty(this, "unique", {value: ix.unique});
 
@@ -2387,21 +2756,21 @@ function IndexedDBIndex(store, ix) {
    *
    * @name native
    * @type {IDBIndex}
-   * @memberof odba.indexeddb.IndexedDBIndex#
+   * @memberof vdba.indexeddb.IndexedDBIndex#
    * @private
    */
   Object.defineProperty(this, "native", {value: ix});
 }
 
-odba.util.inherits(IndexedDBIndex, odba.Index);
-Object.defineProperty(odba.indexeddb, "IndexedDBIndex", {value: IndexedDBIndex});
+vdba.util.inherits(IndexedDBIndex, vdba.Index);
+Object.defineProperty(vdba.indexeddb, "IndexedDBIndex", {value: IndexedDBIndex});
 
 /**
  * The database.
  *
  * @name database
- * @type {odba.indexeddb.IndexedDBDatabase}
- * @memberof odba.indexeddb.IndexedDBIndex#
+ * @type {vdba.indexeddb.IndexedDBDatabase}
+ * @memberof vdba.indexeddb.IndexedDBIndex#
  */
 IndexedDBIndex.prototype.__defineGetter__("database", function() {
   return this.table.database;
@@ -2411,8 +2780,8 @@ IndexedDBIndex.prototype.__defineGetter__("database", function() {
  * The connection.
  *
  * @name connection
- * @type {odba.indexeddb.IndexedDBConnection}
- * @memberof odba.indexeddb.IndexedDBIndex#
+ * @type {vdba.indexeddb.IndexedDBConnection}
+ * @memberof vdba.indexeddb.IndexedDBIndex#
  * @private
  */
 IndexedDBIndex.prototype.__defineGetter__("connection", function() {
@@ -2426,8 +2795,8 @@ IndexedDBIndex.prototype.__defineGetter__("connection", function() {
 /**
  * A query.
  *
- * @class odba.indexeddb.IndexedDBQuery
- * @extends odba.Query
+ * @class vdba.indexeddb.IndexedDBQuery
+ * @extends vdba.Query
  * @protected
  *
  * @param {IndexedDBTable} table
@@ -2440,15 +2809,15 @@ function IndexedDBQuery(table) {
   Object.defineProperty(this, "filter", {value: {}, writable: true});
 }
 
-odba.util.inherits(IndexedDBQuery, odba.Query);
-Object.defineProperty(odba.indexeddb, "IndexedDBQuery", {value: IndexedDBQuery});
+vdba.util.inherits(IndexedDBQuery, vdba.Query);
+Object.defineProperty(vdba.indexeddb, "IndexedDBQuery", {value: IndexedDBQuery});
 
 /**
  * Returns if the query is simple.
  *
  * @name isSimpleQuery
  * @function
- * @memberof odba.indexeddb.IndexedDBQuery#
+ * @memberof vdba.indexeddb.IndexedDBQuery#
  * @private
  *
  * @returns {Boolean}
@@ -2462,7 +2831,7 @@ IndexedDBQuery.prototype.isSimpleQuery = function isSimpleQuery() {
  *
  * @name isCompoundQuery
  * @function
- * @memberof odba.indexeddb.IndexedDBQuery#
+ * @memberof vdba.indexeddb.IndexedDBQuery#
  * @private
  *
  * @returns {Boolean}
@@ -2476,7 +2845,7 @@ IndexedDBQuery.prototype.isCompoundQuery = function isCompoundQuery() {
  *
  * @name findAll
  * @function
- * @memberof odba.indexeddb.IndexedDBQuery#
+ * @memberof vdba.indexeddb.IndexedDBQuery#
  *
  * @param {Function} callback The function to call: fn(error, result).
  */
@@ -2487,7 +2856,7 @@ IndexedDBQuery.prototype.findAll = function findAll(callback) {
   }
 
   //(2) run query
-  new odba.indexeddb.QueryEngine().run(this, callback);
+  new vdba.indexeddb.QueryEngine().run(this, callback);
 };
 
 /**
@@ -2495,7 +2864,7 @@ IndexedDBQuery.prototype.findAll = function findAll(callback) {
  *
  * @name find
  * @function
- * @memberof odba.indexeddb.IndexedDBQuery#
+ * @memberof vdba.indexeddb.IndexedDBQuery#
  *
  * @param {Object} [filter]   The filter object.
  * @param {Function} callback The function to call: fn(error, result).
@@ -2515,7 +2884,7 @@ IndexedDBQuery.prototype.find = function find(filter, callback) {
   this.filter = filter;
 
   //(3) run query
-  new odba.indexeddb.QueryEngine().run(this, callback);
+  new vdba.indexeddb.QueryEngine().run(this, callback);
 };
 
 /**
@@ -2523,7 +2892,7 @@ IndexedDBQuery.prototype.find = function find(filter, callback) {
  *
  * @name findOne
  * @function
- * @memberof odba.indexeddb.IndexedDBQuery#
+ * @memberof vdba.indexeddb.IndexedDBQuery#
  *
  * @param {Object} [filter]   The filter object.
  * @param {Function} callback The function to call: fn(error, record).
@@ -2551,7 +2920,7 @@ IndexedDBQuery.prototype.findOne = function findOne(filter, callback) {
  *
  * @name join
  * @function
- * @memberof odba.indexeddb.IndexedDBQuery#
+ * @memberof vdba.indexeddb.IndexedDBQuery#
  *
  * @param {String} target       The target table/store.
  * @param {String} col1         The source column.
@@ -2601,21 +2970,21 @@ IndexedDBQuery.prototype.join = function join(target, col1, col2, callback) {
 /**
  * A query engine.
  *
- * @class odba.indexeddb.QueryEngine
+ * @class vdba.indexeddb.QueryEngine
  * @private
  */
 function QueryEngine() {
 
 }
 
-Object.defineProperty(odba.indexeddb, "QueryEngine", {value: QueryEngine});
+Object.defineProperty(vdba.indexeddb, "QueryEngine", {value: QueryEngine});
 
 QueryEngine.prototype.__defineGetter__("combinator", function() {
-  return new odba.Combinator();
+  return new vdba.Combinator();
 });
 
 QueryEngine.prototype.__defineGetter__("filter", function() {
-  return new odba.ResultFilter();
+  return new vdba.ResultFilter();
 });
 
 /**
@@ -2644,7 +3013,7 @@ QueryEngine.prototype.runSimpleQuery = function runSimpleQuery(query, callback) 
  * @private
  */
 QueryEngine.prototype.runCompoundQuery = function runCompoundQuery(query, callback) {
-  var IndexedDBResult = odba.indexeddb.IndexedDBResult;
+  var IndexedDBResult = vdba.indexeddb.IndexedDBResult;
   var self = this;
 
   this.find(query, function(error, result) {
@@ -2687,7 +3056,7 @@ QueryEngine.prototype.runCompoundQuery = function runCompoundQuery(query, callba
  * @param {Function} callback The function to call: fn(error, result).
  */
 QueryEngine.prototype.findAll = function findAll(query, callback) {
-  var IndexedDBResult = odba.indexeddb.IndexedDBResult;
+  var IndexedDBResult = vdba.indexeddb.IndexedDBResult;
   var table, tran, req, records = [];
 
   //(1) get table
@@ -2752,7 +3121,7 @@ QueryEngine.prototype.find = function find(query, callback) {
  * @param {Function} callback The function to call: fn(error, result).
  */
 QueryEngine.prototype.findByFilter = function findByFilter(query, callback) {
-  var IndexedDBResult = odba.indexeddb.IndexedDBResult;
+  var IndexedDBResult = vdba.indexeddb.IndexedDBResult;
 
   if (Object.keys(query.filter).length === 0) {
     this.findAll(query, callback);
@@ -2817,7 +3186,7 @@ QueryEngine.prototype.getIDBKeyRange = function getIDBKeyRange(op, filter) {
  * @param {Function} callback The function to call: fn(error, records).
  */
 QueryEngine.prototype.findByKeyPath = function findByKeyPath(query, callback) {
-  var IndexedDBResult = odba.indexeddb.IndexedDBResult;
+  var IndexedDBResult = vdba.indexeddb.IndexedDBResult;
   var table, filter, rg;
 
   //(1) get table and filter
@@ -2876,7 +3245,7 @@ QueryEngine.prototype.findByKeyPath = function findByKeyPath(query, callback) {
  * @param {Function} callback The function to call: fn(error, result).
  */
 QueryEngine.prototype.findByIndex = function findByIndex(query, callback) {
-  var IndexedDBResult = odba.indexeddb.IndexedDBResult;
+  var IndexedDBResult = vdba.indexeddb.IndexedDBResult;
   var table, key, ix, filter, where, rg;
 
   //(1) get index info
@@ -2936,40 +3305,40 @@ QueryEngine.prototype.findByIndex = function findByIndex(query, callback) {
 /**
  * An IndexedDBResult.
  *
- * @class odba.indexeddb.IndexedDBResult
- * @extends odba.Result
+ * @class vdba.indexeddb.IndexedDBResult
+ * @extends vdba.Result
  *
  * @param {Object[]} records  The records.
  * @param {Object} options    The options: byKey (Boolean), byIndex (Boolean).
  */
 function IndexedDBResult(records, options) {
-  if (!options) options = {};
-  if (!options.byKey) options.byKey = false;
-  if (!options.byIndex) options.byIndex = false;
-
-  IndexedDBResult.super_.call(this, records);
-
-  /**
-   * Has it been solved by key?
-   *
-   * @name byKey
-   * @type {Boolean}
-   * @memberof odba.indexeddb.IndexedDBResult#
-   */
-  Object.defineProperty(this, "byKey", {value: options.byKey});
-
-  /**
-   * Has it been solved by index?
-   *
-   * @name byIndex
-   * @type {Boolean}
-   * @memberof odba.indexeddb.IndexedDBResult#
-   */
-  Object.defineProperty(this, "byIndex", {value: options.byIndex});
+  IndexedDBResult.super_.call(this, records, options);
 }
 
-odba.util.inherits(IndexedDBResult, odba.Result);
-Object.defineProperty(odba.indexeddb, "IndexedDBResult", {value: IndexedDBResult});
+vdba.util.inherits(IndexedDBResult, vdba.Result);
+Object.defineProperty(vdba.indexeddb, "IndexedDBResult", {value: IndexedDBResult});
+
+/**
+ * Has it been solved by key?
+ *
+ * @name byKey
+ * @type {Boolean}
+ * @memberof vdba.indexeddb.IndexedDBResult#
+ */
+IndexedDBResult.prototype.__defineGetter__("byKey", function() {
+  return this.options.byKey || false;
+});
+
+/**
+ * Has it been solved by index?
+ *
+ * @name byIndex
+ * @type {Boolean}
+ * @memberof vdba.indexeddb.IndexedDBResult#
+ */
+IndexedDBResult.prototype.__defineGetter__("byIndex", function() {
+  return this.options.byIndex || false;
+});
 
 })();
 
@@ -2978,8 +3347,8 @@ Object.defineProperty(odba.indexeddb, "IndexedDBResult", {value: IndexedDBResult
 /**
  * An IndexedDB server.
  *
- * @class odba.indexeddb.IndexedDBServer
- * @extends odba.Server
+ * @class vdba.indexeddb.IndexedDBServer
+ * @extends vdba.Server
  * @protected
  */
 function IndexedDBServer(cx) {
@@ -2989,22 +3358,22 @@ function IndexedDBServer(cx) {
    * The connection to use.
    *
    * @name connection
-   * @type {odba.indexeddb.IndexedDBConnection}
-   * @memberof odba.indexeddb.IndexedDBServer#
+   * @type {vdba.indexeddb.IndexedDBConnection}
+   * @memberof vdba.indexeddb.IndexedDBServer#
    * @private
    */
   Object.defineProperty(this, "connection", {value: cx});
 }
 
-odba.util.inherits(IndexedDBServer, odba.Server);
-Object.defineProperty(odba.indexeddb, "IndexedDBServer", {value: IndexedDBServer});
+vdba.util.inherits(IndexedDBServer, vdba.Server);
+Object.defineProperty(vdba.indexeddb, "IndexedDBServer", {value: IndexedDBServer});
 
 /**
  * The hostname.
  *
  * @name host
  * @type {String}
- * @memberof odba.indexeddb.IndexedDBServer#
+ * @memberof vdba.indexeddb.IndexedDBServer#
  */
 IndexedDBServer.prototype.__defineGetter__("host", function() {
   return "localhost";
@@ -3025,7 +3394,7 @@ IndexedDBServer.prototype.__defineGetter__("version", function() {
  *
  * @name createDatabase
  * @function
- * @memberof odba.indexeddb.IndexedDBServer#
+ * @memberof vdba.indexeddb.IndexedDBServer#
  *
  * @param {String} name         The database name.
  * @param {Function} ddl        The function to create the schema: fn(db).
@@ -3040,8 +3409,8 @@ IndexedDBServer.prototype.__defineGetter__("version", function() {
  * server.createDatabase("mydb", function(db) { ... }, function(error) { ... });
  */
 IndexedDBServer.prototype.createDatabase = function createDatabase(name, ddl, callback) {
-  var IndexedDBDatabase = odba.indexeddb.IndexedDBDatabase;
-  var IndexedDBTransaction = odba.indexeddb.IndexedDBTransaction;
+  var IndexedDBDatabase = vdba.indexeddb.IndexedDBDatabase;
+  var IndexedDBTransaction = vdba.indexeddb.IndexedDBTransaction;
   var cx = this.connection, indexedDB = cx.indexedDB;
   var self = this, req;
 
@@ -3083,7 +3452,7 @@ IndexedDBServer.prototype.createDatabase = function createDatabase(name, ddl, ca
  *
  * @name dropDatabase
  * @function
- * @memberof odba.indexeddb.IndexedDBServer#
+ * @memberof vdba.indexeddb.IndexedDBServer#
  *
  * @param {String} name         The database name.
  * @param {Function} [callback] The function to call: fn(error).
@@ -3123,13 +3492,13 @@ IndexedDBServer.prototype.dropDatabase = function dropDatabase(name, callback) {
  * Due to the IndexedDB spec, we only can alter the database during
  * a new opening. If the connection is opened, error.
  *
- * This method is out of the ODBA spec.
+ * This method is out of the VDBA spec.
  *
  * The operations fails whether another connection is opened in the database.
  *
  * @name alterDatabase
  * @function
- * @memberof odba.indexeddb.IndexedDBServer#
+ * @memberof vdba.indexeddb.IndexedDBServer#
  *
  * @param {String} name         The database name.
  * @param {Function} ddl        The function to alter the schema: fn(db).
@@ -3140,8 +3509,8 @@ IndexedDBServer.prototype.dropDatabase = function dropDatabase(name, callback) {
  * svr.alterDatabase("mydb", function(db) { ... }, function(error) { ... });
  */
 IndexedDBServer.prototype.alterDatabase = function alterDatabase(name, ddl, callback) {
-  var IndexedDBDatabase = odba.indexeddb.IndexedDBDatabase;
-  var IndexedDBTransaction = odba.indexeddb.IndexedDBTransaction;
+  var IndexedDBDatabase = vdba.indexeddb.IndexedDBDatabase;
+  var IndexedDBTransaction = vdba.indexeddb.IndexedDBTransaction;
   var cx = this.connection, indexedDB = cx.indexedDB, req;
 
   //(1) pre: arguments
@@ -3203,7 +3572,7 @@ IndexedDBServer.prototype.alterDatabase = function alterDatabase(name, ddl, call
  *
  * @name hasDatabase
  * @function
- * @memberof odba.indexeddb.IndexedDBServer#
+ * @memberof vdba.indexeddb.IndexedDBServer#
  *
  * @param {String} name       The database name.
  * @param {Function} callback The function to call: fn(error, exists).
@@ -3212,7 +3581,7 @@ IndexedDBServer.prototype.alterDatabase = function alterDatabase(name, ddl, call
  * server.hasDatabase("mydb", function(error, exists) { ... });
  */
 IndexedDBServer.prototype.hasDatabase = function hasDatabase(name, callback) {
-  var cx = this.connection, indexedDB = cx.indexedDB, req, util = odba.util;
+  var cx = this.connection, indexedDB = cx.indexedDB, req, util = vdba.util;
 
   //(1) pre: arguments
   if (!name || typeof(name) != "string") {
@@ -3262,15 +3631,15 @@ IndexedDBServer.prototype.hasDatabase = function hasDatabase(name, callback) {
 /**
  * An IndexedDB store.
  *
- * @class odba.indexeddb.IndexedDBTable
- * @extends odba.Table
+ * @class vdba.indexeddb.IndexedDBTable
+ * @extends vdba.Table
  * @protected
  *
  * @param {IndexedDBDatabase} db  The database.
  * @param {IDBStore} store        The store.
  */
 function IndexedDBTable(db, store) {
-  var IndexedDBIndex = odba.indexeddb.IndexedDBIndex;
+  var IndexedDBIndex = vdba.indexeddb.IndexedDBIndex;
   var indexes = {};
   var indexed = {};
 
@@ -3279,8 +3648,8 @@ function IndexedDBTable(db, store) {
    * The database.
    *
    * @name database
-   * @type {odba.indexeddb.IndexedDBDatabase}
-   * @memberof odba.indexeddb.IndexedDBTable#
+   * @type {vdba.indexeddb.IndexedDBDatabase}
+   * @memberof vdba.indexeddb.IndexedDBTable#
    */
   Object.defineProperty(this, "database", {value: db, enumerable: true});
 
@@ -3289,7 +3658,7 @@ function IndexedDBTable(db, store) {
    *
    * @name name
    * @type {String}
-   * @memberof odba.indexeddb.IndexedDBTable#
+   * @memberof vdba.indexeddb.IndexedDBTable#
    */
   Object.defineProperty(this, "name", {value: store.name, enumerable: true});
 
@@ -3298,7 +3667,7 @@ function IndexedDBTable(db, store) {
    *
    * @name keyPath
    * @type {String}
-   * @memberof odba.indexeddb.IndexedDBTable#
+   * @memberof vdba.indexeddb.IndexedDBTable#
    */
   Object.defineProperty(this, "keyPath", {value: store.keyPath, enumerable: true});
 
@@ -3307,7 +3676,7 @@ function IndexedDBTable(db, store) {
    *
    * @name autoIncrement
    * @type {Boolean}
-   * @memberof odba.indexeddb.IndexedDBTable#
+   * @memberof vdba.indexeddb.IndexedDBTable#
    */
   Object.defineProperty(this, "autoIncrement", {value: store.autoIncrement, enumerable: true});
 
@@ -3315,8 +3684,8 @@ function IndexedDBTable(db, store) {
    * The connection.
    *
    * @name connection
-   * @type {odba.indexeddb.IndexedDBConnection}
-   * @memberof odba.indexeddb.IndexedDBTable#
+   * @type {vdba.indexeddb.IndexedDBConnection}
+   * @memberof vdba.indexeddb.IndexedDBTable#
    * @private
    */
   Object.defineProperty(this, "connection", {value: db.connection});
@@ -3325,8 +3694,8 @@ function IndexedDBTable(db, store) {
    * The indexes.
    *
    * @name indexes
-   * @type {odba.indexeddb.IndexedDBIndex[]}
-   * @memberof odba.indexeddb.IndexedDBTable#
+   * @type {vdba.indexeddb.IndexedDBIndex[]}
+   * @memberof vdba.indexeddb.IndexedDBTable#
    * @private
    */
   Object.defineProperty(this, "indexes", {value: indexes});
@@ -3336,7 +3705,7 @@ function IndexedDBTable(db, store) {
    *
    * @name indexed
    * @type {Object}
-   * @memberof odba.indexeddb.IndexedDBTable#
+   * @memberof vdba.indexeddb.IndexedDBTable#
    * @private
    */
   Object.defineProperty(this, "indexed", {value: indexed});
@@ -3350,15 +3719,15 @@ function IndexedDBTable(db, store) {
   }
 }
 
-odba.util.inherits(IndexedDBTable, odba.Table);
-Object.defineProperty(odba.indexeddb, "IndexedDBTable", {value: IndexedDBTable});
+vdba.util.inherits(IndexedDBTable, vdba.Table);
+Object.defineProperty(vdba.indexeddb, "IndexedDBTable", {value: IndexedDBTable});
 
 /**
  * The active transaction.
  *
  * @name transaction
- * @type {odba.indexeddb.IndexedDBTransaction}
- * @memberof odba.indexeddb.IndexedDBTable#
+ * @type {vdba.indexeddb.IndexedDBTransaction}
+ * @memberof vdba.indexeddb.IndexedDBTable#
  * @private
  */
 IndexedDBTable.prototype.__defineGetter__("transaction", function() {
@@ -3370,7 +3739,7 @@ IndexedDBTable.prototype.__defineGetter__("transaction", function() {
  *
  * @name hasIndex
  * @function
- * @memberof odba.indexeddb.IndexedDBTable#
+ * @memberof vdba.indexeddb.IndexedDBTable#
  *
  * @param {String} name       The index name.
  * @param {Function} callback The function to call: fn(error, exists).
@@ -3390,7 +3759,7 @@ IndexedDBTable.prototype.hasIndex = function hasIndex(name, callback) {
  *
  * @name findIndex
  * @function
- * @memberof odba.indexeddb.IndexedDBTable#
+ * @memberof vdba.indexeddb.IndexedDBTable#
  *
  * @param {String} name       The index name.
  * @param {Function} callback The function to call: fn(error, exists).
@@ -3411,7 +3780,7 @@ IndexedDBTable.prototype.findIndex = function findIndex(name, callback) {
  *
  * @name createIndex
  * @function
- * @memberof odba.indexeddb.IndexedDBTable#
+ * @memberof vdba.indexeddb.IndexedDBTable#
  *
  * @param {String} name         The index name.
  * @param {String} col          The column.
@@ -3442,7 +3811,7 @@ IndexedDBTable.prototype.createIndex = function createIndex(name, col, options, 
  *
  * @name dropIndex
  * @function
- * @memberof odba.indexeddb.IndexedDBTable#
+ * @memberof vdba.indexeddb.IndexedDBTable#
  *
  * @param {String} name         The index name.
  * @param {Function} [callback] The function to call: fn(error).
@@ -3464,13 +3833,13 @@ IndexedDBTable.prototype.dropIndex = function dropIndex(name, callback) {
 /**
  * @name query
  * @function
- * @memberof odba.indexeddb.IndexedDBTable#
+ * @memberof vdba.indexeddb.IndexedDBTable#
  * @private
  *
  * @returns {Query}
  */
 IndexedDBTable.prototype.query = function query() {
-  return new odba.indexeddb.IndexedDBQuery(this);
+  return new vdba.indexeddb.IndexedDBQuery(this);
 };
 
 /**
@@ -3478,7 +3847,7 @@ IndexedDBTable.prototype.query = function query() {
  *
  * @name find
  * @function
- * @memberof odba.indexeddb.IndexedDBTable#
+ * @memberof vdba.indexeddb.IndexedDBTable#
  *
  * @param {Object} where      The condition.
  * @param {Function} callback The function to call: fn(error, result).
@@ -3492,7 +3861,7 @@ IndexedDBTable.prototype.find = function find(where, callback) {
  *
  * @name findAll
  * @function
- * @memberof odba.indexeddb.IndexedDBTable#
+ * @memberof vdba.indexeddb.IndexedDBTable#
  *
  * @param {Function} callback The function to call: fn(error, result).
  */
@@ -3505,7 +3874,7 @@ IndexedDBTable.prototype.findAll = function findAll(callback) {
  *
  * @name findOne
  * @function
- * @memberof odba.indexeddb.IndexedDBTable#
+ * @memberof vdba.indexeddb.IndexedDBTable#
  *
  * @param {Object} where      The condition.
  * @param {Function} callback The function to call: fn(error, record).
@@ -3519,7 +3888,7 @@ IndexedDBTable.prototype.findOne = function findOne(where, callback) {
  *
  * @name count
  * @function
- * @memberof odba.indexeddb.IndexedDBTable#
+ * @memberof vdba.indexeddb.IndexedDBTable#
  *
  * @param {Function} callback The function to call: fn(error, count).
  */
@@ -3541,14 +3910,14 @@ IndexedDBTable.prototype.count = function count(callback) {
  *
  * @name join
  * @function
- * @memberof odba.indexeddb.IndexedDBTable#
+ * @memberof vdba.indexeddb.IndexedDBTable#
  *
  * @param {String} target
  * @param {String} col1
  * @param {String} [col2]
  * @param {Function} [callback]
  *
- * @returns {odba.indexeddb.IndexedDBQuery} If the call doesn't pass a callback,
+ * @returns {vdba.indexeddb.IndexedDBQuery} If the call doesn't pass a callback,
  *            it returns a Query; otherwise, asynchronous call.
  */
 IndexedDBTable.prototype.join = function join(target, col1, col2, callback) {
@@ -3560,7 +3929,7 @@ IndexedDBTable.prototype.join = function join(target, col1, col2, callback) {
  *
  * @name insert
  * @function
- * @memberof odba.indexeddb.IndexedDBTable#
+ * @memberof vdba.indexeddb.IndexedDBTable#
  *
  * @param {Array|Object} records  The records to insert.
  * @param {Function} [callback]   The function to call: fn(error).
@@ -3642,7 +4011,7 @@ IndexedDBTable.prototype.insert = function insert(records, callback) {
  *
  * @name save
  * @function
- * @memberof odba.indexeddb.IndexedDBTable#
+ * @memberof vdba.indexeddb.IndexedDBTable#
  *
  * @param {Object} records      The record(s).
  * @param {Function} [callback] The function to call: fn(error).
@@ -3684,7 +4053,7 @@ IndexedDBTable.prototype.save = function save(records, callback) {
  *
  * @name update
  * @function
- * @memberof odba.indexeddb.IndexedDBTable#
+ * @memberof vdba.indexeddb.IndexedDBTable#
  *
  * @param {Object} [where]      The condition.
  * @param {Object} fields       The fields to update.
@@ -3695,7 +4064,7 @@ IndexedDBTable.prototype.save = function save(records, callback) {
  * user.update({userId: 1}, {password: "newPwd"}, function(error) { ... });
  */
 IndexedDBTable.prototype.update = function update(where, fields, callback) {
-  var Updater = odba.indexeddb.Updater;
+  var Updater = vdba.indexeddb.Updater;
   var self = this;
 
   //(1) pre: arguments
@@ -3730,7 +4099,7 @@ IndexedDBTable.prototype.update = function update(where, fields, callback) {
  *
  * @name remove
  * @function
- * @memberof odba.indexeddb.IndexedDBTable#
+ * @memberof vdba.indexeddb.IndexedDBTable#
  *
  * @param {Object} where        The condition.
  * @param {Function} [callback] The function to call: fn(error).
@@ -3788,7 +4157,7 @@ IndexedDBTable.prototype.remove = function remove(where, callback) {
 /**
  * A transaction.
  *
- * @class odba.indexeddb.IndexedDBTransaction
+ * @class vdba.indexeddb.IndexedDBTransaction
  * @protected
  *
  * @param {IDBTransaction} tran     The native transaction.
@@ -3832,14 +4201,14 @@ function IndexedDBTransaction(tran, cx, stores, handlers) {
   }
 }
 
-Object.defineProperty(odba.indexeddb, "IndexedDBTransaction", {value: IndexedDBTransaction});
+Object.defineProperty(vdba.indexeddb, "IndexedDBTransaction", {value: IndexedDBTransaction});
 
 /**
  * The current mode: readonly, readwrite or versionchange.
  *
  * @name mode
  * @type {String}
- * @memberof odba.indexeddb.IndexedDBTransaction#
+ * @memberof vdba.indexeddb.IndexedDBTransaction#
  */
 IndexedDBTransaction.prototype.__defineGetter__("mode", function() {
   return this.native.mode;
@@ -3849,8 +4218,8 @@ IndexedDBTransaction.prototype.__defineGetter__("mode", function() {
  * The database.
  *
  * @name database
- * @type {odba.indexeddb.IndexedDBDatabase}
- * @memberof odba.indexeddb.IndexedDBTransaction#
+ * @type {vdba.indexeddb.IndexedDBDatabase}
+ * @memberof vdba.indexeddb.IndexedDBTransaction#
  * @private
  */
 IndexedDBTransaction.prototype.__defineGetter__("database", function() {
@@ -3862,7 +4231,7 @@ IndexedDBTransaction.prototype.__defineGetter__("database", function() {
  *
  * @name on
  * @function
- * @memberof odba.indexeddb.IndexedDBTransaction#
+ * @memberof vdba.indexeddb.IndexedDBTransaction#
  *
  * @param {String} event      The event name: error, abort or complete.
  * @param {Function} handler  The handler function.
@@ -3890,7 +4259,7 @@ IndexedDBTransaction.prototype.on = function on(event, handler) {
  *
  * @name addHandlers
  * @function
- * @memberof odba.indexeddb.IndexedDBTransaction#
+ * @memberof vdba.indexeddb.IndexedDBTransaction#
  *
  * @param {Object} handlers The events and handlers.
  *
@@ -3913,7 +4282,7 @@ IndexedDBTransaction.prototype.addHandlers = function addHandlers(handlers) {
  *
  * @name handleErrorEvent
  * @function
- * @memberof odba.indexeddb.IndexedDBTransaction#
+ * @memberof vdba.indexeddb.IndexedDBTransaction#
  * @private
  *
  * @param {EventTarget} e The event info.
@@ -3933,7 +4302,7 @@ IndexedDBTransaction.prototype.handleErrorEvent = function handleErrorEvent(e) {
  *
  * @name handleAbortEvent
  * @function
- * @memberof odba.indexeddb.IndexedDBTransaction#
+ * @memberof vdba.indexeddb.IndexedDBTransaction#
  * @private
  *
  * @param {EventTarget} e The event info.
@@ -3953,7 +4322,7 @@ IndexedDBTransaction.prototype.handleAbortEvent = function handleAbortEvent(e) {
  *
  * @name handleCompleteEvent
  * @function
- * @memberof odba.indexeddb.IndexedDBTransaction#
+ * @memberof vdba.indexeddb.IndexedDBTransaction#
  * @private
  *
  * @param {EventTarget} e The event info.
@@ -3973,7 +4342,7 @@ IndexedDBTransaction.prototype.handleCompleteEvent = function handleCompleteEven
  *
  * @name getObjectStore
  * @function
- * @memberof odba.indexeddb.IndexedDBTransaction#
+ * @memberof vdba.indexeddb.IndexedDBTransaction#
  * @private
  *
  * @param {String} name The object store name.
@@ -3996,7 +4365,7 @@ IndexedDBTransaction.prototype.getObjectStore = function getObjectStore(name) {
  *
  * @name getTable
  * @function
- * @memberof odba.indexeddb.IndexedDBTransaction#
+ * @memberof vdba.indexeddb.IndexedDBTransaction#
  * @private
  *
  * @param {String} name The object store name.
@@ -4004,7 +4373,7 @@ IndexedDBTransaction.prototype.getObjectStore = function getObjectStore(name) {
  * @returns {IndexedDBTable}
  */
 IndexedDBTransaction.prototype.getTable = function getTable(name) {
-  return new odba.indexeddb.IndexedDBTable(this.database, this.getObjectStore(name));
+  return new vdba.indexeddb.IndexedDBTable(this.database, this.getObjectStore(name));
 };
 
 /**
@@ -4012,7 +4381,7 @@ IndexedDBTransaction.prototype.getTable = function getTable(name) {
  *
  * @name rollback
  * @function
- * @memberof odba.indexeddb.IndexedDBTransaction#
+ * @memberof vdba.indexeddb.IndexedDBTransaction#
  */
 IndexedDBTransaction.prototype.rollback = function rollback() {
   this.native.abort();
@@ -4025,21 +4394,21 @@ IndexedDBTransaction.prototype.rollback = function rollback() {
 /**
  * An column/field updater.
  *
- * @class odba.indexeddb.Updater
+ * @class vdba.indexeddb.Updater
  * @private
  */
 function Updater() {
 
 }
 
-Object.defineProperty(odba.indexeddb, "Updater", {value: Updater});
+Object.defineProperty(vdba.indexeddb, "Updater", {value: Updater});
 
 /**
  * Updates specified fields with given values.
  *
  * @name update
  * @function
- * @memberof odba.indexeddb.Updater#
+ * @memberof vdba.indexeddb.Updater#
  *
  * @param {Object} records  The records to update.
  * @param {Object} fields   The fields and their new value.
@@ -4053,7 +4422,7 @@ Updater.prototype.update = function update(records, fields) {
 /**
  * @name updateRecord
  * @function
- * @memberof odba.indexeddb.Updater#
+ * @memberof vdba.indexeddb.Updater#
  * @private
  */
 Updater.prototype.updateRecord = function updateRecord(record, fields) {
@@ -4068,7 +4437,7 @@ Updater.prototype.updateRecord = function updateRecord(record, fields) {
 /**
  * @name updateField
  * @function
- * @memberof odba.indexeddb.Updater#
+ * @memberof vdba.indexeddb.Updater#
  * @private
  */
 Updater.prototype.updateField = function updateField(record, prop, expr) {
@@ -4111,7 +4480,7 @@ Updater.prototype.updateField = function updateField(record, prop, expr) {
 /**
  * @name $set
  * @function
- * @memberof odba.indexeddb.Updater#
+ * @memberof vdba.indexeddb.Updater#
  * @private
  */
 Updater.prototype.$set = function $set(record, prop, value) {
@@ -4121,7 +4490,7 @@ Updater.prototype.$set = function $set(record, prop, value) {
 /**
  * @name $inc
  * @function
- * @memberof odba.indexeddb.Updater#
+ * @memberof vdba.indexeddb.Updater#
  * @private
  */
 Updater.prototype.$inc = function $inc(record, prop, value) {
@@ -4131,7 +4500,7 @@ Updater.prototype.$inc = function $inc(record, prop, value) {
 /**
  * @name $dec
  * @function
- * @memberof odba.indexeddb.Updater#
+ * @memberof vdba.indexeddb.Updater#
  * @private
  */
 Updater.prototype.$dec = function $dec(record, prop, value) {
@@ -4141,7 +4510,7 @@ Updater.prototype.$dec = function $dec(record, prop, value) {
 /**
  * @name $mul
  * @function
- * @memberof odba.indexeddb.Updater#
+ * @memberof vdba.indexeddb.Updater#
  * @private
  */
 Updater.prototype.$mul = function $mul(record, prop, value) {

@@ -33,9 +33,9 @@ module.exports = function(grunt) {
         separator: "\n\n"
       },
 
-      "indexeddb-odba-driver.js": {
-        src: ["lib/browser-odba-core.js", "lib/index.js", "lib/odba/indexeddb/**"],
-        dest: "indexeddb-odba-driver.js"
+      "indexeddb-vdba-driver.js": {
+        src: ["lib/browser-vdba-core.js", "lib/index.js", "lib/vdba/indexeddb/**"],
+        dest: "indexeddb-vdba-driver.js"
       }
     },
 
@@ -64,7 +64,7 @@ module.exports = function(grunt) {
         },
 
         files: {
-          src: ["lib/***"]
+          src: ["lib/**"]
         }
       },
 
@@ -81,7 +81,7 @@ module.exports = function(grunt) {
 
     test: {
       host: "localhost",
-      port: 51792,
+      port: 51806,
       chromeFolder: "C:\\Program Files (x86)\\Google\\Chrome\\Application",
       firefoxFolder: "C:\\Program Files (x86)\\Mozilla Firefox",
       app: "http://<%= test.host %>:<%= test.port %>/<%= pkg.name %>",
@@ -107,9 +107,9 @@ module.exports = function(grunt) {
         preserveComments: false
       },
 
-      "indexeddb-odba-driver.min.js": {
+      "indexeddb-vdba-driver.min.js": {
         files: {
-          "indexeddb-odba-driver.min.js": ["indexeddb-odba-driver.js"]
+          "indexeddb-vdba-driver.min.js": ["indexeddb-vdba-driver.js"]
         }
       }
     }
@@ -132,8 +132,8 @@ module.exports = function(grunt) {
     "jsdoc:api.html",
     "compress:api.html",
     "clean:doc",
-    "concat:indexeddb-odba-driver.js",
-    "uglify:indexeddb-odba-driver.min.js",
+    "concat:indexeddb-vdba-driver.js",
+    "uglify:indexeddb-vdba-driver.min.js",
     "test:chrome:true"
   ]);
 

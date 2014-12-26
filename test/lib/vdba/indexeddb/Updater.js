@@ -1,8 +1,8 @@
-describe("odba.indexeddb.Updater", function() {
+describe("vdba.indexeddb.Updater", function() {
   var updater, records;
 
   before(function() {
-    updater  = new odba.indexeddb.Updater();
+    updater  = new vdba.indexeddb.Updater();
   });
 
   beforeEach(function() {

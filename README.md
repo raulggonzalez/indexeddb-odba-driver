@@ -1,10 +1,10 @@
-# indexeddb-odba-driver
+# indexeddb-vdba-driver
 
-`ODBA` (Open Database API) is an asynchronous API for the JavaScript language
+`VDBA` (Valencia Database API) is an asynchronous API for the JavaScript language
 that programmers can use to access data such as databases.
-The ODBA philosophy is similar to the `Node.js` API's.
+The VDBA philosophy is similar to the `Node.js` API's.
 
-`indexeddb-odba-driver` is the `IndexedDB` driver to use with the browsers.
+`indexeddb-vdba-driver` is the `IndexedDB` driver to use with the browsers.
 
 The unit testing is performed using `Should.js` and `Mocha` on:
 
@@ -26,15 +26,15 @@ IndexedDB is a key-value database and it uses its own terminology:
 
 ## Use
 
-To use `indexeddb-odba-driver`, we have to include:
+To use `indexeddb-vdba-driver`, we have to include:
 
   ```
-  <script src="indexeddb-odba-driver.min.js"></script>
+  <script src="indexeddb-vdba-driver.min.js"></script>
   ```
 
-## odba namespace
+## vdba namespace
 
-When the driver is included, an `odba` object is created automatically.
+When the driver is included, an `vdba` object is created automatically.
 This is the API start point.
 
 ## Getting the driver
@@ -42,7 +42,7 @@ This is the API start point.
 First of all, we have to get the IndexedDB driver:
 
   ```
-  var drv = odba.Driver.getDriver("IndexedDB");
+  var drv = vdba.Driver.getDriver("IndexedDB");
   ```
 
 ## Getting the connection
@@ -236,6 +236,15 @@ Next, we can use `Table.find()`, `Table.findOne()` and `Table.findAll()`:
 
 **Important** When the query can be resolved using the key path or an index,
 the method uses.
+
+### Mapping
+
+We also can use the map methods to get the records being instance of a given
+class: `map()`, `mapOne()` and `mapAll()`. For example:
+
+  ```
+  user.mapOne({clss: User}, {userId: 1}, function(error, result) { ... });
+  ```
 
 ### Result
 

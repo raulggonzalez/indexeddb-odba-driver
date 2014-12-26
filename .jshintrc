@@ -83,7 +83,7 @@
 	// they are not described in the [JSHint Options documentation][4].
 
 	"predef" : [ // Extra globals.
-	  "odba",
+	  "vdba",
 	  "IDBKeyRange",
 	  "Modernizr"
 		//"exampleVar",

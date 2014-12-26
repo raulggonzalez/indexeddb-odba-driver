@@ -1,19 +1,19 @@
-describe("odba.indexeddb.IndexedDBConnection", function() {
-  var IndexedDBDatabase = odba.indexeddb.IndexedDBDatabase;
-  var IndexedDBServer = odba.indexeddb.IndexedDBServer;
+describe("vdba.indexeddb.IndexedDBConnection", function() {
+  var IndexedDBDatabase = vdba.indexeddb.IndexedDBDatabase;
+  var IndexedDBServer = vdba.indexeddb.IndexedDBServer;
   var drv, cx;
 
   before(function() {
-    drv = odba.Driver.getDriver("IndexedDB");
-    cx = drv.createConnection({database: "odba"});
+    drv = vdba.Driver.getDriver("IndexedDB");
+    cx = drv.createConnection({database: "vdba"});
   });
 
   before(function(done) {
-    cx.server.createDatabase("odba", schema, done);
+    cx.server.createDatabase("vdba", schema, done);
   });
 
   after(function(done) {
-    cx.server.dropDatabase("odba", done);
+    cx.server.dropDatabase("vdba", done);
   });
 
   after(function(done) {
@@ -23,7 +23,7 @@ describe("odba.indexeddb.IndexedDBConnection", function() {
   describe("Properties", function() {
     describe("Closed connection", function() {
       it("config", function() {
-        cx.config.should.be.eql({database: "odba"});
+        cx.config.should.be.eql({database: "vdba"});
       });
 
       it("transaction", function() {

@@ -1,6 +1,9 @@
-describe("odba.indexeddb.IndexedDBQuery", function() {
-  var IndexedDBQuery = odba.indexeddb.IndexedDBQuery;
-  var Result = odba.Result;
+describe("vdba.indexeddb.IndexedDBQuery", function() {
+  var IndexedDBQuery = vdba.indexeddb.IndexedDBQuery;
+  var Result = vdba.Result;
+  var IndexedDBResult = vdba.indexeddb.IndexedDBResult;
+
+  function User() {}
 
   var users = [
     {userId: 1, username: "user01", password: "pwd01"},
@@ -33,12 +36,12 @@ describe("odba.indexeddb.IndexedDBQuery", function() {
   var drv, cx, db, user, session;
 
   before(function() {
-    drv = odba.Driver.getDriver("IndexedDB");
-    cx = drv.createConnection({database: "odba"});
+    drv = vdba.Driver.getDriver("IndexedDB");
+    cx = drv.createConnection({database: "vdba"});
   });
 
   before(function(done) {
-    cx.server.createDatabase("odba", indexedSchema, done);
+    cx.server.createDatabase("vdba", indexedSchema, done);
   });
 
   before(function(done) {
@@ -72,7 +75,7 @@ describe("odba.indexeddb.IndexedDBQuery", function() {
   });
 
   after(function(done) {
-    cx.server.dropDatabase("odba", done);
+    cx.server.dropDatabase("vdba", done);
   });
 
   describe("Simple query", function() {
@@ -108,6 +111,24 @@ describe("odba.indexeddb.IndexedDBQuery", function() {
           should.assert(error === undefined);
           result.should.be.instanceOf(Result);
           result.rows.should.be.eql(users);
+          done();
+        });
+      });
+    });
+
+    describe("#mapAll()", function() {
+      it("mapAll(map, callback)", function(done) {
+        query.mapAll({clss: User}, function(error, result) {
+          should.assert(error === undefined);
+          result.should.be.instanceOf(IndexedDBResult);
+          result.length.should.be.eql(3);
+
+          for (var i = 0; i < result.length; ++i) {
+            var row  = result.rows[i];
+            row.should.be.instanceOf(User);
+            row.should.have.properties(users[i]);
+          }
+
           done();
         });
       });
@@ -155,6 +176,25 @@ describe("odba.indexeddb.IndexedDBQuery", function() {
       });
     });
 
+    describe("#mapOne()", function() {
+      it("mapOne(map, callback)", function(done) {
+        query.mapOne({clss: User}, function(error, record) {
+          should.assert(error === undefined);
+          record.should.be.instanceOf(User);
+          record.should.have.properties(users[0]);
+          done();
+        });
+      });
+
+      it("mapOne(map, filter, callback) - No rows matched", function(done) {
+        query.mapOne({clss: User}, {userId: 123}, function(error, record) {
+          should.assert(error === undefined);
+          should.assert(record === undefined);
+          done();
+        });
+      });
+    });
+
     describe("#find()", function() {
       describe("Error handling", function() {
         it("find()", function() {
@@ -193,6 +233,24 @@ describe("odba.indexeddb.IndexedDBQuery", function() {
           should.assert(error === undefined);
           result.should.be.instanceOf(Result);
           result.rows.should.be.eql([]);
+          done();
+        });
+      });
+    });
+
+    describe("#map()", function() {
+      it("map(map, callback)", function(done) {
+        query.map({clss: User}, function(error, result) {
+          should.assert(error === undefined);
+          result.should.be.instanceOf(IndexedDBResult);
+          result.length.should.be.eql(3);
+
+          for (var i = 0; i < result.length; ++i) {
+            var row = result.rows[i];
+            row.should.be.instanceOf(User);
+            row.should.have.properties(users[i]);
+          }
+
           done();
         });
       });

@@ -1,7 +1,7 @@
-describe("QueryEngine", function() {
-  var Result = odba.Result;
-  var IndexedDBQuery = odba.indexeddb.IndexedDBQuery;
-  var QueryEngine = odba.indexeddb.QueryEngine;
+describe("vdba.indexeddb.QueryEngine", function() {
+  var Result = vdba.Result;
+  var IndexedDBQuery = vdba.indexeddb.IndexedDBQuery;
+  var QueryEngine = vdba.indexeddb.QueryEngine;
 
   var drv, cx, engine = new QueryEngine(), user, query, records = [
     {userId: 1, username: "user01", password: "pwd01"},
@@ -10,12 +10,12 @@ describe("QueryEngine", function() {
   ];
 
   before(function() {
-    drv = odba.Driver.getDriver("IndexedDB");
-    cx = drv.createConnection({database: "odba"});
+    drv = vdba.Driver.getDriver("IndexedDB");
+    cx = drv.createConnection({database: "vdba"});
   });
 
   before(function(done) {
-    cx.server.createDatabase("odba", indexedSchema, done);
+    cx.server.createDatabase("vdba", indexedSchema, done);
   });
 
   before(function(done) {
@@ -40,7 +40,7 @@ describe("QueryEngine", function() {
   });
 
   after(function(done) {
-    cx.server.dropDatabase("odba", done);
+    cx.server.dropDatabase("vdba", done);
   });
 
   describe("#findAll()", function() {

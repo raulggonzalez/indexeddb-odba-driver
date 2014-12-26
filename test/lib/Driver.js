@@ -1,7 +1,7 @@
-describe("odba.Driver", function() {
-  var Driver = odba.Driver;
-  var IndexedDBDriver = odba.indexeddb.IndexedDBDriver;
-  var IndexedDBConnection = odba.indexeddb.IndexedDBConnection;
+describe("vdba.Driver", function() {
+  var Driver = vdba.Driver;
+  var IndexedDBDriver = vdba.indexeddb.IndexedDBDriver;
+  var IndexedDBConnection = vdba.indexeddb.IndexedDBConnection;
 
   describe("#getDriver()", function() {
     it("getDriver('IndexedDB')", function() {
@@ -33,11 +33,11 @@ describe("odba.Driver", function() {
       });
     });
 
-    it("createConnection({database: 'odba'})", function() {
-      var cx = drv.createConnection({database: "odba"});
+    it("createConnection({database: 'vdba'})", function() {
+      var cx = drv.createConnection({database: "vdba"});
 
       cx.should.be.instanceOf(IndexedDBConnection);
-      cx.config.should.be.eql({database: "odba"});
+      cx.config.should.be.eql({database: "vdba"});
     });
   });
 
@@ -49,7 +49,7 @@ describe("odba.Driver", function() {
     });
 
     after(function(done) {
-      drv.createConnection({database: "odba"}).server.dropDatabase("odba", done);
+      drv.createConnection({database: "vdba"}).server.dropDatabase("vdba", done);
     });
 
     describe("Error handling", function() {
@@ -73,7 +73,7 @@ describe("odba.Driver", function() {
     });
 
     it("openConnection(config, callback)", function(done) {
-      drv.openConnection({database: "odba"}, function(error, cx) {
+      drv.openConnection({database: "vdba"}, function(error, cx) {
         should.assert(error === undefined);
         cx.should.be.instanceOf(IndexedDBConnection);
         cx.connected.should.be.eql(true);

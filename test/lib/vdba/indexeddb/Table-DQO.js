@@ -1,5 +1,5 @@
-describe("odba.indexeddb.IndexedDBTable (DQO)", function() {
-  var Result = odba.Result;
+describe("vdba.indexeddb.IndexedDBTable (DQO)", function() {
+  var Result = vdba.Result;
   var drv, cx, db, user, session;
 
   var users = [
@@ -31,12 +31,12 @@ describe("odba.indexeddb.IndexedDBTable (DQO)", function() {
   ];
 
   before(function() {
-    drv = odba.Driver.getDriver("IndexedDB");
-    cx = drv.createConnection({database: "odba"});
+    drv = vdba.Driver.getDriver("IndexedDB");
+    cx = drv.createConnection({database: "vdba"});
   });
 
   before(function(done) {
-    cx.server.createDatabase("odba", indexedSchema, done);
+    cx.server.createDatabase("vdba", indexedSchema, done);
   });
 
   before(function(done) {
@@ -65,7 +65,7 @@ describe("odba.indexeddb.IndexedDBTable (DQO)", function() {
   });
 
   after(function(done) {
-    cx.server.dropDatabase("odba", done);
+    cx.server.dropDatabase("vdba", done);
   });
 
   describe("#findAll()", function() {

@@ -1,25 +1,25 @@
-describe("odba.indexeddb.IndexedDBServer (Transaction)", function() {
-  var IndexedDBTransaction = odba.indexeddb.IndexedDBTransaction;
+describe("vdba.indexeddb.IndexedDBServer (Transaction)", function() {
+  var IndexedDBTransaction = vdba.indexeddb.IndexedDBTransaction;
   var drv;
 
   before(function() {
-    drv = odba.Driver.getDriver("IndexedDB");
+    drv = vdba.Driver.getDriver("IndexedDB");
   });
 
   describe("#createDatabase()", function() {
     var cx, svr;
 
     beforeEach(function() {
-      cx = drv.createConnection({database: "odba"});
+      cx = drv.createConnection({database: "vdba"});
       svr = cx.server;
     });
 
     afterEach(function(done) {
-      svr.dropDatabase("odba", done);
+      svr.dropDatabase("vdba", done);
     });
 
     it("createDatabase(name, ddl, callback)", function(done) {
-      svr.createDatabase("odba", function(db) {
+      svr.createDatabase("vdba", function(db) {
         cx.hasTransaction().should.be.eql(true);
         cx.transaction.should.be.instanceOf(IndexedDBTransaction);
         cx.transaction.mode.should.be.eql("versionchange");
@@ -35,20 +35,20 @@ describe("odba.indexeddb.IndexedDBServer (Transaction)", function() {
     var cx, svr;
 
     beforeEach(function() {
-      cx = drv.createConnection({database: "odba"});
+      cx = drv.createConnection({database: "vdba"});
       svr = cx.server;
     });
 
     beforeEach(function(done) {
-      svr.createDatabase("odba", schema, done);
+      svr.createDatabase("vdba", schema, done);
     });
 
     afterEach(function(done) {
-      svr.dropDatabase("odba", done);
+      svr.dropDatabase("vdba", done);
     });
 
     it("alterDatabase(ddl, callback)", function(done) {
-      svr.alterDatabase("odba", function(db) {
+      svr.alterDatabase("vdba", function(db) {
         cx.hasTransaction().should.be.eql(true);
         cx.transaction.should.be.instanceOf(IndexedDBTransaction);
         cx.transaction.mode.should.be.eql("versionchange");

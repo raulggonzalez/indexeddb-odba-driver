@@ -1,24 +1,24 @@
-describe("odba.indexeddb.IndexedDBDatabase", function() {
-  var IndexedDBConnection = odba.indexeddb.IndexedDBConnection;
+describe("vdba.indexeddb.IndexedDBDatabase", function() {
+  var IndexedDBConnection = vdba.indexeddb.IndexedDBConnection;
   var drv;
 
   before(function() {
-    drv = odba.Driver.getDriver("IndexedDB");
+    drv = vdba.Driver.getDriver("IndexedDB");
   });
 
   describe("Properties", function() {
     var cx, db;
 
     before(function() {
-      cx = drv.createConnection({database: "odba"});
+      cx = drv.createConnection({database: "vdba"});
     });
 
     before(function(done) {
-      cx.server.dropDatabase("odba", done);
+      cx.server.dropDatabase("vdba", done);
     });
 
     before(function(done) {
-      cx.server.createDatabase("odba", undefined, done);
+      cx.server.createDatabase("vdba", undefined, done);
     });
 
     before(function(done) {
@@ -33,11 +33,11 @@ describe("odba.indexeddb.IndexedDBDatabase", function() {
     });
 
     after(function(done) {
-      cx.server.dropDatabase("odba", done);
+      cx.server.dropDatabase("vdba", done);
     });
 
     it("name", function() {
-      db.name.should.be.eql("odba");
+      db.name.should.be.eql("vdba");
     });
 
     it("version", function() {
